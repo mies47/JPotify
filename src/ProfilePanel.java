@@ -188,7 +188,7 @@ public class ProfilePanel extends JFrame {
                 if(password.getModel().isPressed()){
                     keyPressed++;
                     if(keyPressed%2 == 1){
-                        if(jpwd.getText().equals(finalPass)) {
+                        if(String.valueOf(jpwd.getPassword()).equals(finalPass)) {
 
                             jpwd.setText("");
                             status.setText("Enter your new password");
@@ -197,7 +197,7 @@ public class ProfilePanel extends JFrame {
                             keyPressed--;
                         }
                     }else{
-                        finalPass =jpwd.getText();
+                        finalPass =String.valueOf(jpwd.getPassword());
                         jpwd.setText("");
                         status.setText("Your password has successfully changed!");
                     }
@@ -214,7 +214,7 @@ public class ProfilePanel extends JFrame {
                 if(e.getKeyCode() == KeyEvent.VK_ENTER){
                     keyPressed++;
                     if(keyPressed%2 == 1){
-                        if(jpwd.getText().equals(finalPass)) {
+                        if(String.valueOf(jpwd.getPassword()).equals(finalPass)) {
                             jpwd.setText("");
                             status.setText("Enter your new password");
                         }else{
@@ -222,7 +222,7 @@ public class ProfilePanel extends JFrame {
                             keyPressed--;
                         }
                     }else{
-                        finalPass =jpwd.getText();
+                        finalPass =String.valueOf(jpwd.getPassword());
                         jpwd.setText("");
                         status.setText("Your password has successfully changed!");
                     }
@@ -234,7 +234,7 @@ public class ProfilePanel extends JFrame {
                 if(e.getKeyCode() == KeyEvent.VK_ENTER){
                     keyPressed++;
                     if(keyPressed%2 == 1){
-                        if(jpwd.getText().equals(finalPass)) {
+                        if(String.valueOf(jpwd.getPassword()).equals(finalPass)) {
                             jpwd.setText("");
                             status.setText("Enter your new password");
 
@@ -243,7 +243,7 @@ public class ProfilePanel extends JFrame {
                             keyPressed--;
                         }
                     }else{
-                        finalPass =jpwd.getText();
+                        finalPass =String.valueOf(jpwd.getPassword());
                         jpwd.setText("");
                         status.setText("Your password has successfully changed!");
                     }
