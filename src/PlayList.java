@@ -1,5 +1,6 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.io.IOException;
 
@@ -17,6 +18,9 @@ public class PlayList extends JPanel {
         l.setFont(new Font("",Font.PLAIN,20));
         l.setOpaque(true);//show background color
         l.setForeground(Color.WHITE);
+        Box box= Box.createHorizontalBox();//set position to left of panel
+        box.add(l);
+        box.add(Box.createHorizontalGlue());
         JButton btn=new JButton("ADD PlayList");
         btn.setBorder(null);
         btn.setFont(new Font("",Font.PLAIN,17));
@@ -25,10 +29,14 @@ public class PlayList extends JPanel {
         Image img = ImageIO.read(getClass().getResource("download.png"));//get icon
         Image img2=img.getScaledInstance(30,30,Image.SCALE_SMOOTH);//changing the scale of icon
         btn.setIcon(new ImageIcon(img2));
+        Box box2= Box.createHorizontalBox();//set position to left of panel
+        box2.add(btn);
+        box2.add(Box.createHorizontalGlue());
+        box.setBorder(new EmptyBorder(0,0,10,0));
         this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
-        this.add(l);
+        this.add(box);
         this.add(new Scroller());//get list of playlist
-        this.add(btn);
+        this.add(box2);
         setBackground(Color.BLACK);
         setVisible(true);
     }

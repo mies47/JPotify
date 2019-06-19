@@ -19,7 +19,7 @@ public class LibGUI extends JPanel {
      * @throws IOException if not find icon throws exception
      */
     public LibGUI() throws IOException {
-        l=new JLabel("YOUR LIBRARY:  ");
+        l=new JLabel("YOUR LIBRARY: ");
         l.setBackground(Color.BLACK);
         l.setFont(new Font("",Font.PLAIN,20));
         l.setOpaque(true);//show background color
