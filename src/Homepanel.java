@@ -22,11 +22,13 @@ public class Homepanel extends JButton {
         } catch (Exception ex) {
             System.out.println(ex);
         }
-
         setBackground(Color.BLACK);
         setForeground(Color.WHITE);
         setFont(new Font("dialog",Font.LAYOUT_NO_LIMIT_CONTEXT,20));
         this.setBorder(null);
+        setBackground(Color.BLACK);
+        setForeground(Color.WHITE);
+        setFont(new Font("dialog",Font.LAYOUT_NO_LIMIT_CONTEXT,20));
     }
 
 }
