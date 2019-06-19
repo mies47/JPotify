@@ -7,6 +7,7 @@ import java.io.IOException;
  * Graphical part of Search
  * Using a JTextArea as searchField
  * and a Button to hold the icon
+ * @author milad
  */
 public class SearchArea extends JPanel {
     JTextArea searchArea;

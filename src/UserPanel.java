@@ -1,12 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * showing the name an picture of this user
+ * @author milad
+ */
 public class UserPanel extends JButton {
     String name;
     Image img;
 
     /**
-     * showing the name an picture of this user
      * @param name the name of user shown on top
      * @param img the profile image of user
      */
