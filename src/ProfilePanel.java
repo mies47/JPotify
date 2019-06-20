@@ -29,7 +29,7 @@ public class ProfilePanel extends JFrame {
     String finalPass;// the final password after changing
     String finalUsername;// the final username after changing
     int keyPressed = 0;//how many times "password" was pressed for changing password
-    public ProfilePanel(String username , Image img , String pass){
+    public ProfilePanel(String username , Image img , String pass , JFrame frame){
         super("Profile");
         finalPass = pass;
         finalUsername = username;
@@ -138,6 +138,13 @@ public class ProfilePanel extends JFrame {
                     }
                     img = img.getScaledInstance(100 , 100 , Image.SCALE_SMOOTH);
                     jpic.setIcon(new ImageIcon(img));//set the jpic label to chosen file
+                    Component[] components =frame.getContentPane().getComponents();
+                    for (Component p : components){
+                        if(p instanceof MiddleGUI){
+                            ToolBar toolBar = (ToolBar)((MiddleGUI) p).getComponent(0);
+                            toolBar.userPanel.setPic(img);
+                        }
+                    }
                     try{
                         BufferedReader br=new BufferedReader(new FileReader(filepath));
                         String s1="",s2="";
@@ -259,6 +266,12 @@ public class ProfilePanel extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {//close this panel if sign out button was pressed
                 ProfilePanel.this.dispose();
+                frame.dispose();
+                try {
+                    new Login2();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
         });
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);

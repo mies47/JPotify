@@ -1,3 +1,4 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 
@@ -16,9 +17,12 @@ public class UserPanel extends JButton {
     public UserPanel(String name , Image img){
         super(name);
         this.setBackground(Color.BLACK);
-        this.img = img.getScaledInstance(20 , 20 , Image.SCALE_SMOOTH);
-        this.setIcon(new ImageIcon(this.img));
         this.setForeground(Color.WHITE);
         this.setBorder(null);
+        this.setPic(img);
+    }
+    public void setPic(Image img){
+        this.img = img.getScaledInstance(20 , 20 , Image.SCALE_SMOOTH);
+        this.setIcon(new ImageIcon(this.img));
     }
 }
