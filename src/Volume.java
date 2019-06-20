@@ -1,5 +1,7 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,6 +25,7 @@ public class Volume extends JPanel {
         btn.setIcon(new ImageIcon(img2));
         btn.setBackground(Color.BLACK);
         btn.setForeground(Color.BLACK);
+        JSlider b=new JSlider();
         btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -36,6 +39,7 @@ public class Volume extends JPanel {
                     }
                     Image img16 = img15.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
                     btn.setIcon(new ImageIcon(img16));
+                    b.setValue(0);
                 }else{
                     Image img17 = null;
                     try {
@@ -48,7 +52,24 @@ public class Volume extends JPanel {
                 }
             }
         });
-        JSlider b=new JSlider();
+        b.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                if (b.getValue()== 0){
+                    try {
+                        btn.setIcon(new ImageIcon((ImageIO.read(getClass().getResource("mute (1).png"))).getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }else{
+                    try {
+                        btn.setIcon(new ImageIcon((ImageIO.read(getClass().getResource("speaker.png"))).getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        });
         b.setPaintTrack(true);
         b.setPaintTicks(true);
         b.setPaintLabels(true);
