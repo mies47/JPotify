@@ -1,6 +1,11 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.SoftBevelBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.io.IOException;
 
 /**
@@ -10,8 +15,8 @@ import java.io.IOException;
  * @author milad
  */
 public class SearchArea extends JPanel {
-    JTextArea searchArea;
-    private final String DEFAULTTEXT = "   Search ...";
+    JTextField searchArea;
+    private final String DEFAULTTEXT = "   Search ...                    ";
     private Icon searchIcon;
     private JButton btn;
 
@@ -20,11 +25,10 @@ public class SearchArea extends JPanel {
      * setting the icon as preferred size
      */
     public SearchArea(){
-        searchArea = new JTextArea(DEFAULTTEXT);
+        searchArea = new JTextField(DEFAULTTEXT);
         searchArea.setForeground(Color.LIGHT_GRAY);
         searchArea.setFocusable(true);
         searchArea.setEditable(true);
-        searchArea.setLineWrap(true);
         btn = new JButton();
         btn.setBackground(Color.WHITE);
         btn.setBorder(null);
@@ -39,6 +43,30 @@ public class SearchArea extends JPanel {
         this.setLayout(new BorderLayout());
         this.add(btn , BorderLayout.WEST);
         this.add(searchArea , BorderLayout.CENTER);
+        searchArea.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String searchtxt = searchArea.getText();
+                //search in songs
+            }
+        });
+        searchArea.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                searchArea.setText("");
+                searchArea.setBorder(BorderFactory.createSoftBevelBorder(SoftBevelBorder.LOWERED , Color.CYAN , Color.CYAN));
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if(btn.getModel().isPressed()){
+                    String searchtxt = searchArea.getText();
+                    //search in songs
+                }
+                searchArea.setText(DEFAULTTEXT);
+                searchArea.setBorder(null);
+            }
+        });
     }
 
 }
