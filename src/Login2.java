@@ -5,7 +5,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.concurrent.TimeUnit;
 
 public class Login2 extends JFrame {
@@ -46,6 +48,7 @@ public class Login2 extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
+                    dispose();
                     GUI all =new GUI();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -56,6 +59,19 @@ public class Login2 extends JFrame {
         btn2.setBackground(Color.DARK_GRAY);
         btn2.setForeground(Color.WHITE);
         btn2.setBorder(null);
+        btn2.addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                dispose();
+                try {
+                    SignUp all =new SignUp();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         Image img3 = ImageIO.read(getClass().getResource("a2.png"));
         Image img4=img3.getScaledInstance(50,50,Image.SCALE_SMOOTH);//changing the scale of icon
         btn2.setIcon(new ImageIcon(img4));

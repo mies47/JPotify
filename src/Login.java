@@ -18,7 +18,7 @@ public class Login extends JFrame {
         setLocationRelativeTo(null);
         this.setVisible(true);
         TimeUnit.SECONDS.sleep(3);
-        this.setVisible(false);
+        this.dispose();
     }
     public static void main(String[] args) throws IOException, InterruptedException {
         Login l=new Login();
