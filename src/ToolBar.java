@@ -27,10 +27,10 @@ public class ToolBar extends JPanel {
         searchArea = new SearchArea();
         userName = name;
         passWord = pass;
-        /**
-         * check to see if the directory was empty to set profile picture
-         * to default picture
-         * initializing the userpanel for showing user basic info
+        /*
+          check to see if the directory was empty to set profile picture
+          to default picture
+          initializing the userpanel for showing user basic info
           */
         try {
             if(dir.equals("")){
@@ -46,9 +46,9 @@ public class ToolBar extends JPanel {
         this.add(searchArea , BorderLayout.WEST);
         this.add(userPanel , BorderLayout.EAST);
         this.setBackground(Color.BLACK);
-        /**
-         * check to see if userPanel was clicked
-         * to open the profile panel
+        /*
+          check to see if userPanel was clicked
+          to open the profile panel
          */
         userPanel.addActionListener(new ActionListener() {
             @Override

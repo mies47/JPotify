@@ -16,11 +16,11 @@ public class Login2 extends JFrame {
         l.setForeground(Color.WHITE);
         l.setOpaque(true);
         l.setFont(new Font("",Font.BOLD,30));
-        JLabel l1=new JLabel("Username:           ");
+        JLabel l1=new JLabel("Username:          ");
         l1.setBackground(Color.DARK_GRAY);
         l1.setForeground(Color.WHITE);
         l1.setOpaque(true);
-        JLabel l2=new JLabel("Password:            ");
+        JLabel l2=new JLabel("Password:           ");
         l2.setBackground(Color.DARK_GRAY);
         l2.setForeground(Color.WHITE);
         l2.setOpaque(true);

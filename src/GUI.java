@@ -1,6 +1,8 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * @author naha
@@ -13,6 +15,19 @@ public class GUI extends JFrame {
         j.setLayout(new BorderLayout());
         j.add(new BtmofGUI(),BorderLayout.PAGE_END);
         j.add(new leftofGUI(),BorderLayout.WEST);
+        ArrayList<SongPlaylist> temp = new ArrayList<>();
+        temp.add(new SongPlaylist("" , "dgdfbejhfksehfsfsdjf uifheskfskdhf"));
+        temp.add(new SongPlaylist("" , "dgdfbejhfksehfsfsdjf uifheskfskdhf"));
+        temp.add(new SongPlaylist("" , "dgdfbejhfksehfsfsdjf uifheskfskdhf"));
+        temp.add(new SongPlaylist("" , "dgdfbejhfksehfsfsdjf uifheskfskdhf"));
+        temp.add(new SongPlaylist("" , "dgdfbejhfksehfsfsdjf uifheskfskdhf"));
+        temp.add(new SongPlaylist("" , "dgdfbejhfksehfsfsdjf uifheskfskdhf"));
+        temp.add(new SongPlaylist("" , "dgdfbejhfksehfsfsdjf uifheskfskdhf"));
+        temp.add(new SongPlaylist("" , "dgdfbejhfksehfsfsdjf uifheskfskdhf"));
+        j.add(new MiddleGUI(temp , new ToolBar("Milad" , "" , "1234")));
+        ArrayList<OtherUsersSongs> list = new ArrayList<>();
+        list.add(new OtherUsersSongs("Milad" , "0" , "fuuuck" , "Amir" , ImageIO.read(getClass().getResource("index.jpg"))));
+        j.add(new FriendsActivity(list) , BorderLayout.EAST);
         j.setMinimumSize(new Dimension(900, 900));
         j.setLocationRelativeTo(null);
         j.setExtendedState(JFrame.MAXIMIZED_BOTH);

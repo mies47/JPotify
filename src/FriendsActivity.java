@@ -20,12 +20,14 @@ public class FriendsActivity extends JPanel {
             container.add(temp);
         }
         container.setLayout(new BoxLayout(container , BoxLayout.Y_AXIS));
+        this.setLayout(new BorderLayout());
+        this.setBackground(Color.BLACK);
         JScrollPane scrollPane = new JScrollPane(container);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);//always show scrollbar
         UIManager.put("ScrollBar.thumbShadow", new ColorUIResource(Color.BLACK));
         UIManager.put("ScrollBar.thumb", new ColorUIResource(Color.BLACK));//edit color of thumb of scroller
         UIManager.put("ScrollBar.track", new ColorUIResource(Color.BLACK));
         scrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI());
-        this.add(scrollPane);
+        this.add(scrollPane , BorderLayout.CENTER);
     }
 }
