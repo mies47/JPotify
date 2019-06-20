@@ -8,11 +8,14 @@ import java.io.IOException;
  * compare all JPanel
  */
 public class GUI extends JFrame {
-    public static void main(String[] args) throws IOException {
+    public GUI() throws IOException {
         JFrame j=new JFrame("Jpotify");
         j.setLayout(new BorderLayout());
         j.add(new BtmofGUI(),BorderLayout.PAGE_END);
         j.add(new leftofGUI(),BorderLayout.WEST);
+        j.setMinimumSize(new Dimension(900, 900));
+        j.setLocationRelativeTo(null);
+        j.setExtendedState(JFrame.MAXIMIZED_BOTH);
         j.setVisible(true);
     }
 }
