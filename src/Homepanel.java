@@ -25,6 +25,7 @@ public class Homepanel extends JButton {
         setBackground(Color.BLACK);
         setForeground(Color.WHITE);
         setFont(new Font("dialog",Font.LAYOUT_NO_LIMIT_CONTEXT,20));
+        this.setBorder(null);
     }
 
 }
