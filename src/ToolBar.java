@@ -16,7 +16,6 @@ public class ToolBar extends JPanel {
     String userName;
     String passWord;
     ProfilePanel profilePanel;
-
     /**
      * setting the top toolbar
      * @param name the user's name
@@ -57,4 +56,5 @@ public class ToolBar extends JPanel {
             }
         });
     }
+
 }

@@ -292,4 +292,8 @@ public class Login2 extends JFrame {
         //this.setBackground(Color.DARK_GRAY);
         this.setVisible(true);
     }
+
+//    public void setUsershow(Usershow usershow) {
+//        this.usershow = usershow;
+//    }
 }
