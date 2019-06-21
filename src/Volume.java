@@ -1,5 +1,6 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
@@ -21,6 +22,11 @@ public class Volume extends JPanel {
      */
     public Volume() throws IOException {
         JButton btn=new JButton();
+        JLabel l=new JLabel();
+        l.setBackground(Color.BLACK);
+        l.setForeground(Color.WHITE);
+        l.setFont(new Font("",Font.LAYOUT_NO_LIMIT_CONTEXT,20));
+        l.setText("50"+"%");
         Image img = ImageIO.read(getClass().getResource("speaker.png"));
         Image img2=img.getScaledInstance(40,40,Image.SCALE_SMOOTH);//changing the scale of icon
         btn.setIcon(new ImageIcon(img2));
@@ -45,6 +51,7 @@ public class Volume extends JPanel {
                     b.setValue(0);
                     //Audio audio=new Audio();
                     Audio.setMasterOutputVolume(0f);
+                    l.setText("0"+"%");
                 }else{
                     Image img17 = null;
                     try {
@@ -56,6 +63,7 @@ public class Volume extends JPanel {
                     btn.setIcon(new ImageIcon(img18));
                     Audio.setMasterOutputVolume(1f);
                     b.setValue(100);
+                    l.setText("100"+"%");
                 }
             }
         });
@@ -63,6 +71,7 @@ public class Volume extends JPanel {
             @Override
             public void stateChanged(ChangeEvent e) {
                 Audio.setMasterOutputVolume(b.getValue()/(float)100);
+                l.setText(b.getValue()+"%");
                 if (b.getValue()== 0){
                     try {
                         btn.setIcon(new ImageIcon((ImageIO.read(getClass().getResource("mute (1).png"))).getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
@@ -78,15 +87,20 @@ public class Volume extends JPanel {
                 }
             }
         });
+        Box box= Box.createHorizontalBox();//set position to left of panel
+        box.add(btn);
+        box.add(b);
+        box.add(Box.createHorizontalGlue());
         b.setPaintTrack(true);
         b.setPaintTicks(true);
         b.setPaintLabels(true);
         b.setBackground(Color.BLACK);
         b.setBorder(null);
         btn.setBorder(null);
-        this.setLayout(new BoxLayout(this,BoxLayout.X_AXIS));
-        this.add(btn);
-        this.add(b);
+        box.setBorder(new EmptyBorder(10,0,0,0));
+        this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
+        this.add(box);
+        this.add(l);
         this.setBackground(Color.BLACK);
         this.setVisible(true);
     }
