@@ -10,7 +10,7 @@ import java.io.IOException;
  * @author naha
  * show two label of btm
  */
-public class nameLabel extends JPanel {
+public class NameLabel extends JPanel {
     private String Song="Song: ";
     private String Artist="Artist: ";
     private int keyPress2=0;
@@ -21,7 +21,7 @@ public class nameLabel extends JPanel {
      * @param s1 set name of song
      * @param s2 set name of artist
      */
-    public nameLabel(String s1,String s2)  {
+    public NameLabel(String s1, String s2)  {
         l1=new JLabel();
         l2=new JLabel();
         this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
