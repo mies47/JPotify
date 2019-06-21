@@ -9,12 +9,13 @@ import java.io.IOException;
  * compare three JPanel
  */
 public class BtmofGUI extends JPanel {
+    PlayStop PS;
     /**
      * @throws IOException if not find icon throws exception
      */
     public BtmofGUI() throws IOException {
         nameLabel nL=new nameLabel(" "," ");
-        PlayStop PS=new PlayStop();
+        PS=new PlayStop();
         Volume v=new Volume();
         this.setLayout(new BorderLayout());
         this.add(nL,BorderLayout.WEST);

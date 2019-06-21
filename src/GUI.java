@@ -1,6 +1,8 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -10,10 +12,12 @@ import java.util.ArrayList;
  * compare all JPanel
  */
 public class GUI extends JFrame {
+    BtmofGUI btmofGUI;
     public GUI() throws IOException {
         JFrame j=new JFrame("Jpotify");
         j.setLayout(new BorderLayout());
-        j.add(new BtmofGUI(),BorderLayout.PAGE_END);
+        btmofGUI= new BtmofGUI();
+        j.add(btmofGUI,BorderLayout.PAGE_END);
         j.add(new leftofGUI(),BorderLayout.WEST);
         ArrayList<SongPlaylist> temp = new ArrayList<>();
         temp.add(new SongPlaylist("" , "dgdfbejhfksehfsfsdjf uifheskfskdhf"));

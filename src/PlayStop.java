@@ -4,6 +4,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.IOException;
 
 /**
@@ -15,12 +17,12 @@ public class PlayStop extends JPanel {
     private int keyPress2 = 0;
     private int keyPress4 = 0;
     private int keyPress3 = 0;
-
+    JButton b3;
     /**
      * @throws IOException if not find icon throw exception
      */
     public PlayStop() throws IOException {
-        JButton b1,b2,b3,b4,b5;
+        JButton b1,b2,b4,b5;
         b1=new JButton();
         b2=new JButton();
         b3=new JButton();
@@ -66,6 +68,44 @@ public class PlayStop extends JPanel {
         b3.setIcon(new ImageIcon(img6));
         b3.setBackground(Color.BLACK);
         b3.setForeground(Color.BLACK);
+        b3.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent keyEvent) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent keyEvent) {
+                int key = keyEvent.getKeyCode();
+                if(key==KeyEvent.VK_ENTER){
+                    keyPress++;
+                    if(keyPress%2==1) {
+                        Image img11 = null;
+                        try {
+                            img11 = ImageIO.read(getClass().getResource("pause2.png"));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        Image img12 = img11.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
+                        b3.setIcon(new ImageIcon(img12));
+                    }else{
+                        Image img13 = null;
+                        try {
+                            img13 = ImageIO.read(getClass().getResource("play3.png"));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        Image img14 = img13.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
+                        b3.setIcon(new ImageIcon(img14));
+                    }
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent keyEvent) {
+
+            }
+        });
         b3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -193,4 +233,7 @@ public class PlayStop extends JPanel {
         this.setVisible(true);
     }
 
+    public int getKeyPress() {
+        return keyPress;
+    }
 }
