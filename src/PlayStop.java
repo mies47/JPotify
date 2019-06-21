@@ -10,8 +10,7 @@ import java.io.*;
 
 import com.mpatric.mp3agic.*;
 import javazoom.jl.decoder.JavaLayerException;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+
 import java.io.IOException;
 
 /**
@@ -133,11 +132,11 @@ public class PlayStop extends JPanel {
                                     ((BtmofGUI) c).nL.l1.setText("Song: Unknown ");
                                 }
                             }
-                            if(c instanceof leftofGUI){
+                            if(c instanceof LeftOfGUI){
                                 if(mp3File.hasId3v2Tag()) {
                                     if(mp3File.getId3v2Tag().getAlbumImage() != null) {
                                         BufferedImage image =ImageIO.read(new ByteArrayInputStream(mp3File.getId3v2Tag().getAlbumImage()));
-                                        ((leftofGUI) c).setL(image);
+                                        ((LeftOfGUI) c).setL(image);
                                     }
                                 }
                             }
@@ -267,8 +266,9 @@ public class PlayStop extends JPanel {
         box.add(b5);
         box.add(btn);
         box.setBackground(Color.BLACK);
-        box.setBorder(new EmptyBorder(0,0,20,0));
+        box.setBorder(new EmptyBorder(5,0,20,0));
         this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
+
         this.add(box);
         this.add(new Slider());
         this.setBackground(Color.BLACK);
