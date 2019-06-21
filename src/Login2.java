@@ -5,10 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.util.Scanner;
 
 
@@ -16,6 +13,8 @@ public class Login2 extends JFrame {
     public Login2() throws IOException {
         super("Login");
         File file = new File("member.txt");
+        BufferedWriter out = new BufferedWriter(
+                new FileWriter(file, true));
         Scanner scanner3 = new Scanner(file);
         JLabel l=new JLabel("...Welcome to JPotify...");
         JLabel showmsg=new JLabel();
