@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import javax.sound.sampled.*;
 
 /**
  * @author naha
@@ -26,6 +27,8 @@ public class Volume extends JPanel {
         btn.setBackground(Color.BLACK);
         btn.setForeground(Color.BLACK);
         JSlider b=new JSlider();
+        b.setMinimum(0);
+        b.setMaximum(100);
         btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -40,6 +43,8 @@ public class Volume extends JPanel {
                     Image img16 = img15.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
                     btn.setIcon(new ImageIcon(img16));
                     b.setValue(0);
+                    //Audio audio=new Audio();
+                    Audio.setMasterOutputVolume(0f);
                 }else{
                     Image img17 = null;
                     try {
@@ -49,12 +54,15 @@ public class Volume extends JPanel {
                     }
                     Image img18 = img17.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
                     btn.setIcon(new ImageIcon(img18));
+                    Audio.setMasterOutputVolume(1f);
+                    b.setValue(100);
                 }
             }
         });
         b.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
+                Audio.setMasterOutputVolume(b.getValue()/(float)100);
                 if (b.getValue()== 0){
                     try {
                         btn.setIcon(new ImageIcon((ImageIO.read(getClass().getResource("mute (1).png"))).getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
