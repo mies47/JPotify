@@ -33,16 +33,25 @@ public class LibGUI extends JPanel {
         b2.setBorder(null);
         b2.setBackground(Color.BLACK);
         b2.setForeground(Color.WHITE);
+        JButton bFavorite=new JButton("Favorite");
+        bFavorite.setBorder(null);
+        bFavorite.setFont(new Font("",Font.PLAIN,17));
+        bFavorite.setBackground(Color.BLACK);
+        bFavorite.setForeground(Color.WHITE);
         b3=new JButton("ADD");
         b3.setBorder(null);
         b3.setBackground(Color.BLACK);
         b3.setForeground(Color.WHITE);
+
         Image img = ImageIO.read(getClass().getResource("images (1).png"));
         Image img2=img.getScaledInstance(30,30,Image.SCALE_SMOOTH);//changing the scale of icon
         b3.setIcon(new ImageIcon(img2));
         Box box= Box.createHorizontalBox();//set position to left of panel
         box.add(b2);
         box.add(Box.createHorizontalGlue());
+        Box boxF= Box.createHorizontalBox();//set position to left of panel
+        boxF.add(bFavorite);
+        boxF.add(Box.createHorizontalGlue());
         box.setBorder(new EmptyBorder(5,0,0,0));//space between two rows
         Box box2= Box.createHorizontalBox();//set position to left of panel
         box2.add(b1);
@@ -52,10 +61,12 @@ public class LibGUI extends JPanel {
         box3.add(l);
         box3.add(b3);
         box3.add(Box.createHorizontalGlue());
+        boxF.setBorder(new EmptyBorder(5,0,0,0));//space between two rows
         this.setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
         this.add(box3);
         this.add(box2);
         this.add(box);
+        this.add(boxF);
         setBackground(Color.BLACK);
         setVisible(true);
     }

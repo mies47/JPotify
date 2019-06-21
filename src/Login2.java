@@ -4,17 +4,21 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.concurrent.TimeUnit;
+
+import java.io.*;
+import java.util.Scanner;
+
 
 public class Login2 extends JFrame {
 
     public Login2() throws IOException {
         super("Login");
+        File file = new File("member.txt");
+        BufferedWriter out = new BufferedWriter(
+                new FileWriter(file, true));
+        Scanner scanner3 = new Scanner(file);
         JLabel l=new JLabel("...Welcome to JPotify...");
+        JLabel showmsg=new JLabel();
         l.setBackground(Color.DARK_GRAY);
         l.setForeground(Color.WHITE);
         l.setOpaque(true);
@@ -33,6 +37,108 @@ public class Login2 extends JFrame {
         JP.setOpaque(true);
         JP.setVisible(true);
         JTextField JU=new JTextField();
+        JP.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(JP.getPassword()!=null && !JU.getText().equals("")){
+                    Scanner scanner3 = null;
+                    try {
+                        scanner3 = new Scanner(file);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    while (scanner3.hasNextLine()) {
+                        String line = scanner3.nextLine();
+                        if(JU.getText().equals(line)) {
+                            File file2 = new File(line);
+                            try {
+                                Scanner scanner2 = new Scanner(file2);
+                                int line2 = scanner2.nextInt();
+                                String s;
+                                s=String .valueOf(JP.getPassword());
+                                if(s.hashCode()==line2){
+                                    try {
+                                        dispose();
+                                        GUI all =new GUI();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }else{
+                                    showmsg.setText("Username or password maybe inccorect");
+                                    showmsg.setForeground(Color.RED);
+                                    JU.setText("");
+                                    JP.setText("");
+                                }
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            }
+                        }else{
+                            showmsg.setText("Username or password maybe incorect");
+                            showmsg.setForeground(Color.RED);
+                            JU.setText("");
+                            JP.setText("");
+                        }
+                    }
+                }else{
+                    showmsg.setText("Username and password is required");
+                    showmsg.setForeground(Color.RED);
+                    JU.setText("");
+                    JP.setText("");
+                }
+
+            }
+        });
+        JU.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(JP.getPassword().length!=0 && !JU.getText().equals("")){
+                    Scanner scanner3 = null;
+                    try {
+                        scanner3 = new Scanner(file);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    while (scanner3.hasNextLine()) {
+                        String line = scanner3.nextLine();
+                        if(JU.getText().equals(line)) {
+                            File file2 = new File(line);
+                            try {
+                                Scanner scanner2 = new Scanner(file2);
+                                int line2 = scanner2.nextInt();
+                                String s;
+                                s=String .valueOf(JP.getPassword());
+                                if(s.hashCode()==line2){
+                                    try {
+                                        dispose();
+                                        GUI all =new GUI();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }else{
+                                    showmsg.setText("Username or password maybe inccorect");
+                                    showmsg.setForeground(Color.RED);
+                                    JU.setText("");
+                                    JP.setText("");
+                                }
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            }
+                        }else{
+                            showmsg.setText("Username or password maybe incorect");
+                            showmsg.setForeground(Color.RED);
+                            JU.setText("");
+                            JP.setText("");
+                        }
+                    }
+                }else{
+                    showmsg.setText("Username and password is required");
+                    showmsg.setForeground(Color.RED);
+                    JU.setText("");
+                    JP.setText("");
+                }
+
+            }
+        });
         JU.setBackground(Color.WHITE);
         JU.setForeground(Color.BLACK);
         JU.setOpaque(true);
@@ -48,14 +154,55 @@ public class Login2 extends JFrame {
         btn1.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                try {
-                    dispose();
-                    GUI all =new GUI();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if(JP.getPassword()!=null && !JU.getText().equals("")){
+                    Scanner scanner4 = null;
+                    try {
+                        scanner4 = new Scanner(file);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    while (scanner4.hasNextLine()) {
+                        String line = scanner4.nextLine();
+                        if(JU.getText().equals(line)) {
+                            File file2 = new File(line);
+                            try {
+                                Scanner scanner5 = new Scanner(file2);
+                                int line2 = scanner5.nextInt();
+                                String s;
+                                s=String .valueOf(JP.getPassword());
+                                if(s.hashCode()==line2){
+                                    try {
+                                        dispose();
+                                        GUI all =new GUI();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }else{
+                                    showmsg.setText("Username or password maybe inccorect");
+                                    showmsg.setForeground(Color.RED);
+                                    JU.setText("");
+                                    JP.setText("");
+                                }
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            }
+                        }else{
+                            showmsg.setText("Username or password maybe incorect");
+                            showmsg.setForeground(Color.RED);
+                            JU.setText("");
+                            JP.setText("");
+                        }
+                    }
+                }else{
+                    showmsg.setText("Username and password is required");
+                    showmsg.setForeground(Color.RED);
+                    JU.setText("");
+                    JP.setText("");
                 }
+
             }
         });
+
         JButton btn2=new JButton("Sign up");
         btn2.setBackground(Color.DARK_GRAY);
         btn2.setForeground(Color.WHITE);
@@ -63,11 +210,42 @@ public class Login2 extends JFrame {
         btn2.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                dispose();
+//                dispose();
+                if(JP.getPassword().length!=0 && !JU.getText().equals("") ) {
+
+
                 try {
-                    SignUp all =new SignUp();
-                } catch (FileNotFoundException | UnsupportedEncodingException e) {
+                    boolean a=true;
+                    Scanner scanner = new Scanner(file);
+                    while (scanner.hasNextLine()) {
+                        String line = scanner.nextLine();
+                        if(JU.getText().equals(line)){
+
+                            showmsg.setText("User exists please login!");
+                            showmsg.setForeground(Color.RED);
+                            JU.setText("");
+                            JP.setText("");
+                            a=false;
+                        }
+                    }
+                    if(a==true){
+                        SignUp sign =new SignUp(JU.getText(),JP.getPassword());
+                        showmsg.setText("Sign up has been added Successfuly!");
+                        showmsg.setForeground(Color.GREEN);
+                        JU.setText("");
+                        JP.setText("");
+                    }
+                } catch (FileNotFoundException e) {
                     e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }}else{
+                    showmsg.setText("Username and password is required");
+                    showmsg.setForeground(Color.RED);
+                    JU.setText("");
+                    JP.setText("");
                 }
             }
         });
@@ -83,9 +261,13 @@ public class Login2 extends JFrame {
         box.add(JP);
         box.add(Box.createHorizontalGlue());
         JPanel p2=new JPanel();
+        showmsg.setBackground(Color.DARK_GRAY);
+
         p2.setLayout(new BoxLayout(p2,BoxLayout.Y_AXIS));
         p2.add(box0);
         p2.add(box);
+        p2.add(showmsg);
+        showmsg.setBorder(new EmptyBorder(20,0,0,0));
         p2.setBackground(Color.DARK_GRAY);
         p2.setVisible(true);
         JPanel p3=new JPanel();
@@ -93,7 +275,7 @@ public class Login2 extends JFrame {
         p3.add(btn1);
         p3.add(btn2);
         p3.setBackground(Color.DARK_GRAY);
-        p3.setBorder(new EmptyBorder(100,0,50,0));
+        p3.setBorder(new EmptyBorder(80,0,50,0));
         p3.setVisible(true);
         JPanel p=new JPanel();
         p.setLayout(new BoxLayout(p,BoxLayout.Y_AXIS));

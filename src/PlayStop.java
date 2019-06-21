@@ -10,6 +10,9 @@ import java.io.*;
 
 import com.mpatric.mp3agic.*;
 import javazoom.jl.decoder.JavaLayerException;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.io.IOException;
 
 /**
  * @author naha and milad
@@ -20,7 +23,7 @@ public class PlayStop extends JPanel {
     private int keyPress2 = 0;
     private int keyPress4 = 0;
     private int keyPress3 = 0;
-
+    JButton b3;
     /**
      * @throws IOException if not find icon throw exception
      */
@@ -272,4 +275,7 @@ public class PlayStop extends JPanel {
         this.setVisible(true);
     }
 
+    public int getKeyPress() {
+        return keyPress;
+    }
 }
