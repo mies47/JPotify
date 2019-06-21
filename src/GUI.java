@@ -20,7 +20,7 @@ public class GUI extends JFrame {
     public GUI() throws IOException {
         JFrame j=new JFrame("Jpotify");
         j.setLayout(new BorderLayout());
-        j.add(new BtmofGUI(j , new File("C:\\Users\\behesht\\Downloads\\Telegram Desktop\\Octave - Delam Tang Shode Barat.mp3")),BorderLayout.PAGE_END);
+        j.add(new BtmofGUI(j , new File("/home/naha/Desktop/jpotify/src/mil.mp3")),BorderLayout.PAGE_END);
         j.add(new leftofGUI(),BorderLayout.WEST);
         ArrayList<SongPlaylist> temp = new ArrayList<>();
         toolBar = new ToolBar("Milad" , "" , "1234" , j);

@@ -10,7 +10,8 @@ import java.util.Scanner;
 
 
 public class Login2 extends JFrame {
-
+    String s;
+    String s1;
     public Login2() throws IOException {
         super("Login");
         File file = new File("member.txt");
@@ -41,6 +42,8 @@ public class Login2 extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if(JP.getPassword()!=null && !JU.getText().equals("")){
+                    s=JU.getText();
+                    s1=String .valueOf(JP.getPassword());
                     Scanner scanner3 = null;
                     try {
                         scanner3 = new Scanner(file);
@@ -49,14 +52,12 @@ public class Login2 extends JFrame {
                     }
                     while (scanner3.hasNextLine()) {
                         String line = scanner3.nextLine();
-                        if(JU.getText().equals(line)) {
+                        if(s.equals(line)) {
                             File file2 = new File(line);
                             try {
                                 Scanner scanner2 = new Scanner(file2);
                                 int line2 = scanner2.nextInt();
-                                String s;
-                                s=String .valueOf(JP.getPassword());
-                                if(s.hashCode()==line2){
+                                if(s1.hashCode()==line2){
                                     try {
                                         dispose();
                                         GUI all =new GUI();
@@ -92,6 +93,8 @@ public class Login2 extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if(JP.getPassword().length!=0 && !JU.getText().equals("")){
+                    s=JU.getText();
+                    s1=String .valueOf(JP.getPassword());
                     Scanner scanner3 = null;
                     try {
                         scanner3 = new Scanner(file);
@@ -105,9 +108,7 @@ public class Login2 extends JFrame {
                             try {
                                 Scanner scanner2 = new Scanner(file2);
                                 int line2 = scanner2.nextInt();
-                                String s;
-                                s=String .valueOf(JP.getPassword());
-                                if(s.hashCode()==line2){
+                                if(s1.hashCode()==line2){
                                     try {
                                         dispose();
                                         GUI all =new GUI();
@@ -155,6 +156,8 @@ public class Login2 extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if(JP.getPassword()!=null && !JU.getText().equals("")){
+                    s=JU.getText();
+                    s1=String .valueOf(JP.getPassword());
                     Scanner scanner4 = null;
                     try {
                         scanner4 = new Scanner(file);
@@ -168,9 +171,7 @@ public class Login2 extends JFrame {
                             try {
                                 Scanner scanner5 = new Scanner(file2);
                                 int line2 = scanner5.nextInt();
-                                String s;
-                                s=String .valueOf(JP.getPassword());
-                                if(s.hashCode()==line2){
+                                if(s1.hashCode()==line2){
                                     try {
                                         dispose();
                                         GUI all =new GUI();
