@@ -17,7 +17,7 @@ public class GUI extends JFrame {
         return toolBar;
     }
 
-    public GUI() throws IOException {
+    public GUI() throws IOException, InterruptedException {
         JFrame j=new JFrame("Jpotify");
         j.setLayout(new BorderLayout());
         j.add(new BtmofGUI(j , new File("C:\\Users\\behesht\\Downloads\\Telegram Desktop\\Octave - Delam Tang Shode Barat.mp3")),BorderLayout.PAGE_END);

@@ -1,15 +1,19 @@
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.io.File;
 
 /**
  * @author naha
  * show Slider control time of songs
  */
-public class Slider extends  JPanel {
+public class Slider extends  JPanel{
+    JSlider b;
     /**
      * two label and one JSlider
      */
-    public Slider( ){
+    public Slider(){
         JLabel l1=new JLabel("0:00");
         JLabel l2=new JLabel("0:00");
         l1.setBackground(Color.BLACK);
@@ -18,10 +22,11 @@ public class Slider extends  JPanel {
         l2.setForeground(Color.WHITE);
         l1.setOpaque(true);
         l2.setOpaque(true);
-        JSlider b=new JSlider();
+        b=new JSlider();
         b.setPaintTrack(true);
         b.setPaintTicks(true);
         b.setPaintLabels(true);
+        b.setValue(0);
         //b.setVisible(true);
         b.setBackground(Color.BLACK);
         this.setLayout(new BoxLayout(this,BoxLayout.LINE_AXIS));
@@ -33,4 +38,6 @@ public class Slider extends  JPanel {
         this.setBackground(Color.BLACK);
         setVisible(true);
     }
+
+
 }

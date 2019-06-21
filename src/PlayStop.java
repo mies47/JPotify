@@ -2,6 +2,8 @@ import javax.imageio.ImageIO;
 //import javax.media.Player;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,13 +28,14 @@ public class PlayStop extends JPanel {
     /**
      * @throws IOException if not find icon throw exception
      */
-    public PlayStop(JFrame jFrame , File file) throws IOException {
+    public PlayStop(JFrame jFrame , File file) throws IOException, InterruptedException {
         JButton b1,b2,b3,b4,b5;
         b1=new JButton();
         b2=new JButton();
         b3=new JButton();
         b4=new JButton();
         b5=new JButton();
+        Slider slider = new Slider();
         Image img = ImageIO.read(getClass().getResource("shuffle (1).png"));
         Image img2=img.getScaledInstance(40,40,Image.SCALE_SMOOTH);//changing the scale of icon
         b1.setIcon(new ImageIcon(img2));
@@ -82,6 +85,7 @@ public class PlayStop extends JPanel {
         }
 
         PausablePlayer finalPlayer = player;
+
         b3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -92,6 +96,39 @@ public class PlayStop extends JPanel {
                     try {
                         finalPlayer.play();
                         Mp3File mp3File = new Mp3File(file);
+                        final boolean[] flag = {true};
+                        if(keyPress == 1) {
+                            Thread th = new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    while (true) {
+                                        slider.b.setMaximum((int) mp3File.getLengthInMilliseconds() / 1000);
+                                        slider.b.setValue(slider.b.getValue() + 1);
+                                        try {
+                                            Thread.sleep(1000);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                        if (slider.b.getMaximum() == slider.b.getValue()) {
+                                            slider.b.setValue(0);
+                                            try {
+                                                b3.setIcon(new ImageIcon((ImageIO.read(getClass().getResource("play3.png"))).getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+                                            flag[0] = false;
+                                            break;
+                                        }
+                                    }
+                                }
+                            });
+                            th.start();
+                            if(!flag[0]){
+                                th.stop();
+                                finalPlayer.stop();
+                            }
+                            keyPress--;
+                        }
                         Component[] components =jFrame.getRootPane().getContentPane().getComponents();
                         for (Component c : components){
                             if(c instanceof BtmofGUI){
@@ -269,7 +306,23 @@ public class PlayStop extends JPanel {
         box.setBorder(new EmptyBorder(0,0,20,0));
         this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
         this.add(box);
-        this.add(new Slider());
+        this.add(slider);
+        slider.b.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                try {
+                    Mp3File mp3File = new Mp3File(file);
+
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                } catch (UnsupportedTagException e1) {
+                    e1.printStackTrace();
+                } catch (InvalidDataException e1) {
+                    e1.printStackTrace();
+                }
+
+            }
+        });
         this.setBackground(Color.BLACK);
         this.setVisible(true);
     }
