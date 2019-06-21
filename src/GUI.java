@@ -1,8 +1,7 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -12,14 +11,19 @@ import java.util.ArrayList;
  * compare all JPanel
  */
 public class GUI extends JFrame {
-    BtmofGUI btmofGUI;
+    private ToolBar toolBar;
+
+    public ToolBar getToolBar() {
+        return toolBar;
+    }
+
     public GUI() throws IOException {
         JFrame j=new JFrame("Jpotify");
         j.setLayout(new BorderLayout());
-        btmofGUI= new BtmofGUI();
-        j.add(btmofGUI,BorderLayout.PAGE_END);
+        j.add(new BtmofGUI(j , new File("C:\\Users\\behesht\\Downloads\\Telegram Desktop\\Octave - Delam Tang Shode Barat.mp3")),BorderLayout.PAGE_END);
         j.add(new leftofGUI(),BorderLayout.WEST);
         ArrayList<SongPlaylist> temp = new ArrayList<>();
+        toolBar = new ToolBar("Milad" , "" , "1234" , j);
         temp.add(new SongPlaylist("" , "dgdfbejhfksehfsfsdjf uifheskfskdhf"));
         temp.add(new SongPlaylist("" , "dgdfbejhfksehfsfsdjf uifheskfskdhf"));
         temp.add(new SongPlaylist("" , "dgdfbejhfksehfsfsdjf uifheskfskdhf"));
@@ -28,7 +32,7 @@ public class GUI extends JFrame {
         temp.add(new SongPlaylist("" , "dgdfbejhfksehfsfsdjf uifheskfskdhf"));
         temp.add(new SongPlaylist("" , "dgdfbejhfksehfsfsdjf uifheskfskdhf"));
         temp.add(new SongPlaylist("" , "dgdfbejhfksehfsfsdjf uifheskfskdhf"));
-        j.add(new MiddleGUI(temp , new ToolBar("Milad" , "" , "1234")));
+        j.add(new MiddleGUI(temp , toolBar));
         ArrayList<OtherUsersSongs> list = new ArrayList<>();
         list.add(new OtherUsersSongs("Milad" , "0" , "fuuuck" , "Amir" , ImageIO.read(getClass().getResource("index.jpg"))));
         j.add(new FriendsActivity(list) , BorderLayout.EAST);

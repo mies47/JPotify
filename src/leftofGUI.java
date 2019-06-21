@@ -8,12 +8,13 @@ import java.io.IOException;
  * indicates left of gui
  */
 public class leftofGUI extends JPanel {
+    JLabel l;
     /**
      * @throws IOException if not find icon throw exception
      * constructor of leftofgui
      */
     public leftofGUI() throws IOException {
-        JLabel l=new JLabel();
+        l=new JLabel();
         Image img = ImageIO.read(getClass().getResource("images (2).png"));
         l.setIcon(new ImageIcon(img));
         Box box4= Box.createHorizontalBox();//set position to left of panel
@@ -37,5 +38,9 @@ public class leftofGUI extends JPanel {
         this.add(box4);
         this.setBackground(Color.BLACK);
         this.setVisible(true);
+    }
+
+    public void setL(Image img) {
+        l.setIcon(new ImageIcon(img.getScaledInstance(225 , 225 , Image.SCALE_SMOOTH)));
     }
 }

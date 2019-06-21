@@ -10,6 +10,7 @@ import java.util.Scanner;
 
 
 public class Login2 extends JFrame {
+
     public Login2() throws IOException {
         super("Login");
         File file = new File("member.txt");

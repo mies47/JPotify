@@ -22,7 +22,7 @@ public class ToolBar extends JPanel {
      * @param dir directory of image chosen by user
      * @param pass the password of user
      */
-    public ToolBar(String name , String dir , String pass){
+    public ToolBar(String name , String dir , String pass , JFrame frame){
         searchArea = new SearchArea();
         userName = name;
         passWord = pass;
@@ -52,7 +52,7 @@ public class ToolBar extends JPanel {
         userPanel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                profilePanel = new ProfilePanel(userName , img.getScaledInstance(100 , 100 , Image.SCALE_SMOOTH) , passWord );
+                profilePanel = new ProfilePanel(userName , img.getScaledInstance(100 , 100 , Image.SCALE_SMOOTH) , passWord , frame);
             }
         });
     }
