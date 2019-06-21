@@ -1,6 +1,7 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -9,12 +10,14 @@ import java.io.IOException;
  * compare three JPanel
  */
 public class BtmofGUI extends JPanel {
+    nameLabel nL;
+    PlayStop PS;
     /**
      * @throws IOException if not find icon throws exception
      */
-    public BtmofGUI() throws IOException {
-        nameLabel nL=new nameLabel(" "," ");
-        PlayStop PS=new PlayStop();
+    public BtmofGUI(JFrame jFrame , File file) throws IOException {
+        nL=new nameLabel(" "," ");
+        PS=new PlayStop(jFrame , file);
         Volume v=new Volume();
         this.setLayout(new BorderLayout());
         this.add(nL,BorderLayout.WEST);

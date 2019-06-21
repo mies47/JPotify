@@ -11,6 +11,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.concurrent.TimeUnit;
 
 public class Login2 extends JFrame {
+
     public Login2() throws IOException {
         super("Login");
         JLabel l=new JLabel("...Welcome to JPotify...");
@@ -65,9 +66,7 @@ public class Login2 extends JFrame {
                 dispose();
                 try {
                     SignUp all =new SignUp();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (UnsupportedEncodingException e) {
+                } catch (FileNotFoundException | UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
             }
