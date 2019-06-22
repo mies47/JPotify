@@ -11,7 +11,7 @@ public class SignUp {
         out.close();
         PrintWriter writer1=new PrintWriter(name,"UTF-8");
         String a=String.valueOf(pass);
-        writer1.println(a.hashCode());
+        writer1.print(a.hashCode());
         writer1.close();
     }
 }

@@ -25,4 +25,9 @@ public class UserPanel extends JButton {
         this.img = img.getScaledInstance(20 , 20 , Image.SCALE_SMOOTH);
         this.setIcon(new ImageIcon(this.img));
     }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
 }

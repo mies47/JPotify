@@ -17,13 +17,13 @@ public class GUI extends JFrame {
         return toolBar;
     }
 
-    public GUI() throws IOException, InterruptedException {
+    public GUI(String user ,String pass,String dir) throws IOException, InterruptedException {
         JFrame j=new JFrame("Jpotify");
         j.setLayout(new BorderLayout());
-        j.add(new BtmofGUI(j , new File("C:\\Users\\behesht\\Downloads\\Telegram Desktop\\Billie Eilish - When I Was Older.mp3")),BorderLayout.PAGE_END);
+        j.add(new BtmofGUI(j , new File("/home/naha/Downloads/Alexiane - A Million on My Soul.mp3")),BorderLayout.PAGE_END);
         j.add(new LeftOfGUI(),BorderLayout.WEST);
         ArrayList<SongPlaylist> temp = new ArrayList<>();
-        toolBar = new ToolBar("Milad" , "" , "1234" , j);
+        toolBar = new ToolBar(user , dir , pass , j);
         temp.add(new SongPlaylist("" , "dgdfbejhfksehfsfsdjf uifheskfskdhf"));
         temp.add(new SongPlaylist("" , "dgdfbejhfksehfsfsdjf uifheskfskdhf"));
         temp.add(new SongPlaylist("" , "dgdfbejhfksehfsfsdjf uifheskfskdhf"));

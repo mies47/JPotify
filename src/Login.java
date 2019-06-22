@@ -1,7 +1,10 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class Login extends JFrame {

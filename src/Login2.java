@@ -12,6 +12,7 @@ import java.util.Scanner;
 public class Login2 extends JFrame {
     String s;
     String s1;
+    String imgDir="";
     public Login2() throws IOException {
         super("Login");
         File file = new File("member.txt");
@@ -60,7 +61,9 @@ public class Login2 extends JFrame {
                                 if(s1.hashCode()==line2){
                                     try {
                                         dispose();
-                                        GUI all =new GUI();
+                                        while(scanner2.hasNextLine())
+                                            imgDir=scanner2.nextLine();
+                                        GUI all =new GUI(s,s1,imgDir);
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     } catch (InterruptedException e) {
@@ -113,7 +116,9 @@ public class Login2 extends JFrame {
                                 if(s1.hashCode()==line2){
                                     try {
                                         dispose();
-                                        GUI all =new GUI();
+                                        while(scanner2.hasNextLine())
+                                            imgDir=scanner2.nextLine();
+                                        GUI all =new GUI(s,s1,imgDir);
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     } catch (InterruptedException e) {
@@ -173,12 +178,14 @@ public class Login2 extends JFrame {
                         if(JU.getText().equals(line)) {
                             File file2 = new File(line);
                             try {
-                                Scanner scanner5 = new Scanner(file2);
-                                int line2 = scanner5.nextInt();
+                                Scanner scanner = new Scanner(file2);
+                                int line2 = scanner.nextInt();
                                 if(s1.hashCode()==line2){
                                     try {
                                         dispose();
-                                        GUI all =new GUI();
+                                        while(scanner.hasNextLine())
+                                            imgDir=scanner.nextLine();
+                                        GUI all =new GUI(s,s1,imgDir);
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     } catch (InterruptedException e) {
