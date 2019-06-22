@@ -63,6 +63,8 @@ public class Login2 extends JFrame {
                                         GUI all =new GUI();
                                     } catch (IOException e) {
                                         e.printStackTrace();
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
                                     }
                                 }else{
                                     showmsg.setText("Username or password maybe inccorect");
@@ -113,6 +115,8 @@ public class Login2 extends JFrame {
                                         dispose();
                                         GUI all =new GUI();
                                     } catch (IOException e) {
+                                        e.printStackTrace();
+                                    } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
                                 }else{
@@ -176,6 +180,8 @@ public class Login2 extends JFrame {
                                         dispose();
                                         GUI all =new GUI();
                                     } catch (IOException e) {
+                                        e.printStackTrace();
+                                    } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
                                 }else{

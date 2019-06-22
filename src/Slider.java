@@ -20,6 +20,7 @@ public class Slider extends  JPanel {
         l1.setOpaque(true);
         l2.setOpaque(true);
         b=new JSlider();
+        b.setValue(0);
         b.setPaintTrack(true);
         b.setPaintTicks(true);
         b.setPaintLabels(true);

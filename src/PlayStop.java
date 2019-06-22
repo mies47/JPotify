@@ -11,6 +11,8 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import com.mpatric.mp3agic.*;
 import javazoom.jl.decoder.JavaLayerException;
+import javazoom.jl.player.Player;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
@@ -84,82 +86,108 @@ public class PlayStop extends JPanel {
             e.printStackTrace();
         }
 
-        PausablePlayer finalPlayer = player;
+        final PausablePlayer[] finalPlayer = {player};
+        Thread th = null;
+        final boolean[] flag = {true};
+        Mp3File mp3File = null;
+        try {
+            mp3File = new Mp3File(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (UnsupportedTagException e) {
+            e.printStackTrace();
+        } catch (InvalidDataException e) {
+            e.printStackTrace();
+        }
+        Mp3File finalMp3File = mp3File;
+        th = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                flag[0] = true;
+                while (true) {
+                    slider.b.setMaximum((int) finalMp3File.getLengthInMilliseconds() / 1000);
+                    slider.b.setValue(slider.b.getValue() + 1);
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (slider.b.getMaximum() == slider.b.getValue()) {
+                        slider.b.setValue(0);
+                        try {
+                            b3.setIcon(new ImageIcon((ImageIO.read(getClass().getResource("play3.png"))).getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        flag[0] = false;
+                        finalPlayer[0].stop();
+                        keyPress = 0;
+                        try {
+                            finalPlayer[0] = new PausablePlayer(new FileInputStream(file));
+                        } catch (JavaLayerException e) {
+                            e.printStackTrace();
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    }
+                }
+            }
+        });
 
+        Thread finalTh = th;
+        Mp3File finalMp3File1 = mp3File;
         b3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 keyPress++;
-
                 if(keyPress%2==1) {
                     Image img11 = null;
                     try {
-                        finalPlayer.play();
-                        Mp3File mp3File = new Mp3File(file);
-                        final boolean[] flag = {true};
-                        if(keyPress == 1) {
-                            Thread th = new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    while (true) {
-                                        slider.b.setMaximum((int) mp3File.getLengthInMilliseconds() / 1000);
-                                        slider.b.setValue(slider.b.getValue() + 1);
-                                        try {
-                                            Thread.sleep(1000);
-                                        } catch (InterruptedException e) {
-                                            e.printStackTrace();
-                                        }
-                                        if (slider.b.getMaximum() == slider.b.getValue()) {
-                                            slider.b.setValue(0);
-                                            try {
-                                                b3.setIcon(new ImageIcon((ImageIO.read(getClass().getResource("play3.png"))).getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
-                                            } catch (IOException e) {
-                                                e.printStackTrace();
-                                            }
-                                            flag[0] = false;
-                                            break;
-                                        }
-                                    }
-                                }
-                            });
-                            th.start();
-                            if(!flag[0]){
-                                th.stop();
-                                finalPlayer.stop();
+                        assert finalPlayer[0] != null;
+                        finalPlayer[0].play();
+                        if(finalTh.isInterrupted()){
+                            synchronized (finalTh){
+                                finalTh.notifyAll();
                             }
-                            keyPress--;
+                        }
+                        if(keyPress == 1) {
+                            finalTh.start();
+                            if(!flag[0]){
+                                finalTh.wait();
+                            }
                         }
                         Component[] components =jFrame.getRootPane().getContentPane().getComponents();
                         for (Component c : components){
                             if(c instanceof BtmofGUI){
-                                if(mp3File.hasId3v1Tag()){
-                                    if(mp3File.getId3v1Tag().getTrack() != null) {
-                                        ((BtmofGUI) c).nL.l1.setText("Song: "+mp3File.getId3v1Tag().getTrack());
-                                        if(mp3File.getId3v1Tag().getArtist() != null) {
-                                            ((BtmofGUI) c).nL.l2.setText("Artist: " + mp3File.getId3v1Tag().getArtist());
+                                if(finalMp3File1.hasId3v1Tag()){
+                                    if(finalMp3File1.getId3v1Tag().getTrack() != null) {
+                                        ((BtmofGUI) c).nL.l1.setText("Song: "+ finalMp3File1.getId3v1Tag().getTrack());
+                                        if(finalMp3File1.getId3v1Tag().getArtist() != null) {
+                                            ((BtmofGUI) c).nL.l2.setText("Artist: " + finalMp3File1.getId3v1Tag().getArtist());
                                         }else {
                                             ((BtmofGUI) c).nL.l2.setText("Artist: Unknown ");
                                         }
                                     }else{
                                         ((BtmofGUI) c).nL.l1.setText("Song: Unknown");
-                                        if(mp3File.getId3v1Tag().getArtist() != null) {
-                                            ((BtmofGUI) c).nL.l2.setText("Artist: " + mp3File.getId3v1Tag().getArtist());
+                                        if(finalMp3File1.getId3v1Tag().getArtist() != null) {
+                                            ((BtmofGUI) c).nL.l2.setText("Artist: " + finalMp3File1.getId3v1Tag().getArtist());
                                         }else {
                                             ((BtmofGUI) c).nL.l2.setText("Artist: Unknown ");
                                         }
                                     }
-                                }else if(mp3File.hasId3v2Tag()){
-                                    if(mp3File.getId3v2Tag().getTrack() != null) {
-                                        ((BtmofGUI) c).nL.l1.setText("Song: "+mp3File.getId3v2Tag().getTrack());
-                                        if(mp3File.getId3v2Tag().getArtist() != null) {
-                                            ((BtmofGUI) c).nL.l2.setText("Artist: " + mp3File.getId3v2Tag().getArtist());
+                                }else if(finalMp3File1.hasId3v2Tag()){
+                                    if(finalMp3File1.getId3v2Tag().getTrack() != null) {
+                                        ((BtmofGUI) c).nL.l1.setText("Song: "+ finalMp3File1.getId3v2Tag().getTrack());
+                                        if(finalMp3File1.getId3v2Tag().getArtist() != null) {
+                                            ((BtmofGUI) c).nL.l2.setText("Artist: " + finalMp3File1.getId3v2Tag().getArtist());
                                         }else {
                                             ((BtmofGUI) c).nL.l2.setText("Artist: Unknown ");
                                         }
                                     }else{
                                         ((BtmofGUI) c).nL.l1.setText("Song: Unknown");
-                                        if(mp3File.getId3v2Tag().getArtist() != null) {
-                                            ((BtmofGUI) c).nL.l2.setText("Artist: " + mp3File.getId3v2Tag().getArtist());
+                                        if(finalMp3File1.getId3v2Tag().getArtist() != null) {
+                                            ((BtmofGUI) c).nL.l2.setText("Artist: " + finalMp3File1.getId3v2Tag().getArtist());
                                         }else {
                                             ((BtmofGUI) c).nL.l2.setText("Artist: Unknown ");
                                         }
@@ -170,9 +198,9 @@ public class PlayStop extends JPanel {
                                 }
                             }
                             if(c instanceof LeftOfGUI){
-                                if(mp3File.hasId3v2Tag()) {
-                                    if(mp3File.getId3v2Tag().getAlbumImage() != null) {
-                                        BufferedImage image =ImageIO.read(new ByteArrayInputStream(mp3File.getId3v2Tag().getAlbumImage()));
+                                if(finalMp3File1.hasId3v2Tag()) {
+                                    if(finalMp3File1.getId3v2Tag().getAlbumImage() != null) {
+                                        BufferedImage image =ImageIO.read(new ByteArrayInputStream(finalMp3File1.getId3v2Tag().getAlbumImage()));
                                         ((LeftOfGUI) c).setL(image);
                                     }
                                 }
@@ -180,11 +208,9 @@ public class PlayStop extends JPanel {
                         }
                     } catch (JavaLayerException e) {
                         e.printStackTrace();
-                    } catch (UnsupportedTagException e) {
-                        e.printStackTrace();
                     } catch (IOException e) {
                         e.printStackTrace();
-                    } catch (InvalidDataException e) {
+                    } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                     try {
@@ -196,17 +222,33 @@ public class PlayStop extends JPanel {
                     b3.setIcon(new ImageIcon(img12));
                 }else{
                     Image img13 = null;
-                    if (finalPlayer != null) {
-                        finalPlayer.pause();
+                    if (finalPlayer[0] != null) {
+                        finalPlayer[0].pause();
                     }
                     try {
                         img13 = ImageIO.read(getClass().getResource("play3.png"));
+                        Image img14 = img13.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
+                        b3.setIcon(new ImageIcon(img14));
+                        synchronized (finalTh) {
+                            finalTh.wait();
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                    Image img14 = img13.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
-                    b3.setIcon(new ImageIcon(img14));
+
                 }
+
+//                if(keyPress%2  == 1) {
+//                    while (true) {
+//                        th.stop();
+//                        if (keyPress % 2 == 0) {
+//                            th.start();
+//                            break;
+//                        }
+//                    }
+//                }
             }
         });
         Image img7 = ImageIO.read(getClass().getResource("right-arrow.png"));
@@ -312,7 +354,7 @@ public class PlayStop extends JPanel {
             public void stateChanged(ChangeEvent e) {
                 try {
                     Mp3File mp3File = new Mp3File(file);
-
+                    System.out.println(finalPlayer[0].player.getPosition());
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 } catch (UnsupportedTagException e1) {

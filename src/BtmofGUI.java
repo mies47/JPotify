@@ -15,7 +15,7 @@ public class BtmofGUI extends JPanel {
     /**
      * @throws IOException if not find icon throws exception
      */
-    public BtmofGUI(JFrame jFrame , File file) throws IOException {
+    public BtmofGUI(JFrame jFrame , File file) throws IOException, InterruptedException {
         nL=new NameLabel(" "," ");
         PS=new PlayStop(jFrame , file);
         Volume v=new Volume();
