@@ -5,10 +5,9 @@ import javax.swing.border.SoftBevelBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.util.Scanner;
 
 /**
  * profile panel for user to change the preferences
@@ -20,7 +19,7 @@ public class ProfilePanel extends JFrame {
     private JButton password;// button for changing password
     private JPanel userName;//panel includes user , userChange
     private JPanel passwordPanel;// panel includes jpwd , password
-    private JLabel status;// label to show if the password entered is right or wrong
+    JLabel status;// label to show if the password entered is right or wrong
     public JTextField user;//textfield to enter preferred username
     private JButton userChange;//button to change username
     private JFileChooser fileChooser;//filechooser for choosing th profile pic
@@ -130,6 +129,13 @@ public class ProfilePanel extends JFrame {
                 if(i==JFileChooser.APPROVE_OPTION){
                     File f=fileChooser.getSelectedFile();
                     String filepath=f.getPath();
+                    try {
+                        BufferedWriter out = new BufferedWriter(new FileWriter(finalUsername, true));
+                        out.write( "\n"+filepath );
+                        out.close();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
                     Image img = null;
                     try {
                         img = ImageIO.read(f);
@@ -168,6 +174,39 @@ public class ProfilePanel extends JFrame {
             public void focusLost(FocusEvent e) {
                 if(userChange.getModel().isPressed()){//if the change user btn was pressed
                     finalUsername = user.getText();
+                    File f=new File("member.txt");
+                    Scanner scanner= null;
+                    try {
+                        scanner = new Scanner(f);
+                    } catch (FileNotFoundException ex) {
+                        ex.printStackTrace();
+                    };
+                    int i=0;
+                    String[] trash=new String[100];
+                    while(scanner.hasNextLine()){
+                        trash[i]=scanner.nextLine();
+                        if(trash[i].equals(username)) {
+                            trash[i] = finalUsername;
+                            File oldfile =new File(username);
+                            File newfile =new File(finalUsername);
+                            oldfile.renameTo(newfile);
+                        }
+                        i++;
+                    }
+                    try {
+                        BufferedWriter out = new BufferedWriter(new FileWriter("member.txt"));
+                        for (int l=0;l<i;l++){
+                            if(System.getProperty("os.name").contains("Windows")) {
+                                out.write(trash[l] + "\r\n");
+                            }else {
+                                out.write(trash[l] + "\n");
+                            }
+                        }
+                        out.close();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    user.setText("");
                 }
                 user.setText(finalUsername);
                 user.setBorder(null);
@@ -178,6 +217,39 @@ public class ProfilePanel extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 finalUsername = user.getText();
+                File f=new File("member.txt");
+                Scanner scanner= null;
+                try {
+                    scanner = new Scanner(f);
+                } catch (FileNotFoundException ex) {
+                    ex.printStackTrace();
+                };
+                int i=0;
+                String[] trash=new String[100];
+                while(scanner.hasNextLine()){
+                    trash[i]=scanner.nextLine();
+                    if(trash[i].equals(username)) {
+                        trash[i] = finalUsername;
+                        File oldfile =new File(username);
+                        File newfile =new File(finalUsername);
+                        oldfile.renameTo(newfile);
+                    }
+                    i++;
+                }
+                try {
+                    BufferedWriter out = new BufferedWriter(new FileWriter("member.txt"));
+                    for (int l=0;l<i;l++){
+                        if(System.getProperty("os.name").contains("Windows")) {
+                            out.write(trash[l] + "\r\n");
+                        }else {
+                            out.write(trash[l] + "\n");
+                        }
+                    }
+                    out.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                user.setText("");
             }
         });
 
@@ -196,15 +268,49 @@ public class ProfilePanel extends JFrame {
                     keyPressed++;
                     if(keyPressed%2 == 1){
                         if(String.valueOf(jpwd.getPassword()).equals(finalPass)) {
-
                             jpwd.setText("");
                             status.setText("Enter your new password");
+
                         }else{
                             status.setText("Wrong password , try again");
                             keyPressed--;
                         }
                     }else{
                         finalPass =String.valueOf(jpwd.getPassword());
+                        File f=new File(finalUsername);
+                        Scanner scanner= null;
+                        try {
+                            scanner = new Scanner(f);
+                        } catch (FileNotFoundException ex) {
+                            ex.printStackTrace();
+                        };
+                        int i=0;
+                        int code;
+                        String[] trash=new String[100];
+                        code=scanner.nextInt();
+                        while(scanner.hasNextLine()){
+                            trash[i]=scanner.nextLine();
+                            i++;
+                        }
+                        code=finalPass.hashCode();
+                        try {
+                            BufferedWriter out = new BufferedWriter(new FileWriter(finalUsername));
+                            if(System.getProperty("os.name").contains("Windows")) {
+                                out.write(code + "\r\n");
+                            }else {
+                                out.write(code + "\n");
+                            }
+                            for (int l=0;l<i;l++){
+                                if(System.getProperty("os.name").contains("Windows")) {
+                                    out.write(trash[l] + "\r\n");
+                                }else {
+                                    out.write(trash[l] + "\n");
+                                }
+                            }
+                            out.close();
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
                         jpwd.setText("");
                         status.setText("Your password has successfully changed!");
                     }
@@ -230,6 +336,40 @@ public class ProfilePanel extends JFrame {
                         }
                     }else{
                         finalPass =String.valueOf(jpwd.getPassword());
+                        File f=new File(finalUsername);
+                        Scanner scanner= null;
+                        try {
+                            scanner = new Scanner(f);
+                        } catch (FileNotFoundException ex) {
+                            ex.printStackTrace();
+                        };
+                        int i=0;
+                        int code;
+                        String[] trash=new String[100];
+                        code=scanner.nextInt();
+                        while(scanner.hasNextLine()){
+                            trash[i]=scanner.nextLine();
+                            i++;
+                        }
+                        code=finalPass.hashCode();
+                        try {
+                            BufferedWriter out = new BufferedWriter(new FileWriter(finalUsername));
+                            if(System.getProperty("os.name").contains("Windows")) {
+                                out.write(code + "\r\n");
+                            }else {
+                                out.write(code + "\n");
+                            }
+                            for (int l=0;l<i;l++){
+                                if(System.getProperty("os.name").contains("Windows")) {
+                                    out.write(trash[l] + "\r\n");
+                                }else {
+                                    out.write(trash[l] + "\n");
+                                }
+                            }
+                            out.close();
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
                         jpwd.setText("");
                         status.setText("Your password has successfully changed!");
                     }
@@ -251,6 +391,40 @@ public class ProfilePanel extends JFrame {
                         }
                     }else{
                         finalPass =String.valueOf(jpwd.getPassword());
+                        File f=new File(finalUsername);
+                        Scanner scanner= null;
+                        try {
+                            scanner = new Scanner(f);
+                        } catch (FileNotFoundException ex) {
+                            ex.printStackTrace();
+                        };
+                        int i=0;
+                        int code;
+                        String[] trash=new String[100];
+                        code=scanner.nextInt();
+                        while(scanner.hasNextLine()){
+                            trash[i]=scanner.nextLine();
+                            i++;
+                        }
+                        code=finalPass.hashCode();
+                        try {
+                            BufferedWriter out = new BufferedWriter(new FileWriter(finalUsername));
+                            if(System.getProperty("os.name").contains("Windows")) {
+                                out.write(code + "\r\n");
+                            }else {
+                                out.write(code + "\n");
+                            }
+                            for (int l=0;l<i;l++){
+                                if(System.getProperty("os.name").contains("Windows")) {
+                                    out.write(trash[l] + "\r\n");
+                                }else {
+                                    out.write(trash[l] + "\n");
+                                }
+                            }
+                            out.close();
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
                         jpwd.setText("");
                         status.setText("Your password has successfully changed!");
                     }

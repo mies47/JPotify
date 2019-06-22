@@ -144,6 +144,7 @@ public class PlayStop extends JPanel {
                 if(keyPress%2==1) {
                     Image img11 = null;
                     try {
+
                         assert finalPlayer[0] != null;
                         finalPlayer[0].play();
                         if(finalTh.isInterrupted()){
@@ -354,7 +355,6 @@ public class PlayStop extends JPanel {
             public void stateChanged(ChangeEvent e) {
                 try {
                     Mp3File mp3File = new Mp3File(file);
-                    System.out.println(finalPlayer[0].player.getPosition());
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 } catch (UnsupportedTagException e1) {

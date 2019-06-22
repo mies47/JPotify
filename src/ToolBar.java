@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -35,7 +36,7 @@ public class ToolBar extends JPanel {
             if(dir.equals("")){
                 img = ImageIO.read(getClass().getResource("DefaultPhotoPic.jpg"));
             }else {
-                img = ImageIO.read(getClass().getResource(dir));
+                img = ImageIO.read(new File(dir));
             }
             userPanel = new UserPanel(userName + "  " , img);
         } catch (IOException e) {
