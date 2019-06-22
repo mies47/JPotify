@@ -1,4 +1,6 @@
-.class
+*.class
 .idea
 out
-.txt
+*.txt
+*.iml
+*.xml
