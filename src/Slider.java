@@ -6,6 +6,7 @@ import java.awt.*;
  * show Slider control time of songs
  */
 public class Slider extends  JPanel {
+    JSlider b;
     /**
      * two label and one JSlider
      */
@@ -18,7 +19,7 @@ public class Slider extends  JPanel {
         l2.setForeground(Color.WHITE);
         l1.setOpaque(true);
         l2.setOpaque(true);
-        JSlider b=new JSlider();
+        b=new JSlider();
         b.setPaintTrack(true);
         b.setPaintTicks(true);
         b.setPaintLabels(true);
