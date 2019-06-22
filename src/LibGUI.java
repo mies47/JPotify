@@ -42,7 +42,11 @@ public class LibGUI extends JPanel {
         b3.setBorder(null);
         b3.setBackground(Color.BLACK);
         b3.setForeground(Color.WHITE);
-
+        JButton bPlayMovie=new JButton("PlayMovie");
+        bPlayMovie.setFont(new Font("",Font.PLAIN,17));
+        bPlayMovie.setBorder(null);
+        bPlayMovie.setBackground(Color.BLACK);
+        bPlayMovie.setForeground(Color.WHITE);
         Image img = ImageIO.read(getClass().getResource("images (1).png"));
         Image img2=img.getScaledInstance(30,30,Image.SCALE_SMOOTH);//changing the scale of icon
         b3.setIcon(new ImageIcon(img2));
@@ -52,6 +56,9 @@ public class LibGUI extends JPanel {
         Box boxF= Box.createHorizontalBox();//set position to left of panel
         boxF.add(bFavorite);
         boxF.add(Box.createHorizontalGlue());
+        Box boxPlayMovie= Box.createHorizontalBox();//set position to left of panel
+        boxPlayMovie.add(bPlayMovie);
+        boxPlayMovie.add(Box.createHorizontalGlue());
         box.setBorder(new EmptyBorder(5,0,0,0));//space between two rows
         Box box2= Box.createHorizontalBox();//set position to left of panel
         box2.add(b1);
@@ -62,11 +69,13 @@ public class LibGUI extends JPanel {
         box3.add(b3);
         box3.add(Box.createHorizontalGlue());
         boxF.setBorder(new EmptyBorder(5,0,0,0));//space between two rows
+        boxPlayMovie.setBorder(new EmptyBorder(5,0,0,0));//space between two rows
         this.setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
         this.add(box3);
         this.add(box2);
         this.add(box);
         this.add(boxF);
+        this.add(boxPlayMovie);
         setBackground(Color.BLACK);
         setVisible(true);
     }

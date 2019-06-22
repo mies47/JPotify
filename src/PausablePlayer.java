@@ -15,7 +15,7 @@ public class PausablePlayer {
     private final static int FINISHED = 3;
 
     // the player actually doing all the work
-    private final Player player;
+    final Player player;
 
     // locking object used to communicate with player thread
     private final Object playerLock = new Object();
@@ -130,8 +130,5 @@ public class PausablePlayer {
             // ignore, we are terminating anyway
         }
     }
-
-    // demo how to use
-
 
 }

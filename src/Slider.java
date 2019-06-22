@@ -8,7 +8,8 @@ import java.io.File;
  * @author naha
  * show Slider control time of songs
  */
-public class Slider extends  JPanel{
+
+public class Slider extends  JPanel {
     JSlider b;
     /**
      * two label and one JSlider
@@ -23,6 +24,7 @@ public class Slider extends  JPanel{
         l1.setOpaque(true);
         l2.setOpaque(true);
         b=new JSlider();
+        b.setValue(0);
         b.setPaintTrack(true);
         b.setPaintTicks(true);
         b.setPaintLabels(true);

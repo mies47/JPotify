@@ -7,13 +7,13 @@ import java.io.IOException;
 /**
  * indicates left of gui
  */
-public class leftofGUI extends JPanel {
+public class LeftOfGUI extends JPanel {
     JLabel l;
     /**
      * @throws IOException if not find icon throw exception
      * constructor of leftofgui
      */
-    public leftofGUI() throws IOException {
+    public LeftOfGUI() throws IOException {
         l=new JLabel();
         Image img = ImageIO.read(getClass().getResource("images (2).png"));
         l.setIcon(new ImageIcon(img));
