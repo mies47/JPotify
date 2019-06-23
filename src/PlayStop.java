@@ -25,11 +25,12 @@ public class PlayStop extends JPanel {
     private NewPlayer np;
     private int total;
     JButton b3;
-
+    File file;
     /**
      * @throws IOException if not find icon throw exception
      */
-    public PlayStop(JFrame jFrame, File file) throws IOException, InterruptedException, JavaLayerException {
+    public PlayStop(JFrame jFrame, File fileName) throws IOException, InterruptedException, JavaLayerException {
+        file=fileName;
         JButton b1, b2, b3, b4, b5;
         b1 = new JButton();
         b2 = new JButton();
@@ -79,7 +80,8 @@ public class PlayStop extends JPanel {
         b3.setForeground(Color.BLACK);
         PausablePlayer player = null;
         try {
-            player = new PausablePlayer(new FileInputStream(file)); // a pauseable player for the file given
+            if(file!=null)
+                player = new PausablePlayer(new FileInputStream(file)); // a pauseable player for the file given
 
         } catch (JavaLayerException e) {
             e.printStackTrace();
@@ -90,7 +92,8 @@ public class PlayStop extends JPanel {
         final boolean[] flag = {true};
         Mp3File mp3File = null;
         try {
-            mp3File = new Mp3File(file);
+            if(file!=null)
+                mp3File = new Mp3File(file);
         } catch (IOException | UnsupportedTagException | InvalidDataException e) {
             e.printStackTrace();
         }
@@ -352,4 +355,7 @@ public class PlayStop extends JPanel {
         this.setVisible(true);
     }
 
+    public void setFile(File file) {
+        this.file = file;
+    }
 }

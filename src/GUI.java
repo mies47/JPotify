@@ -1,3 +1,5 @@
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.UnsupportedTagException;
 import javazoom.jl.decoder.JavaLayerException;
 
 import javax.imageio.ImageIO;
@@ -16,23 +18,31 @@ import java.util.Scanner;
  */
 public class GUI extends JFrame {
     private ToolBar toolBar;
-
+    private BtmofGUI btmofGUI;
     public ToolBar getToolBar() {
         return toolBar;
     }
-
-    public GUI(String user ,String pass,String dir) throws IOException, InterruptedException, JavaLayerException {
+    public BtmofGUI getBtmofGUI() {
+        return btmofGUI;
+    }
+    public GUI(String user , String pass, String dir) throws IOException, InterruptedException, JavaLayerException, InvalidDataException, UnsupportedTagException {
         JFrame j=new JFrame("Jpotify");
-
         j.setLayout(new BorderLayout());
-        j.add(new BtmofGUI(j , new File("/home/naha/Downloads/Alexiane - A Million on My Soul.mp3")),BorderLayout.PAGE_END);
+
+        btmofGUI=new BtmofGUI(j,new File("/home/naha/Downloads/Alexiane - A Million on My Soul.mp3"));
+        j.add((btmofGUI),BorderLayout.PAGE_END);
         ArrayList<SongPlaylist> temp = new ArrayList<>();
         toolBar = new ToolBar(user , dir , pass , j);
         String songDir;
-        Scanner scannerSong = new Scanner(user+"songs");
-        while(scannerSong.hasNextLine())
+        File f=new File(user+"songs");
+        Scanner scannerSong = new Scanner(f);
+        while(scannerSong.hasNextLine()){
             songDir=scannerSong.nextLine();
-        te
+            temp.add(new SongPlaylist(songDir));
+        }
+        for (int i = 0; i < temp.size(); i++) {
+            temp.get(i).setNewSong(btmofGUI);
+        }
         LeftOfGUI lGUI = new LeftOfGUI(j,user);
         MiddleGUI mGUI = new MiddleGUI(temp , toolBar);
         lGUI.getLibGUI().setSongPlaylist(mGUI);

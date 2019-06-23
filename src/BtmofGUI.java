@@ -11,15 +11,17 @@ import java.io.IOException;
  * compare and complete bottom of gui
  * compare three JPanel
  */
-public class BtmofGUI extends JPanel {
+public class BtmofGUI extends JPanel implements SetSong {
     NameLabel nL;
     PlayStop PS;
+    File fileName;
     /**
      * @throws IOException if not find icon throws exception
      */
-    public BtmofGUI(JFrame jFrame , File file) throws IOException, InterruptedException, JavaLayerException {
+    public BtmofGUI(JFrame jFrame,File file) throws IOException, InterruptedException, JavaLayerException {
+        fileName=file;
         nL=new NameLabel(" "," ");
-        PS=new PlayStop(jFrame , file);
+        PS=new PlayStop(jFrame , fileName);
         Volume v=new Volume();
         this.setLayout(new BorderLayout());
         this.add(nL,BorderLayout.WEST);
@@ -28,5 +30,15 @@ public class BtmofGUI extends JPanel {
         PS.setBorder(new EmptyBorder(0,100,20,0));
         this.setBackground(Color.BLACK);
         this.setVisible(true);
+    }
+
+    public void setFile(File file) {
+        this.fileName = file;
+    }
+
+    @Override
+    public void set(String s) {
+        fileName = new File(s);
+        PS.setFile(fileName);
     }
 }

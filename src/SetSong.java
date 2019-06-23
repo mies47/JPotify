@@ -1,2 +1,3 @@
-public interface setSong {
+public interface SetSong {
+    void set (String s);
 }

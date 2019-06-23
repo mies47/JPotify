@@ -194,6 +194,9 @@ public class ProfilePanel extends JFrame {
                             File oldfile =new File(username);
                             File newfile =new File(finalUsername);
                             oldfile.renameTo(newfile);
+                            File oldfile1 =new File(username+"songs");
+                            File newfile1 =new File(finalUsername+"songs");
+                            oldfile1.renameTo(newfile1);
                         }
                         i++;
                     }
@@ -237,6 +240,9 @@ public class ProfilePanel extends JFrame {
                         File oldfile =new File(username);
                         File newfile =new File(finalUsername);
                         oldfile.renameTo(newfile);
+                        File oldfile1 =new File(username+"songs");
+                        File newfile1 =new File(finalUsername+"songs");
+                        oldfile1.renameTo(newfile1);
                     }
                     i++;
                 }

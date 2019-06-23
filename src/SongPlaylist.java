@@ -23,14 +23,21 @@ public class SongPlaylist extends JPanel {
     private JLabel pic;
     private JLabel description;
 
+    public void setNewSong(SetSong newSong) {
+        this.newSong = newSong;
+    }
+
+    private SetSong newSong;
+    private String songDir;
     /**
      *
-     * @param songDir set directory of song
+     * @param s set directory of song
      * @throws IOException if the directory given does not exist
      */
-    public SongPlaylist(String songDir) throws IOException, InvalidDataException, UnsupportedTagException {
-        File songFile=new File(songDir);
-        Mp3File mp3File = new Mp3File(songFile);
+    public SongPlaylist(String s) throws IOException, InvalidDataException, UnsupportedTagException {
+        //File songFile=new File(songDir);
+        songDir=s;
+        Mp3File mp3File = new Mp3File(songDir,true);
         String song = "Unknown";
         String album = "Unknown";
         String date = "No date";
@@ -88,7 +95,7 @@ public class SongPlaylist extends JPanel {
 
             @Override
             public void mouseReleased(MouseEvent mouseEvent) {
-
+                newSong.set(songDir);
             }
 
             @Override
