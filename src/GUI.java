@@ -47,6 +47,9 @@ public class GUI extends JFrame {
         }
         LeftOfGUI lGUI = new LeftOfGUI(j,user);
         MiddleGUI mGUI = new MiddleGUI(temp , toolBar);
+        for(SongPlaylist sp : mGUI.songPlaylists){
+            sp.setPlayAddedSong(btmofGUI.PS);
+        }
         lGUI.getLibGUI().setSongPlaylist(mGUI);
         j.add(lGUI,BorderLayout.WEST);
 

@@ -15,25 +15,33 @@ import java.io.IOException;
  * @author naha and milad
  * 3 int param for time
  */
-public class PlayStop extends JPanel {
+public class PlayStop extends JPanel implements PlayAddedSong {
     private volatile int keyPress = 0;
     private int keyPress2 = 0;
     private int keyPress4 = 0;
     private int keyPress3 = 0;
     private Thread finalThread;
+    final Thread[] finalTh = new Thread[1];
+    private Thread newSongThread;
     private int num = 0;
     private NewPlayer np;
     private int total;
     private volatile boolean oneRepeatFlag = false;
+    private volatile boolean newSong = false;
+    final PausablePlayer[] finalPlayer = new PausablePlayer[1];
     Slider slider;
     JButton b3;
-    File file;
+    JFrame jFrame;
+    volatile File file;
+
+    volatile Mp3File mp3File;
     /**
      * @throws IOException if not find icon throw exception
      */
     public PlayStop(JFrame jFrame, File fileName) throws IOException, InterruptedException, JavaLayerException {
         file=fileName;
-        JButton b1, b2, b3, b4, b5;
+        this.jFrame = jFrame;
+        JButton b1, b2, b4, b5;
         b1 = new JButton();
         b2 = new JButton();
         b3 = new JButton();
@@ -83,16 +91,15 @@ public class PlayStop extends JPanel {
         PausablePlayer player = null;
         try {
             if(file!=null)
-                player = new PausablePlayer(new FileInputStream(file)); // a pauseable player for the file given
+                finalPlayer[0] = new PausablePlayer(new FileInputStream(file)); // a pauseable player for the file given
 
         } catch (JavaLayerException e) {
             e.printStackTrace();
         }
 
-        final PausablePlayer[] finalPlayer = {player};//the main player using
         final Thread[] th = {null};
         final boolean[] flag = {true};
-        Mp3File mp3File = null;
+        mp3File = null;
         try {
             if(file!=null)
                 mp3File = new Mp3File(file);
@@ -102,13 +109,38 @@ public class PlayStop extends JPanel {
         Mp3File finalMp3File = mp3File;
 
         final Thread[] finalTh = {th[0]};
-
+//        while (true) {
+//            if(newSong){
+//                keyPress = 0;
+//                finalPlayer[0].close();
+//                if(finalTh[0]!= null){
+//                    finalTh[0].interrupt();
+//                }
+//                b3.doClick();
+//                newSong = false;
+//
+//            }else {
+//                break;
+//            }
+//        }
         Mp3File finalMp3File1 = mp3File;
         b3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+//                if(newSong){
+//                    keyPress = 0;
+//                }
+//                if(newSong){
+//                    newSong = false;
+//                    jFrame.invalidate();
+//                    jFrame.validate();
+//                    jFrame.repaint();
+//                }
                 keyPress++;
                 if (keyPress % 2 == 1) {
+                    if(finalTh[0] != null && newSong){
+                        finalTh[0].interrupt();
+                    }
                     if (finalThread == null || !finalThread.isAlive()) {//check if the thread for seek is dead
                         Image img11 = null;
                         finalTh[0] = new Thread(new Runnable() {
@@ -116,10 +148,10 @@ public class PlayStop extends JPanel {
                             public void run() {
                                 flag[0] = true;
                                 while (true) {
-                                    slider.b.setMaximum((int) finalMp3File.getLengthInMilliseconds() / 1000);
+                                    slider.b.setMaximum((int) mp3File.getLengthInMilliseconds() / 1000);
                                     slider.b.setValue(slider.b.getValue() + 1);//moving the progressbar forward
-                                    PlayStop.this.slider.changeLabel((int)(slider.b.getValue() * finalMp3File.getLengthInMilliseconds() / (1000 *
-                                            slider.b.getMaximum())) , (int)finalMp3File.getLengthInMilliseconds() / 1000);
+                                    PlayStop.this.slider.changeLabel((int)(slider.b.getValue() * mp3File.getLengthInMilliseconds() / (1000 *
+                                            slider.b.getMaximum())) , (int)mp3File.getLengthInMilliseconds() / 1000);
                                     try {
                                         Thread.sleep(1000);
                                     } catch (InterruptedException e) {
@@ -127,8 +159,8 @@ public class PlayStop extends JPanel {
                                     }
                                     if (slider.b.getMaximum() == slider.b.getValue()) {//if the file ended
                                         slider.b.setValue(0);
-                                        PlayStop.this.slider.changeLabel((int)(slider.b.getValue() * finalMp3File.getLengthInMilliseconds() / (1000 *
-                                                slider.b.getMaximum())) , (int)finalMp3File.getLengthInMilliseconds() / 1000);
+                                        PlayStop.this.slider.changeLabel((int)(slider.b.getValue() * mp3File.getLengthInMilliseconds() / (1000 *
+                                                slider.b.getMaximum())) , (int)mp3File.getLengthInMilliseconds() / 1000);
                                         try {
                                             b3.setIcon(new ImageIcon((ImageIO.read(getClass().getResource("play3.png"))).getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
                                         } catch (IOException e) {
@@ -152,6 +184,9 @@ public class PlayStop extends JPanel {
                                                 finalPlayer[0].play();
                                                 b3.setIcon(new ImageIcon((ImageIO.read(getClass().getResource("pause2.png"))).getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
                                                 keyPress = 1;
+                                                jFrame.invalidate();
+                                                jFrame.validate();
+                                                jFrame.repaint();
 
                                             } catch (JavaLayerException e) {
                                                 e.printStackTrace();
@@ -174,34 +209,34 @@ public class PlayStop extends JPanel {
                             Component[] components = jFrame.getRootPane().getContentPane().getComponents();
                             for (Component c : components) {
                                 if (c instanceof BtmofGUI) {
-                                    if (finalMp3File1.hasId3v1Tag()) {
-                                        if (finalMp3File1.getId3v1Tag().getTrack() != null) {
-                                            ((BtmofGUI) c).nL.l1.setText("Song: " + finalMp3File1.getId3v1Tag().getTrack());
-                                            if (finalMp3File1.getId3v1Tag().getArtist() != null) {
-                                                ((BtmofGUI) c).nL.l2.setText("Artist: " + finalMp3File1.getId3v1Tag().getArtist());
+                                    if (mp3File.hasId3v1Tag()) {
+                                        if (mp3File.getId3v1Tag().getTrack() != null) {
+                                            ((BtmofGUI) c).nL.l1.setText("Song: " + mp3File.getId3v1Tag().getTrack());
+                                            if (mp3File.getId3v1Tag().getArtist() != null) {
+                                                ((BtmofGUI) c).nL.l2.setText("Artist: " + mp3File.getId3v1Tag().getArtist());
                                             } else {
                                                 ((BtmofGUI) c).nL.l2.setText("Artist: Unknown ");
                                             }
                                         } else {
                                             ((BtmofGUI) c).nL.l1.setText("Song: Unknown");
-                                            if (finalMp3File1.getId3v1Tag().getArtist() != null) {
-                                                ((BtmofGUI) c).nL.l2.setText("Artist: " + finalMp3File1.getId3v1Tag().getArtist());
+                                            if (mp3File.getId3v1Tag().getArtist() != null) {
+                                                ((BtmofGUI) c).nL.l2.setText("Artist: " + mp3File.getId3v1Tag().getArtist());
                                             } else {
                                                 ((BtmofGUI) c).nL.l2.setText("Artist: Unknown ");
                                             }
                                         }
-                                    } else if (finalMp3File1.hasId3v2Tag()) {
-                                        if (finalMp3File1.getId3v2Tag().getTrack() != null) {
-                                            ((BtmofGUI) c).nL.l1.setText("Song: " + finalMp3File1.getId3v2Tag().getTrack());
-                                            if (finalMp3File1.getId3v2Tag().getArtist() != null) {
-                                                ((BtmofGUI) c).nL.l2.setText("Artist: " + finalMp3File1.getId3v2Tag().getArtist());
+                                    } else if (mp3File.hasId3v2Tag()) {
+                                        if (mp3File.getId3v2Tag().getTrack() != null) {
+                                            ((BtmofGUI) c).nL.l1.setText("Song: " + mp3File.getId3v2Tag().getTrack());
+                                            if (mp3File.getId3v2Tag().getArtist() != null) {
+                                                ((BtmofGUI) c).nL.l2.setText("Artist: " + mp3File.getId3v2Tag().getArtist());
                                             } else {
                                                 ((BtmofGUI) c).nL.l2.setText("Artist: Unknown ");
                                             }
                                         } else {
                                             ((BtmofGUI) c).nL.l1.setText("Song: Unknown");
-                                            if (finalMp3File1.getId3v2Tag().getArtist() != null) {
-                                                ((BtmofGUI) c).nL.l2.setText("Artist: " + finalMp3File1.getId3v2Tag().getArtist());
+                                            if (mp3File.getId3v2Tag().getArtist() != null) {
+                                                ((BtmofGUI) c).nL.l2.setText("Artist: " + mp3File.getId3v2Tag().getArtist());
                                             } else {
                                                 ((BtmofGUI) c).nL.l2.setText("Artist: Unknown ");
                                             }
@@ -212,9 +247,9 @@ public class PlayStop extends JPanel {
                                     }
                                 }
                                 if (c instanceof LeftOfGUI) {
-                                    if (finalMp3File1.hasId3v2Tag()) {
-                                        if (finalMp3File1.getId3v2Tag().getAlbumImage() != null) {
-                                            BufferedImage image = ImageIO.read(new ByteArrayInputStream(finalMp3File1.getId3v2Tag().getAlbumImage()));
+                                    if (mp3File.hasId3v2Tag()) {
+                                        if (mp3File.getId3v2Tag().getAlbumImage() != null) {
+                                            BufferedImage image = ImageIO.read(new ByteArrayInputStream(mp3File.getId3v2Tag().getAlbumImage()));
                                             ((LeftOfGUI) c).setL(image);
                                         }
                                     }
@@ -354,14 +389,14 @@ public class PlayStop extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 num = e.getX();
                 slider.b.setValue(num * slider.b.getMaximum() / slider.b.getWidth());
-                PlayStop.this.slider.changeLabel((int)(slider.b.getValue() * finalMp3File.getLengthInMilliseconds() / (1000 *
-                        slider.b.getMaximum())) , (int)finalMp3File.getLengthInMilliseconds() / 1000);
+                PlayStop.this.slider.changeLabel((int)(slider.b.getValue() * mp3File.getLengthInMilliseconds() / (1000 *
+                        slider.b.getMaximum())) , (int)mp3File.getLengthInMilliseconds() / 1000);
                 finalPlayer[0].close();
                 super.mouseClicked(e);
                 finalThread = new Thread(() -> {
                     try {
                         synchronized (finalPlayer[0]) {
-                            np = new NewPlayer(file, (int) (num * finalMp3File.getLengthInMilliseconds() / (slider.b.getWidth() * 1000)));
+                            np = new NewPlayer(file, (int) (num * mp3File.getLengthInMilliseconds() / (slider.b.getWidth() * 1000)));
                             finalPlayer[0] = new PausablePlayer(new FileInputStream(np.getNewFile()));
                             finalPlayer[0].play();
                         }
@@ -381,5 +416,23 @@ public class PlayStop extends JPanel {
 
     public void setFile(File file) {
         this.file = file;
+    }
+
+    public void setMp3File(Mp3File mp3File) {
+        this.mp3File = mp3File;
+    }
+    @Override
+    public void playAddedSong(boolean newSong) throws IOException, JavaLayerException, InvalidDataException, UnsupportedTagException {
+        this.newSong = newSong;
+        if(finalPlayer[0] != null){
+            finalPlayer[0].close();
+        }
+        finalPlayer[0] = new PausablePlayer(new FileInputStream(file));
+        finalPlayer[0].play();
+        slider.b.setValue(0);
+        mp3File = new Mp3File(file);
+        keyPress = 0;
+        this.b3.doClick();
+
     }
 }
