@@ -1,8 +1,12 @@
 import java.io.*;
 
+/**
+ * @author naha
+ * Save user and Hash of pass in file
+ */
 public class SignUp {
     public SignUp(String name,char[] pass) throws IOException {
-        BufferedWriter out = new BufferedWriter(new FileWriter("member.txt", true));
+        BufferedWriter out = new BufferedWriter(new FileWriter("member.txt", true));//open append mode
         if(System.getProperty("os.name").contains("Windows")) {
             out.write(name + "\r\n");
         }else {

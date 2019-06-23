@@ -31,13 +31,15 @@ public class PlayStop extends JPanel {
      * @throws IOException if not find icon throw exception
      */
     public PlayStop(JFrame jFrame , File file) throws IOException, InterruptedException {
+        String time1;
+        String time2;
         JButton b1,b2,b3,b4,b5;
         b1=new JButton();
         b2=new JButton();
         b3=new JButton();
         b4=new JButton();
         b5=new JButton();
-        Slider slider = new Slider();
+        Slider slider = new Slider("0:00","0:00");
         Image img = ImageIO.read(getClass().getResource("shuffle (1).png"));
         Image img2=img.getScaledInstance(40,40,Image.SCALE_SMOOTH);//changing the scale of icon
         b1.setIcon(new ImageIcon(img2));
@@ -144,12 +146,12 @@ public class PlayStop extends JPanel {
                 if(keyPress%2==1) {
                     Image img11 = null;
                     try {
-
                         assert finalPlayer[0] != null;
                         finalPlayer[0].play();
                         if(finalTh.isInterrupted()){
                             synchronized (finalTh){
                                 finalTh.notifyAll();
+                                finalTh.start();
                             }
                         }
                         if(keyPress == 1) {
@@ -231,11 +233,9 @@ public class PlayStop extends JPanel {
                         Image img14 = img13.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
                         b3.setIcon(new ImageIcon(img14));
                         synchronized (finalTh) {
-                            finalTh.wait();
+                            finalTh.stop();
                         }
                     } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
 

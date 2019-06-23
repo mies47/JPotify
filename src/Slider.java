@@ -11,12 +11,14 @@ import java.io.File;
 
 public class Slider extends  JPanel {
     JSlider b;
+    JLabel l1;
+    JLabel l2;
     /**
      * two label and one JSlider
      */
-    public Slider(){
-        JLabel l1=new JLabel("0:00");
-        JLabel l2=new JLabel("0:00");
+    public Slider(String time1,String time2){
+        l1=new JLabel(time1);
+        l2=new JLabel(time2);
         l1.setBackground(Color.BLACK);
         l2.setBackground(Color.BLACK);
         l1.setForeground(Color.WHITE);
@@ -41,5 +43,10 @@ public class Slider extends  JPanel {
         setVisible(true);
     }
 
-
+    public void setL1(String timeLeft) {
+         l1.setText(timeLeft);
+    }
+    public void setL2(String timeRight) {
+        l1.setText(timeRight);
+    }
 }

@@ -2,8 +2,10 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * @author naha
@@ -34,7 +36,30 @@ public class GUI extends JFrame {
         temp.add(new SongPlaylist("" , "dgdfbejhfksehfsfsdjf uifheskfskdhf"));
         j.add(new MiddleGUI(temp , toolBar));
         ArrayList<OtherUsersSongs> list = new ArrayList<>();
-        list.add(new OtherUsersSongs("Milad" , "0" , "fuuuck" , "Amir" , ImageIO.read(getClass().getResource("index.jpg"))));
+        File file = new File("member.txt");
+        Scanner scanner3 = null;
+        try {
+            scanner3 = new Scanner(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        while (scanner3.hasNextLine()) {
+            String line = scanner3.nextLine();
+            if(line.equals(user))
+                continue;
+            File fileImg = new File(line);
+            Scanner scanner2 = new Scanner(fileImg);
+            String imgDir="";
+            int trash=scanner2.nextInt();
+            while(scanner2.hasNextLine()) {
+                imgDir = scanner2.nextLine();
+            }
+            if(imgDir.equals("")){
+                list.add(new OtherUsersSongs(line , "0" , "fuuuck" , "Amir" , ImageIO.read(getClass().getResource("DefaultPhotoPic.jpg"))));
+            }else{
+                list.add(new OtherUsersSongs(line , "0" , "fuuuck" , "Amir" , ImageIO.read(new File(imgDir))));
+            }
+        }
         j.add(new FriendsActivity(list) , BorderLayout.EAST);
         j.setMinimumSize(new Dimension(900, 900));
         j.setLocationRelativeTo(null);

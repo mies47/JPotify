@@ -6,7 +6,8 @@ import java.awt.*;
 /**
  * indicates list of playlist in scroller
  */
-public class Scroller extends JPanel {
+public class Scroller extends JPanel implements ChangeName {
+    DefaultListModel<String> DLM;
     /**
      * use Jlist and DefaultListModel
      * constructor of Scroller
@@ -14,9 +15,7 @@ public class Scroller extends JPanel {
      */
     public Scroller(){
 
-        DefaultListModel<String> DLM=new DefaultListModel<>();
-        DLM.addElement("amir");
-        DLM.addElement("milad");
+        DLM=new DefaultListModel<>();
         JList<String> JL=new JList<>(DLM);
         JL.setBackground(Color.BLACK);
         JL.setForeground(Color.WHITE);
@@ -33,6 +32,12 @@ public class Scroller extends JPanel {
         this.add(scrollable,BorderLayout.CENTER);
         setVisible(true);
     }
+    public void add(String s){
+        DLM.addElement(s);
+    }
 
-
+    @Override
+    public void change(String s) {
+        DLM.addElement(s);
+    }
 }

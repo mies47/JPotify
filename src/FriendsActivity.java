@@ -19,7 +19,7 @@ public class FriendsActivity extends JPanel {
         for (OtherUsersSongs temp : list){
             container.add(temp);
         }
-        container.setLayout(new BoxLayout(container , BoxLayout.Y_AXIS));
+        container.setLayout(new BoxLayout(container , WrapLayout.CENTER));
         this.setLayout(new BorderLayout());
         this.setBackground(Color.BLACK);
         JScrollPane scrollPane = new JScrollPane(container);
