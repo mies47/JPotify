@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
 import java.io.IOException;
 import javax.sound.sampled.*;
 
@@ -75,7 +76,6 @@ public class Volume extends JPanel {
                 Audio.setMasterOutputVolume(b.getValue()/(float)100);
                 l.setText(b.getValue()+"%");
                 if (b.getValue()== 0){
-
                     try {
                         btn.setIcon(new ImageIcon((ImageIO.read(getClass().getResource("mute (1).png"))).getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
                     } catch (IOException e1) {

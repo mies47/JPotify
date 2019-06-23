@@ -187,4 +187,5 @@ public class WrapLayout extends FlowLayout
 
         dim.height += rowHeight;
     }
+
 }

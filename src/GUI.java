@@ -8,6 +8,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * @author naha
@@ -62,6 +64,7 @@ public class GUI extends JFrame {
                 list.add(new OtherUsersSongs(line , "0" , "fuuuck" , "Amir" , ImageIO.read(new File(imgDir))));
             }
         }
+
         j.add(new FriendsActivity(list) , BorderLayout.EAST);
         j.setMinimumSize(new Dimension(900, 900));
         j.setLocationRelativeTo(null);

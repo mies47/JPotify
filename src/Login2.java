@@ -101,7 +101,7 @@ public class Login2 extends JFrame {
         JU.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if(JP.getPassword()!=null && !JU.getText().equals("")){
+                if(JP.getPassword().length!=0 && !JU.getText().equals("")){
                     s=JU.getText();
                     s1=String .valueOf(JP.getPassword());
                     Scanner scanner3 = null;
@@ -113,6 +113,7 @@ public class Login2 extends JFrame {
                     while (scanner3.hasNextLine()) {
                         String line = scanner3.nextLine();
                         if(s.equals(line)) {
+
                             File file2 = new File(line);
                             try {
                                 Scanner scanner2 = new Scanner(file2);
@@ -191,6 +192,7 @@ public class Login2 extends JFrame {
                                         dispose();
                                         while(scanner2.hasNextLine())
                                             imgDir=scanner2.nextLine();
+
                                         GUI all =new GUI(s,s1,imgDir);
                                     } catch (IOException e) {
                                         e.printStackTrace();
@@ -234,8 +236,6 @@ public class Login2 extends JFrame {
             public void actionPerformed(ActionEvent actionEvent) {
 //                dispose();
                 if(JP.getPassword().length!=0 && !JU.getText().equals("") ) {
-
-
                     try {
                         boolean a=true;
                         Scanner scanner = new Scanner(file);
@@ -264,6 +264,7 @@ public class Login2 extends JFrame {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }}else{
+
                     showmsg.setText("Username and password is required");
                     showmsg.setForeground(Color.RED);
                     JU.setText("");

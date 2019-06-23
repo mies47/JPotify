@@ -330,7 +330,6 @@ public class PlayStop extends JPanel {
                 num = e.getX();
                 slider.b.setValue(num * slider.b.getMaximum() / slider.b.getWidth());
                 finalPlayer[0].close();
-//                if (finalThread == null) {
                     super.mouseClicked(e);
                     finalThread = new Thread(() -> {
                         try {
@@ -344,27 +343,6 @@ public class PlayStop extends JPanel {
                         }
                     });
                     finalThread.start();
-//                } else {
-//                    finalThread.interrupt();
-//                    np.getNewFile().delete();
-//                    super.mouseClicked(e);
-//                    finalThread = new Thread(() -> {
-//                        try {
-//                            synchronized (finalPlayer[0]) {
-//                                np = new NewPlayer(file, (int) (num * finalMp3File.getLengthInMilliseconds() / (slider.b.getWidth() * 1000)));
-//                                finalPlayer[0] = new PausablePlayer(new FileInputStream(np.getNewFile()));
-//                                finalPlayer[0].play();
-//                                if (jFrame.isVisible()) {
-//                                    finalPlayer[0].close();
-//                                }
-//                            }
-//                        } catch (JavaLayerException | UnsupportedTagException | InvalidDataException | IOException e1) {
-//                            e1.printStackTrace();
-//                        }
-//                    });
-//                    num = e.getX();
-//                    finalThread.start();
-//                }
             }
         });
 

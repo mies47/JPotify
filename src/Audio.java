@@ -13,6 +13,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.Mixer;
 import javax.sound.sampled.Mixer.Info;
 
+
 /**@author naha
  * get Line and get control master Line
  */
@@ -21,6 +22,7 @@ public class Audio {
     /**
      * @param value set the volume with this param
      */
+
     public static void setMasterOutputVolume(float value) {
         if (value < 0 || value > 1)
             throw new IllegalArgumentException(
@@ -54,6 +56,7 @@ public class Audio {
             if (opened) line.close();
         }
     }
+
 
     public static Float getMasterOutputVolume() {
         Line line = getMasterOutputLine();
@@ -112,6 +115,7 @@ public class Audio {
         }
         return null;
     }
+
     public static FloatControl getVolumeControl(Line line) {
         if (!line.isOpen()) throw new RuntimeException("Line is closed: " + toString(line));
         return (FloatControl) findControl(FloatControl.Type.VOLUME, line.getControls());
@@ -252,4 +256,7 @@ public class Audio {
             for (Line line : getAvailableOutputLines(mixer)) {
                 System.out.println(line.getLineInfo().toString());
             }
-        }}}
+        }
+    }
+}
+

@@ -11,6 +11,7 @@ import java.io.IOException;
  */
 public class PlayList extends JPanel {
     Scroller scroller;
+
     /**
      * @throws IOException if not Find icon throw exception
      */

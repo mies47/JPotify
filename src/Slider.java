@@ -52,4 +52,5 @@ public class Slider extends  JPanel {
     public void setL2(String timeRight) {
         l1.setText(timeRight);
     }
+
 }

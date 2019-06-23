@@ -108,7 +108,6 @@ public class LibGUI extends JPanel {
                         e1.printStackTrace();
                     }
 
-
 //                    try{
 //                        BufferedReader br=new BufferedReader(new FileReader(filepath));
 //                        String s1="",s2="";

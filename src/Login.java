@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
  * make Begining frame for go to JPotify
  * show Label with delay
  */
+
 public class Login extends JFrame {
     public Login() throws IOException, InterruptedException {
         super("JPotify");
