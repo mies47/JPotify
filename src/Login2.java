@@ -1,3 +1,5 @@
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.UnsupportedTagException;
 import javazoom.jl.decoder.JavaLayerException;
 
 import javax.imageio.ImageIO;
@@ -44,6 +46,10 @@ public class Login2 extends JFrame {
         JP.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                if(!(scanner3.hasNextLine())) {
+                    showmsg.setText("Please Sing Up first!");
+                    showmsg.setForeground(Color.MAGENTA);
+                }
                 if(JP.getPassword()!=null && !JU.getText().equals("")){
                     s=JU.getText();
                     s1=String .valueOf(JP.getPassword());
@@ -71,6 +77,10 @@ public class Login2 extends JFrame {
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     } catch (JavaLayerException e) {
+                                        e.printStackTrace();
+                                    } catch (InvalidDataException e) {
+                                        e.printStackTrace();
+                                    } catch (UnsupportedTagException e) {
                                         e.printStackTrace();
                                     }
                                 }else{
@@ -101,7 +111,11 @@ public class Login2 extends JFrame {
         JU.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if(JP.getPassword().length!=0 && !JU.getText().equals("")){
+                if(!(scanner3.hasNextLine())) {
+                    showmsg.setText("Please Sing Up first!");
+                    showmsg.setForeground(Color.MAGENTA);
+                }
+                if(JP.getPassword()!=null && !JU.getText().equals("")){
                     s=JU.getText();
                     s1=String .valueOf(JP.getPassword());
                     Scanner scanner3 = null;
@@ -113,7 +127,6 @@ public class Login2 extends JFrame {
                     while (scanner3.hasNextLine()) {
                         String line = scanner3.nextLine();
                         if(s.equals(line)) {
-
                             File file2 = new File(line);
                             try {
                                 Scanner scanner2 = new Scanner(file2);
@@ -129,6 +142,10 @@ public class Login2 extends JFrame {
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     } catch (JavaLayerException e) {
+                                        e.printStackTrace();
+                                    } catch (InvalidDataException e) {
+                                        e.printStackTrace();
+                                    } catch (UnsupportedTagException e) {
                                         e.printStackTrace();
                                     }
                                 }else{
@@ -171,6 +188,10 @@ public class Login2 extends JFrame {
         btn1.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                if(!(scanner3.hasNextLine())) {
+                    showmsg.setText("Please Sing Up first!");
+                    showmsg.setForeground(Color.MAGENTA);
+                }
                 if(JP.getPassword()!=null && !JU.getText().equals("")){
                     s=JU.getText();
                     s1=String .valueOf(JP.getPassword());
@@ -192,13 +213,16 @@ public class Login2 extends JFrame {
                                         dispose();
                                         while(scanner2.hasNextLine())
                                             imgDir=scanner2.nextLine();
-
                                         GUI all =new GUI(s,s1,imgDir);
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     } catch (JavaLayerException e) {
+                                        e.printStackTrace();
+                                    } catch (InvalidDataException e) {
+                                        e.printStackTrace();
+                                    } catch (UnsupportedTagException e) {
                                         e.printStackTrace();
                                     }
                                 }else{
@@ -242,7 +266,6 @@ public class Login2 extends JFrame {
                         while (scanner.hasNextLine()) {
                             String line = scanner.nextLine();
                             if(JU.getText().equals(line)){
-
                                 showmsg.setText("User exists please login!");
                                 showmsg.setForeground(Color.RED);
                                 JU.setText("");
@@ -264,7 +287,6 @@ public class Login2 extends JFrame {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }}else{
-
                     showmsg.setText("Username and password is required");
                     showmsg.setForeground(Color.RED);
                     JU.setText("");

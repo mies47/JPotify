@@ -13,7 +13,6 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.Mixer;
 import javax.sound.sampled.Mixer.Info;
 
-
 /**@author naha
  * get Line and get control master Line
  */
@@ -56,7 +55,6 @@ public class Audio {
             if (opened) line.close();
         }
     }
-
 
     public static Float getMasterOutputVolume() {
         Line line = getMasterOutputLine();

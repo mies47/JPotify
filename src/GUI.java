@@ -1,3 +1,5 @@
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.UnsupportedTagException;
 import javazoom.jl.decoder.JavaLayerException;
 
 import javax.imageio.ImageIO;
@@ -10,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * @author naha
@@ -18,21 +21,31 @@ import java.util.ArrayList;
  */
 public class GUI extends JFrame {
     private ToolBar toolBar;
-
+    private BtmofGUI btmofGUI;
     public ToolBar getToolBar() {
         return toolBar;
     }
-
-    public GUI(String user ,String pass,String dir) throws IOException, InterruptedException, JavaLayerException {
+    public BtmofGUI getBtmofGUI() {
+        return btmofGUI;
+    }
+    public GUI(String user , String pass, String dir) throws IOException, InterruptedException, JavaLayerException, InvalidDataException, UnsupportedTagException {
         JFrame j=new JFrame("Jpotify");
-
         j.setLayout(new BorderLayout());
         BtmofGUI btmofGUI =new BtmofGUI(j , new File("C:\\Users\\behesht\\Downloads\\Telegram Desktop\\01 - Je Veux.mp3"));
         j.add(btmofGUI,BorderLayout.PAGE_END);
         ArrayList<SongPlaylist> temp = new ArrayList<>();
         toolBar = new ToolBar(user , dir , pass , j);
-
-        LeftOfGUI lGUI = new LeftOfGUI(j);
+        String songDir;
+        File f=new File(user+"songs");
+        Scanner scannerSong = new Scanner(f);
+        while(scannerSong.hasNextLine()){
+            songDir=scannerSong.nextLine();
+            temp.add(new SongPlaylist(songDir));
+        }
+        for (int i = 0; i < temp.size(); i++) {
+            temp.get(i).setNewSong(btmofGUI);
+        }
+        LeftOfGUI lGUI = new LeftOfGUI(j,user);
         MiddleGUI mGUI = new MiddleGUI(temp , toolBar);
         lGUI.getLibGUI().setSongPlaylist(mGUI);
         j.add(lGUI,BorderLayout.WEST);
@@ -65,7 +78,6 @@ public class GUI extends JFrame {
                 list.add(new OtherUsersSongs(line , "0" , "fuuuck" , "Amir" , ImageIO.read(new File(imgDir))));
             }
         }
-
         j.add(new FriendsActivity(list) , BorderLayout.EAST);
         j.setMinimumSize(new Dimension(900, 900));
         j.setLocationRelativeTo(null);

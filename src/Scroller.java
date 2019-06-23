@@ -8,7 +8,6 @@ import java.awt.*;
  */
 public class Scroller extends JPanel implements ChangeName {
     DefaultListModel<String> DLM;
-
     /**
      * use Jlist and DefaultListModel
      * constructor of Scroller

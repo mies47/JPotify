@@ -14,6 +14,10 @@ import java.util.Scanner;
  * @author milad
  */
 public class ProfilePanel extends JFrame {
+//    ChangeUserName changeUserName;
+//    public void setChangeUserName(ChangeUserName changeUserName) {
+//        this.changeUserName = changeUserName;
+//    }
     Image profileImg;// profile image
     JButton signOutBTN;// button for signing out
     private JButton password;// button for changing password
@@ -190,6 +194,9 @@ public class ProfilePanel extends JFrame {
                             File oldfile =new File(username);
                             File newfile =new File(finalUsername);
                             oldfile.renameTo(newfile);
+                            File oldfile1 =new File(username+"songs");
+                            File newfile1 =new File(finalUsername+"songs");
+                            oldfile1.renameTo(newfile1);
                         }
                         i++;
                     }
@@ -233,6 +240,9 @@ public class ProfilePanel extends JFrame {
                         File oldfile =new File(username);
                         File newfile =new File(finalUsername);
                         oldfile.renameTo(newfile);
+                        File oldfile1 =new File(username+"songs");
+                        File newfile1 =new File(finalUsername+"songs");
+                        oldfile1.renameTo(newfile1);
                     }
                     i++;
                 }
@@ -249,6 +259,7 @@ public class ProfilePanel extends JFrame {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
+//                changeUserName.changeUser(finalUsername);
                 user.setText("");
             }
         });

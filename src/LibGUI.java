@@ -30,7 +30,7 @@ public class LibGUI extends JPanel {
      * 1 label and 3 button
      * @throws IOException if not find icon throws exception
      */
-    public LibGUI(JFrame frame) throws IOException {
+    public LibGUI(JFrame frame,String user) throws IOException {
         l=new JLabel("YOUR LIBRARY: ");
         l.setBackground(Color.BLACK);
         l.setFont(new Font("",Font.PLAIN,20));
@@ -64,58 +64,44 @@ public class LibGUI extends JPanel {
                 if(i==JFileChooser.APPROVE_OPTION){
                     File f=fileChooser.getSelectedFile();
                     String filepath=f.getPath();
+                    BufferedWriter out = null;//open append mode
                     try {
-                        Mp3File mp3File = new Mp3File(f);
-                        String song = "Unknown";
-                        String album = "Unknown";
-                        String date = "No date";
-                        BufferedImage image = null;
-                        if(mp3File.getId3v2Tag() != null){
-                            if(mp3File.getId3v2Tag().getAlbumImage()!= null){
-                                image =ImageIO.read(new ByteArrayInputStream(mp3File.getId3v2Tag().getAlbumImage()));
-                            }
-                            if(mp3File.getId3v2Tag().getTrack() != null){
-                                song = mp3File.getId3v2Tag().getTrack();
-                            }
-                            if(mp3File.getId3v2Tag().getAlbum() != null){
-                                album = mp3File.getId3v2Tag().getAlbum();
-                            }
-                            if(mp3File.getId3v2Tag().getTrack() != null){
-                                date = mp3File.getId3v2Tag().getDate();
-                            }
-
-                        }else if(mp3File.getId3v1Tag() != null){
-                            if(mp3File.getId3v1Tag().getTrack() != null){
-                                song = mp3File.getId3v2Tag().getTrack();
-                            }
-                            if(mp3File.getId3v1Tag().getAlbum() != null){
-                                album = mp3File.getId3v2Tag().getAlbum();
-                            }
-                            if(mp3File.getId3v1Tag().getTrack() != null){
-                                date = mp3File.getId3v2Tag().getDate();
-                            }
+                        out = new BufferedWriter(new FileWriter(user+"songs", true));
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    if(System.getProperty("os.name").contains("Windows")) {
+                        try {
+                            out.write(filepath + "\r\n");
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
                         }
-                        songPlaylist.addSong(new SongPlaylist(image , "Song: " + song + "<br>" +"Album: " + album
-                                + "<br>" + "Date: " + date));
-                        frame.invalidate();
-                        frame.validate();
-                        frame.repaint();
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    } catch (UnsupportedTagException e1) {
-                        e1.printStackTrace();
-                    } catch (InvalidDataException e1) {
-                        e1.printStackTrace();
+                    }else {
+                        try {
+                            out.write(filepath + "\n");
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                    try {
+                        out.close();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
                     }
 
-//                    try{
-//                        BufferedReader br=new BufferedReader(new FileReader(filepath));
-//                        String s1="",s2="";
-//                        while((s1=br.readLine())!=null){
-//                            s2+=s1+"\n";
-//                        }
-//                        br.close();
-//                    }catch (Exception ex) {ex.printStackTrace();  }
+                    try {
+                        songPlaylist.addSong(new SongPlaylist(filepath));
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    } catch (InvalidDataException ex) {
+                        ex.printStackTrace();
+                    } catch (UnsupportedTagException ex) {
+                        ex.printStackTrace();
+                    }
+                    frame.invalidate();
+                    frame.validate();
+                    frame.repaint();
+
                 }
             }
         });

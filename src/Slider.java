@@ -33,7 +33,6 @@ public class Slider extends  JPanel{
 //        b.setPaintTrack(true);
 //        b.setPaintTicks(true);
 //        b.setPaintLabels(true);
-        b.setValue(0);
         //b.setVisible(true);
         b.setBackground(Color.BLACK);
         this.setLayout(new BoxLayout(this,BoxLayout.LINE_AXIS));
@@ -56,9 +55,9 @@ public class Slider extends  JPanel{
     public void changeLabel(int current, int total) {
         int currentMin = current / 60;
         int currentSec = current - currentMin * 60;
-        setL1(String.valueOf(currentMin)+":"+String.valueOf(currentSec));
+        setL1(String.valueOf(currentMin) + ":" + String.valueOf(currentSec));
         int totalMin = total / 60;
-        int totalSec = total - totalMin*60;
-        setL2(String.valueOf(totalMin)+":"+String.valueOf(totalSec));
+        int totalSec = total - totalMin * 60;
+        setL2(String.valueOf(totalMin) + ":" + String.valueOf(totalSec));
     }
 }

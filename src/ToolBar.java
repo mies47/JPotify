@@ -38,6 +38,7 @@ public class ToolBar extends JPanel {
             }else {
                 img = ImageIO.read(new File(dir));
             }
+
             userPanel = new UserPanel(userName + "  " , img);
         } catch (IOException e) {
             e.printStackTrace();
@@ -53,7 +54,6 @@ public class ToolBar extends JPanel {
         userPanel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 profilePanel = new ProfilePanel(userName , img.getScaledInstance(100 , 100 , Image.SCALE_SMOOTH) , passWord , frame);
 
             }
