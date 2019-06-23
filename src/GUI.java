@@ -1,3 +1,5 @@
+import javazoom.jl.decoder.JavaLayerException;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -19,22 +21,22 @@ public class GUI extends JFrame {
         return toolBar;
     }
 
-    public GUI(String user ,String pass,String dir) throws IOException, InterruptedException {
+    public GUI(String user ,String pass,String dir) throws IOException, InterruptedException, JavaLayerException {
         JFrame j=new JFrame("Jpotify");
+
         j.setLayout(new BorderLayout());
-        j.add(new BtmofGUI(j , new File("/home/naha/Downloads/Alexiane - A Million on My Soul.mp3")),BorderLayout.PAGE_END);
-        j.add(new LeftOfGUI(),BorderLayout.WEST);
+        j.add(new BtmofGUI(j , new File("C:\\Users\\behesht\\Downloads\\Telegram Desktop\\Billie Eilish - When I Was Older.mp3")),BorderLayout.PAGE_END);
         ArrayList<SongPlaylist> temp = new ArrayList<>();
         toolBar = new ToolBar(user , dir , pass , j);
-        temp.add(new SongPlaylist("" , "dgdfbejhfksehfsfsdjf uifheskfskdhf"));
-        temp.add(new SongPlaylist("" , "dgdfbejhfksehfsfsdjf uifheskfskdhf"));
-        temp.add(new SongPlaylist("" , "dgdfbejhfksehfsfsdjf uifheskfskdhf"));
-        temp.add(new SongPlaylist("" , "dgdfbejhfksehfsfsdjf uifheskfskdhf"));
-        temp.add(new SongPlaylist("" , "dgdfbejhfksehfsfsdjf uifheskfskdhf"));
-        temp.add(new SongPlaylist("" , "dgdfbejhfksehfsfsdjf uifheskfskdhf"));
-        temp.add(new SongPlaylist("" , "dgdfbejhfksehfsfsdjf uifheskfskdhf"));
-        temp.add(new SongPlaylist("" , "dgdfbejhfksehfsfsdjf uifheskfskdhf"));
-        j.add(new MiddleGUI(temp , toolBar));
+
+        LeftOfGUI lGUI = new LeftOfGUI(j);
+        MiddleGUI mGUI = new MiddleGUI(temp , toolBar);
+        lGUI.getLibGUI().setSongPlaylist(mGUI);
+        j.add(lGUI,BorderLayout.WEST);
+
+
+        j.add(mGUI , BorderLayout.CENTER);
+
         ArrayList<OtherUsersSongs> list = new ArrayList<>();
         File file = new File("member.txt");
         Scanner scanner3 = null;

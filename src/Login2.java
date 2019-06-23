@@ -1,3 +1,5 @@
+import javazoom.jl.decoder.JavaLayerException;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -68,6 +70,8 @@ public class Login2 extends JFrame {
                                         e.printStackTrace();
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
+                                    } catch (JavaLayerException e) {
+                                        e.printStackTrace();
                                     }
                                 }else{
                                     showmsg.setText("Username or password maybe inccorect");
@@ -122,6 +126,8 @@ public class Login2 extends JFrame {
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    } catch (JavaLayerException e) {
                                         e.printStackTrace();
                                     }
                                 }else{
@@ -189,6 +195,8 @@ public class Login2 extends JFrame {
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    } catch (JavaLayerException e) {
                                         e.printStackTrace();
                                     }
                                 }else{

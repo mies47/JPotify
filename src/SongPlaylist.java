@@ -12,16 +12,14 @@ public class SongPlaylist extends JPanel {
     private JLabel description;
 
     /**
-     * @param dir directory of picture
+     * @param img picture
      * @param description description of song or playlist
      * @throws IOException if the directory given does not exist
      */
-    public SongPlaylist(String dir , String description) throws IOException {
-        Image img;
-        if(dir.equals("")) {
+    public SongPlaylist(Image img , String description) throws IOException {
+        Image img1 = img;
+        if(img == null) {
             img = ImageIO.read(getClass().getResource("musicLogo.jpg"));
-        }else{
-            img = ImageIO.read(getClass().getResource(dir));
         }
         img = img.getScaledInstance(200 , 200 , Image.SCALE_SMOOTH);
         pic = new JLabel();

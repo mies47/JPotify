@@ -9,12 +9,19 @@ import java.io.IOException;
  */
 public class LeftOfGUI extends JPanel {
     JLabel l;
+
+    public LibGUI getLibGUI() {
+        return libGUI;
+    }
+
+    LibGUI libGUI;
     /**
      * @throws IOException if not find icon throw exception
      * constructor of leftofgui
      */
-    public LeftOfGUI() throws IOException {
+    public LeftOfGUI(JFrame frame) throws IOException {
         l=new JLabel();
+        libGUI = new LibGUI(frame);
         Image img = ImageIO.read(getClass().getResource("images (2).png"));
         l.setIcon(new ImageIcon(img));
         Box box4= Box.createHorizontalBox();//set position to left of panel
@@ -24,7 +31,7 @@ public class LeftOfGUI extends JPanel {
         box.add(new Homepanel());
         box.add(Box.createHorizontalGlue());
         Box box2= Box.createHorizontalBox();//set position to left of panel
-        box2.add(new LibGUI());
+        box2.add(libGUI);
         box2.add(Box.createHorizontalGlue());
         Box box3= Box.createHorizontalBox();//set position to left of panel
         box3.add(new PlayList());

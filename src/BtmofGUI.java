@@ -1,3 +1,5 @@
+import javazoom.jl.decoder.JavaLayerException;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -15,7 +17,7 @@ public class BtmofGUI extends JPanel {
     /**
      * @throws IOException if not find icon throws exception
      */
-    public BtmofGUI(JFrame jFrame , File file) throws IOException, InterruptedException {
+    public BtmofGUI(JFrame jFrame , File file) throws IOException, InterruptedException, JavaLayerException {
         nL=new NameLabel(" "," ");
         PS=new PlayStop(jFrame , file);
         Volume v=new Volume();

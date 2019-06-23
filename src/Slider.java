@@ -10,9 +10,12 @@ import java.io.File;
  */
 
 public class Slider extends  JPanel {
-    JSlider b;
+
     JLabel l1;
     JLabel l2;
+
+    JProgressBar b;
+
     /**
      * two label and one JSlider
      */
@@ -25,11 +28,11 @@ public class Slider extends  JPanel {
         l2.setForeground(Color.WHITE);
         l1.setOpaque(true);
         l2.setOpaque(true);
-        b=new JSlider();
+        b=new JProgressBar();
         b.setValue(0);
-        b.setPaintTrack(true);
-        b.setPaintTicks(true);
-        b.setPaintLabels(true);
+//        b.setPaintTrack(true);
+//        b.setPaintTicks(true);
+//        b.setPaintLabels(true);
         b.setValue(0);
         //b.setVisible(true);
         b.setBackground(Color.BLACK);
