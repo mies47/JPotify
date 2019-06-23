@@ -48,6 +48,7 @@ public class LeftOfGUI extends JPanel {
     }
 
     public void setL(Image img) {
-        l.setIcon(new ImageIcon(img.getScaledInstance(225 , 225 , Image.SCALE_SMOOTH)));
+
+        l.setIcon(new ImageIcon(img.getScaledInstance(275 , 225 , Image.SCALE_SMOOTH)));
     }
 }

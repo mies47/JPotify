@@ -53,9 +53,10 @@ public class ToolBar extends JPanel {
         userPanel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 profilePanel = new ProfilePanel(userName , img.getScaledInstance(100 , 100 , Image.SCALE_SMOOTH) , passWord , frame);
+
             }
         });
     }
-
 }

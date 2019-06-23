@@ -36,7 +36,7 @@ public class PlayStop extends JPanel {
         b3 = new JButton();
         b4 = new JButton();
         b5 = new JButton();
-        Slider slider = new Slider();
+        Slider slider = new Slider("0:00", "0:00");
         Image img = ImageIO.read(getClass().getResource("shuffle (1).png"));
         Image img2 = img.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
         b1.setIcon(new ImageIcon(img2));
@@ -330,20 +330,22 @@ public class PlayStop extends JPanel {
                 num = e.getX();
                 slider.b.setValue(num * slider.b.getMaximum() / slider.b.getWidth());
                 finalPlayer[0].close();
-                   super.mouseClicked(e);
-                    finalThread = new Thread(() -> {
-                        try {
-                            synchronized (finalPlayer[0]) {
-                                np = new NewPlayer(file, (int) (num * finalMp3File.getLengthInMilliseconds() / (slider.b.getWidth() * 1000)));
-                                finalPlayer[0] = new PausablePlayer(new FileInputStream(np.getNewFile()));
-                                finalPlayer[0].play();
-                            }
-                        } catch (JavaLayerException | UnsupportedTagException | IOException | InvalidDataException e1) {
-                            e1.printStackTrace();
+                super.mouseClicked(e);
+                finalThread = new Thread(() -> {
+                    try {
+                        synchronized (finalPlayer[0]) {
+                            np = new NewPlayer(file, (int) (num * finalMp3File.getLengthInMilliseconds() / (slider.b.getWidth() * 1000)));
+                            finalPlayer[0] = new PausablePlayer(new FileInputStream(np.getNewFile()));
+                            finalPlayer[0].play();
                         }
-                    });
-                    finalThread.start();
-                }
+                    } catch (JavaLayerException | UnsupportedTagException | IOException | InvalidDataException e1) {
+                        e1.printStackTrace();
+                    }
+                });
+                finalThread.start();
+
+
+            }
         });
 
         this.setBackground(Color.BLACK);

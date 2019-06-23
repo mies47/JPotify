@@ -315,10 +315,10 @@ public class ProfilePanel extends JFrame {
                         status.setText("Your password has successfully changed!");
                     }
                 }
-                    jpwd.setEchoChar((char) 0);
-                    jpwd.setText("Enter your current password");
-                    jpwd.setForeground(Color.LIGHT_GRAY);
-                    jpwd.setBorder(null);
+                jpwd.setEchoChar((char) 0);
+                jpwd.setText("Enter your current password");
+                jpwd.setForeground(Color.LIGHT_GRAY);
+                jpwd.setBorder(null);
             }
         });
         jpwd.addKeyListener(new KeyListener() {

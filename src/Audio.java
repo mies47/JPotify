@@ -13,7 +13,15 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.Mixer;
 import javax.sound.sampled.Mixer.Info;
 
+
+/**@author naha
+ * get Line and get control master Line
+ */
 public class Audio {
+
+    /**
+     * @param value set the volume with this param
+     */
 
     public static void setMasterOutputVolume(float value) {
         if (value < 0 || value > 1)
@@ -31,6 +39,24 @@ public class Audio {
             if (opened) line.close();
         }
     }
+
+    public static void setJPotifyOutputVolume(float value) {
+        if (value < 0 || value > 1)
+            throw new IllegalArgumentException(
+                    "Volume can only be set to a value from 0 to 1. Given value is illegal: " + value);
+        Line line = getJPotifyOutputLine();
+        if (line == null) throw new RuntimeException("Master output port not found");
+        boolean opened = open(line);
+        try {
+            FloatControl control = getVolumeControl(line);
+            if (control == null)
+                throw new RuntimeException("Volume control not found in master port: " + toString(line));
+            control.setValue(value);
+        } finally {
+            if (opened) line.close();
+        }
+    }
+
 
     public static Float getMasterOutputVolume() {
         Line line = getMasterOutputLine();
@@ -75,6 +101,15 @@ public class Audio {
     public static Line getMasterOutputLine() {
         for (Mixer mixer : getMixers()) {
             for (Line line : getAvailableOutputLines(mixer)) {
+                if (line.getLineInfo().toString().contains("Master")) return line;
+            }
+        }
+        return null;
+    }
+    public static Line getJPotifyOutputLine() {
+        for (Mixer mixer : getMixers()) {
+            for (Line line : getAvailableOutputLines(mixer)) {
+                //System.out.println(line.getLineInfo().toString());
                 if (line.getLineInfo().toString().contains("Master")) return line;
             }
         }
@@ -210,5 +245,18 @@ public class Audio {
         sb.append(mixer.isOpen() ? " [open]" : " [closed]");
         return sb.toString();
     }
-
+    public static void main(String[] args){
+//        Master target port
+//        Headphone target port
+//        Speaker target port
+//        PCM target port
+//        Mic Boost target port
+//        interface TargetDataLine supporting 512 audio formats, and buffers of at least 32 bytes
+        for (Mixer mixer : getMixers()) {
+            for (Line line : getAvailableOutputLines(mixer)) {
+                System.out.println(line.getLineInfo().toString());
+            }
+        }
+    }
 }
+

@@ -112,7 +112,8 @@ public class Login2 extends JFrame {
                     }
                     while (scanner3.hasNextLine()) {
                         String line = scanner3.nextLine();
-                        if(JU.getText().equals(line)) {
+                        if(s.equals(line)) {
+
                             File file2 = new File(line);
                             try {
                                 Scanner scanner2 = new Scanner(file2);
@@ -173,24 +174,25 @@ public class Login2 extends JFrame {
                 if(JP.getPassword()!=null && !JU.getText().equals("")){
                     s=JU.getText();
                     s1=String .valueOf(JP.getPassword());
-                    Scanner scanner4 = null;
+                    Scanner scanner3 = null;
                     try {
-                        scanner4 = new Scanner(file);
+                        scanner3 = new Scanner(file);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-                    while (scanner4.hasNextLine()) {
-                        String line = scanner4.nextLine();
-                        if(JU.getText().equals(line)) {
+                    while (scanner3.hasNextLine()) {
+                        String line = scanner3.nextLine();
+                        if(s.equals(line)) {
                             File file2 = new File(line);
                             try {
-                                Scanner scanner = new Scanner(file2);
-                                int line2 = scanner.nextInt();
+                                Scanner scanner2 = new Scanner(file2);
+                                int line2 = scanner2.nextInt();
                                 if(s1.hashCode()==line2){
                                     try {
                                         dispose();
-                                        while(scanner.hasNextLine())
-                                            imgDir=scanner.nextLine();
+                                        while(scanner2.hasNextLine())
+                                            imgDir=scanner2.nextLine();
+
                                         GUI all =new GUI(s,s1,imgDir);
                                     } catch (IOException e) {
                                         e.printStackTrace();
@@ -234,36 +236,35 @@ public class Login2 extends JFrame {
             public void actionPerformed(ActionEvent actionEvent) {
 //                dispose();
                 if(JP.getPassword().length!=0 && !JU.getText().equals("") ) {
+                    try {
+                        boolean a=true;
+                        Scanner scanner = new Scanner(file);
+                        while (scanner.hasNextLine()) {
+                            String line = scanner.nextLine();
+                            if(JU.getText().equals(line)){
 
-
-                try {
-                    boolean a=true;
-                    Scanner scanner = new Scanner(file);
-                    while (scanner.hasNextLine()) {
-                        String line = scanner.nextLine();
-                        if(JU.getText().equals(line)){
-
-                            showmsg.setText("User exists please login!");
-                            showmsg.setForeground(Color.RED);
+                                showmsg.setText("User exists please login!");
+                                showmsg.setForeground(Color.RED);
+                                JU.setText("");
+                                JP.setText("");
+                                a=false;
+                            }
+                        }
+                        if(a==true){
+                            SignUp sign =new SignUp(JU.getText(),JP.getPassword());
+                            showmsg.setText("Sign up has been added Successfuly!");
+                            showmsg.setForeground(Color.GREEN);
                             JU.setText("");
                             JP.setText("");
-                            a=false;
                         }
-                    }
-                    if(a==true){
-                        SignUp sign =new SignUp(JU.getText(),JP.getPassword());
-                        showmsg.setText("Sign up has been added Successfuly!");
-                        showmsg.setForeground(Color.GREEN);
-                        JU.setText("");
-                        JP.setText("");
-                    }
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }}else{
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }}else{
+
                     showmsg.setText("Username and password is required");
                     showmsg.setForeground(Color.RED);
                     JU.setText("");
