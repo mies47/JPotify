@@ -27,7 +27,8 @@ public class GUI extends JFrame {
         JFrame j=new JFrame("Jpotify");
 
         j.setLayout(new BorderLayout());
-        j.add(new BtmofGUI(j , new File("C:\\Users\\behesht\\Downloads\\Telegram Desktop\\01 - Je Veux.mp3")),BorderLayout.PAGE_END);
+        BtmofGUI btmofGUI =new BtmofGUI(j , new File("C:\\Users\\behesht\\Downloads\\Telegram Desktop\\01 - Je Veux.mp3"));
+        j.add(btmofGUI,BorderLayout.PAGE_END);
         ArrayList<SongPlaylist> temp = new ArrayList<>();
         toolBar = new ToolBar(user , dir , pass , j);
 

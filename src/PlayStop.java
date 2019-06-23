@@ -24,6 +24,8 @@ public class PlayStop extends JPanel {
     private int num = 0;
     private NewPlayer np;
     private int total;
+    private volatile boolean oneRepeatFlag = false;
+    Slider slider;
     JButton b3;
 
     /**
@@ -36,7 +38,7 @@ public class PlayStop extends JPanel {
         b3 = new JButton();
         b4 = new JButton();
         b5 = new JButton();
-        Slider slider = new Slider("0:00", "0:00");
+        slider = new Slider("0:00", "0:00");
         Image img = ImageIO.read(getClass().getResource("shuffle (1).png"));
         Image img2 = img.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
         b1.setIcon(new ImageIcon(img2));
@@ -113,6 +115,8 @@ public class PlayStop extends JPanel {
                                 while (true) {
                                     slider.b.setMaximum((int) finalMp3File.getLengthInMilliseconds() / 1000);
                                     slider.b.setValue(slider.b.getValue() + 1);//moving the progressbar forward
+                                    PlayStop.this.slider.changeLabel((int)(slider.b.getValue() * finalMp3File.getLengthInMilliseconds() / (1000 *
+                                            slider.b.getMaximum())) , (int)finalMp3File.getLengthInMilliseconds() / 1000);
                                     try {
                                         Thread.sleep(1000);
                                     } catch (InterruptedException e) {
@@ -120,6 +124,8 @@ public class PlayStop extends JPanel {
                                     }
                                     if (slider.b.getMaximum() == slider.b.getValue()) {//if the file ended
                                         slider.b.setValue(0);
+                                        PlayStop.this.slider.changeLabel((int)(slider.b.getValue() * finalMp3File.getLengthInMilliseconds() / (1000 *
+                                                slider.b.getMaximum())) , (int)finalMp3File.getLengthInMilliseconds() / 1000);
                                         try {
                                             b3.setIcon(new ImageIcon((ImageIO.read(getClass().getResource("play3.png"))).getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
                                         } catch (IOException e) {
@@ -138,7 +144,20 @@ public class PlayStop extends JPanel {
                                         } catch (FileNotFoundException e) {
                                             e.printStackTrace();
                                         }
-                                        break;
+                                        if(oneRepeatFlag){
+                                            try {
+                                                finalPlayer[0].play();
+                                                b3.setIcon(new ImageIcon((ImageIO.read(getClass().getResource("pause2.png"))).getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+                                                keyPress = 1;
+
+                                            } catch (JavaLayerException e) {
+                                                e.printStackTrace();
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }else {
+                                            break;
+                                        }
                                     }
                                 }
                             }
@@ -244,6 +263,7 @@ public class PlayStop extends JPanel {
                     Image img19 = null;
                     try {
                         img19 = ImageIO.read(getClass().getResource("repeat2.png"));
+                        oneRepeatFlag = true;
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -253,6 +273,7 @@ public class PlayStop extends JPanel {
                     Image img23 = null;
                     try {
                         img23 = ImageIO.read(getClass().getResource("repeat3.png"));
+                        oneRepeatFlag = false;
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -262,6 +283,7 @@ public class PlayStop extends JPanel {
                     Image img21 = null;
                     try {
                         img21 = ImageIO.read(getClass().getResource("repeat.png"));
+                        oneRepeatFlag = false;
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -329,6 +351,8 @@ public class PlayStop extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 num = e.getX();
                 slider.b.setValue(num * slider.b.getMaximum() / slider.b.getWidth());
+                PlayStop.this.slider.changeLabel((int)(slider.b.getValue() * finalMp3File.getLengthInMilliseconds() / (1000 *
+                        slider.b.getMaximum())) , (int)finalMp3File.getLengthInMilliseconds() / 1000);
                 finalPlayer[0].close();
                 super.mouseClicked(e);
                 finalThread = new Thread(() -> {

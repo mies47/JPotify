@@ -9,7 +9,7 @@ import java.io.File;
  * show Slider control time of songs
  */
 
-public class Slider extends  JPanel {
+public class Slider extends  JPanel{
 
     JLabel l1;
     JLabel l2;
@@ -50,7 +50,15 @@ public class Slider extends  JPanel {
         l1.setText(timeLeft);
     }
     public void setL2(String timeRight) {
-        l1.setText(timeRight);
+        l2.setText(timeRight);
     }
 
+    public void changeLabel(int current, int total) {
+        int currentMin = current / 60;
+        int currentSec = current - currentMin * 60;
+        setL1(String.valueOf(currentMin)+":"+String.valueOf(currentSec));
+        int totalMin = total / 60;
+        int totalSec = total - totalMin*60;
+        setL2(String.valueOf(totalMin)+":"+String.valueOf(totalSec));
+    }
 }
