@@ -19,9 +19,9 @@ public class LeftOfGUI extends JPanel {
      * @throws IOException if not find icon throw exception
      * constructor of leftofgui
      */
-    public LeftOfGUI(JFrame frame) throws IOException {
+    public LeftOfGUI(JFrame frame,String s) throws IOException {
         l=new JLabel();
-        libGUI = new LibGUI(frame);
+        libGUI = new LibGUI(frame,s);
         Image img = ImageIO.read(getClass().getResource("images (2).png"));
         l.setIcon(new ImageIcon(img));
         Box box4= Box.createHorizontalBox();//set position to left of panel

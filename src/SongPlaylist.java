@@ -1,6 +1,11 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 
 /**
@@ -30,8 +35,35 @@ public class SongPlaylist extends JPanel {
         this.setLayout(new BorderLayout());
         this.add(pic , BorderLayout.CENTER);
         this.add(this.description , BorderLayout.PAGE_END);
+        this.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+
+            }
+        });
         this.setBackground(Color.BLACK);
         this.setPreferredSize(new Dimension(200 + this.description.getWidth() , 200 + this.description.getHeight()));
         this.setBorder(BorderFactory.createSoftBevelBorder(0 , Color.GRAY , Color.LIGHT_GRAY));
+
     }
 }

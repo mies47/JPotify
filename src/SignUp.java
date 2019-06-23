@@ -7,6 +7,7 @@ import java.io.*;
 public class SignUp {
     public SignUp(String name,char[] pass) throws IOException {
         BufferedWriter out = new BufferedWriter(new FileWriter("member.txt", true));//open append mode
+        BufferedWriter song = new BufferedWriter(new FileWriter(name+"songs", true));//open append mode
         if(System.getProperty("os.name").contains("Windows")) {
             out.write(name + "\r\n");
         }else {

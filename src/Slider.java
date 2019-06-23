@@ -33,7 +33,6 @@ public class Slider extends  JPanel {
 //        b.setPaintTrack(true);
 //        b.setPaintTicks(true);
 //        b.setPaintLabels(true);
-        b.setValue(0);
         //b.setVisible(true);
         b.setBackground(Color.BLACK);
         this.setLayout(new BoxLayout(this,BoxLayout.LINE_AXIS));

@@ -30,7 +30,7 @@ public class LibGUI extends JPanel {
      * 1 label and 3 button
      * @throws IOException if not find icon throws exception
      */
-    public LibGUI(JFrame frame) throws IOException {
+    public LibGUI(JFrame frame,String user) throws IOException {
         l=new JLabel("YOUR LIBRARY: ");
         l.setBackground(Color.BLACK);
         l.setFont(new Font("",Font.PLAIN,20));
@@ -64,7 +64,31 @@ public class LibGUI extends JPanel {
                 if(i==JFileChooser.APPROVE_OPTION){
                     File f=fileChooser.getSelectedFile();
                     String filepath=f.getPath();
-                            try {
+                    BufferedWriter out = null;//open append mode
+                    try {
+                        out = new BufferedWriter(new FileWriter(user+"songs", true));
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    if(System.getProperty("os.name").contains("Windows")) {
+                        try {
+                            out.write(filepath + "\r\n");
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                    }else {
+                        try {
+                            out.write(filepath + "\n");
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                    try {
+                        out.close();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    try {
                                 Mp3File mp3File = new Mp3File(f);
                                 String song = "Unknown";
                                 String album = "Unknown";

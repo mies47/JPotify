@@ -25,11 +25,14 @@ public class GUI extends JFrame {
         JFrame j=new JFrame("Jpotify");
 
         j.setLayout(new BorderLayout());
-        j.add(new BtmofGUI(j , new File("C:\\Users\\behesht\\Downloads\\Telegram Desktop\\Billie Eilish - When I Was Older.mp3")),BorderLayout.PAGE_END);
+        j.add(new BtmofGUI(j , new File("/home/naha/Downloads/Alexiane - A Million on My Soul.mp3")),BorderLayout.PAGE_END);
         ArrayList<SongPlaylist> temp = new ArrayList<>();
         toolBar = new ToolBar(user , dir , pass , j);
-
-        LeftOfGUI lGUI = new LeftOfGUI(j);
+        String songDir;
+        Scanner scannerSong = new Scanner(user+"songs");
+        while(scannerSong.hasNextLine())
+            songDir=scannerSong.nextLine();
+        LeftOfGUI lGUI = new LeftOfGUI(j,user);
         MiddleGUI mGUI = new MiddleGUI(temp , toolBar);
         lGUI.getLibGUI().setSongPlaylist(mGUI);
         j.add(lGUI,BorderLayout.WEST);

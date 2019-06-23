@@ -29,15 +29,13 @@ public class PlayStop extends JPanel {
     /**
      * @throws IOException if not find icon throw exception
      */
-    public PlayStop(JFrame jFrame , File file) throws IOException, InterruptedException {
-        String time1;
-        String time2;
-        JButton b1,b2,b3,b4,b5;
-        b1=new JButton();
-        b2=new JButton();
-        b3=new JButton();
-        b4=new JButton();
-        b5=new JButton();
+    public PlayStop(JFrame jFrame, File file) throws IOException, InterruptedException, JavaLayerException {
+        JButton b1, b2, b3, b4, b5;
+        b1 = new JButton();
+        b2 = new JButton();
+        b3 = new JButton();
+        b4 = new JButton();
+        b5 = new JButton();
         Slider slider = new Slider("0:00","0:00");
         Image img = ImageIO.read(getClass().getResource("shuffle (1).png"));
         Image img2 = img.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
@@ -220,9 +218,6 @@ public class PlayStop extends JPanel {
                         img13 = ImageIO.read(getClass().getResource("play3.png"));
                         Image img14 = img13.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
                         b3.setIcon(new ImageIcon(img14));
-                        synchronized (finalTh) {
-                            finalTh.;
-                        }
                         finalTh[0].interrupt();
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -335,7 +330,7 @@ public class PlayStop extends JPanel {
                 num = e.getX();
                 slider.b.setValue(num * slider.b.getMaximum() / slider.b.getWidth());
                 finalPlayer[0].close();
-                if (finalThread == null) {
+
                     super.mouseClicked(e);
                     finalThread = new Thread(() -> {
                         try {
@@ -349,29 +344,8 @@ public class PlayStop extends JPanel {
                         }
                     });
                     finalThread.start();
-                } else {
-                    finalThread.interrupt();
-                    np.getNewFile().delete();
-                    super.mouseClicked(e);
-                    finalThread = new Thread(() -> {
-                        try {
-                            synchronized (finalPlayer[0]) {
-                                np = new NewPlayer(file, (int) (num * finalMp3File.getLengthInMilliseconds() / (slider.b.getWidth() * 1000)));
-                                finalPlayer[0] = new PausablePlayer(new FileInputStream(np.getNewFile()));
-                                finalPlayer[0].play();
-                                if (jFrame.isVisible()) {
-                                    finalPlayer[0].close();
-                                }
-                            }
-                        } catch (JavaLayerException | UnsupportedTagException | InvalidDataException | IOException e1) {
-                            e1.printStackTrace();
-                        }
-                    });
-                    num = e.getX();
-                    finalThread.start();
-
                 }
-            }
+
         });
 
         this.setBackground(Color.BLACK);
