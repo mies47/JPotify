@@ -32,6 +32,7 @@ public class GUI extends JFrame {
         Scanner scannerSong = new Scanner(user+"songs");
         while(scannerSong.hasNextLine())
             songDir=scannerSong.nextLine();
+        te
         LeftOfGUI lGUI = new LeftOfGUI(j,user);
         MiddleGUI mGUI = new MiddleGUI(temp , toolBar);
         lGUI.getLibGUI().setSongPlaylist(mGUI);

@@ -88,51 +88,19 @@ public class LibGUI extends JPanel {
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
-                    try {
-                                Mp3File mp3File = new Mp3File(f);
-                                String song = "Unknown";
-                                String album = "Unknown";
-                                String date = "No date";
-                                BufferedImage image = null;
-                                if(mp3File.getId3v2Tag() != null){
-                                    if(mp3File.getId3v2Tag().getAlbumImage()!= null){
-                                        image =ImageIO.read(new ByteArrayInputStream(mp3File.getId3v2Tag().getAlbumImage()));
-                                    }
-                                    if(mp3File.getId3v2Tag().getTrack() != null){
-                                        song = mp3File.getId3v2Tag().getTrack();
-                                    }
-                                    if(mp3File.getId3v2Tag().getAlbum() != null){
-                                        album = mp3File.getId3v2Tag().getAlbum();
-                                    }
-                                    if(mp3File.getId3v2Tag().getTrack() != null){
-                                        date = mp3File.getId3v2Tag().getDate();
-                                    }
 
-                                }else if(mp3File.getId3v1Tag() != null){
-                                    if(mp3File.getId3v1Tag().getTrack() != null){
-                                        song = mp3File.getId3v2Tag().getTrack();
-                                    }
-                                    if(mp3File.getId3v1Tag().getAlbum() != null){
-                                        album = mp3File.getId3v2Tag().getAlbum();
-                                    }
-                                    if(mp3File.getId3v1Tag().getTrack() != null){
-                                        date = mp3File.getId3v2Tag().getDate();
-                                    }
-                                }
-                                songPlaylist.addSong(new SongPlaylist(image , "Song: " + song + "<br>" +"Album: " + album
-                                + "<br>" + "Date: " + date));
-                                frame.invalidate();
+                    try {
+                        songPlaylist.addSong(new SongPlaylist(filepath));
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    } catch (InvalidDataException ex) {
+                        ex.printStackTrace();
+                    } catch (UnsupportedTagException ex) {
+                        ex.printStackTrace();
+                    }
+                    frame.invalidate();
                                 frame.validate();
                                 frame.repaint();
-                            } catch (IOException e1) {
-                                e1.printStackTrace();
-                            } catch (UnsupportedTagException e1) {
-                                e1.printStackTrace();
-                            } catch (InvalidDataException e1) {
-                                e1.printStackTrace();
-                            }
-
-
 //                    try{
 //                        BufferedReader br=new BufferedReader(new FileReader(filepath));
 //                        String s1="",s2="";
