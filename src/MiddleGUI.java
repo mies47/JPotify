@@ -9,19 +9,24 @@ import java.util.ArrayList;
  * contains a jpanel with flow layout
  * @author Milad
  */
-public class MiddleGUI extends JPanel{
+public class MiddleGUI extends JPanel implements AddSongPlaylist{
+    ArrayList<SongPlaylist> songPlaylists = new ArrayList<>();
+    JPanel jPanel;
+    ToolBar toolBar;
     /**
      * @param list all of the songs or playlists added
      */
     public MiddleGUI(ArrayList<SongPlaylist> list , ToolBar toolBar){
-        JPanel jPanel = new JPanel();
+        songPlaylists = list;
+        jPanel = new JPanel();
         jPanel.setLayout(new WrapLayout(WrapLayout.LEFT));
         for (int i = 0 ; i < list.size() ; i++){
             jPanel.add(list.get(i));
         }
         jPanel.setBackground(Color.BLACK);
+        this.toolBar = toolBar;
         this.setLayout(new BorderLayout());
-        this.add(toolBar , BorderLayout.PAGE_START);
+        this.add(this.toolBar , BorderLayout.PAGE_START);
         this.add(jPanel , BorderLayout.CENTER);
         this.setBackground(Color.BLACK);
         JScrollPane scrollPane = new JScrollPane(jPanel);
@@ -33,6 +38,10 @@ public class MiddleGUI extends JPanel{
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         this.add(scrollPane);
     }
-
+    @Override
+    public void addSong(SongPlaylist songPlaylist){
+        songPlaylists.add(songPlaylist);
+        jPanel.add(songPlaylists.get(songPlaylists.size() - 1));
+    }
 
 }

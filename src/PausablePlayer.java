@@ -4,10 +4,11 @@ import java.io.InputStream;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.AudioDevice;
 import javazoom.jl.player.Player;
+import javazoom.jl.player.advanced.AdvancedPlayer;
 import javazoom.jlgui.basicplayer.BasicPlayer;
 import javazoom.jlgui.basicplayer.BasicPlayerException;
 
-public class PausablePlayer {
+public class PausablePlayer extends AdvancedPlayer {
 
     private final static int NOTSTARTED = 0;
     private final static int PLAYING = 1;
@@ -24,10 +25,12 @@ public class PausablePlayer {
     private int playerStatus = NOTSTARTED;
 
     public PausablePlayer(final InputStream inputStream) throws JavaLayerException {
+        super(inputStream);
         this.player = new Player(inputStream);
     }
 
     public PausablePlayer(final InputStream inputStream, final AudioDevice audioDevice) throws JavaLayerException {
+        super(inputStream);
         this.player = new Player(inputStream, audioDevice);
     }
 

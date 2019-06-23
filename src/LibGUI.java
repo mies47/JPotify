@@ -1,8 +1,17 @@
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.Mp3File;
+import com.mpatric.mp3agic.UnsupportedTagException;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
-import java.io.IOException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.util.ArrayList;
 
 /**
  * library show manage
@@ -13,11 +22,15 @@ public class LibGUI extends JPanel {
     static JLabel l;
     static JButton b1,b2,b3;
 
+
+
+    AddSongPlaylist songPlaylist;
+
     /**
      * 1 label and 3 button
      * @throws IOException if not find icon throws exception
      */
-    public LibGUI() throws IOException {
+    public LibGUI(JFrame frame) throws IOException {
         l=new JLabel("YOUR LIBRARY: ");
         l.setBackground(Color.BLACK);
         l.setFont(new Font("",Font.PLAIN,20));
@@ -42,6 +55,42 @@ public class LibGUI extends JPanel {
         b3.setBorder(null);
         b3.setBackground(Color.BLACK);
         b3.setForeground(Color.WHITE);
+        b3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("mp3", "mp3"));
+                int i=fileChooser.showOpenDialog(frame);
+                if(i==JFileChooser.APPROVE_OPTION){
+                    File f=fileChooser.getSelectedFile();
+                    String filepath=f.getPath();
+                            try {
+                                Mp3File mp3File = new Mp3File(f);
+                                BufferedImage image =ImageIO.read(new ByteArrayInputStream(mp3File.getId3v2Tag().getAlbumImage()));
+                                songPlaylist.addSong(new SongPlaylist(image , "ffffffffffff"));
+                                frame.invalidate();
+                                frame.validate();
+                                frame.repaint();
+                            } catch (IOException e1) {
+                                e1.printStackTrace();
+                            } catch (UnsupportedTagException e1) {
+                                e1.printStackTrace();
+                            } catch (InvalidDataException e1) {
+                                e1.printStackTrace();
+                            }
+
+
+//                    try{
+//                        BufferedReader br=new BufferedReader(new FileReader(filepath));
+//                        String s1="",s2="";
+//                        while((s1=br.readLine())!=null){
+//                            s2+=s1+"\n";
+//                        }
+//                        br.close();
+//                    }catch (Exception ex) {ex.printStackTrace();  }
+                }
+            }
+        });
         JButton bPlayMovie=new JButton("PlayMovie");
         bPlayMovie.setFont(new Font("",Font.PLAIN,17));
         bPlayMovie.setBorder(null);
@@ -78,5 +127,8 @@ public class LibGUI extends JPanel {
         this.add(boxPlayMovie);
         setBackground(Color.BLACK);
         setVisible(true);
+    }
+    public void setSongPlaylist(AddSongPlaylist songPlaylist) {
+        this.songPlaylist = songPlaylist;
     }
 }
