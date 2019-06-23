@@ -116,7 +116,8 @@ public class SongPlaylist extends JPanel {
 
             @Override
             public void mouseEntered(MouseEvent mouseEvent) {
-
+                Cursor cursor = new Cursor(Cursor.HAND_CURSOR);
+                setCursor(cursor);
             }
 
             @Override

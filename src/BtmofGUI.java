@@ -1,3 +1,5 @@
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.UnsupportedTagException;
 import javazoom.jl.decoder.JavaLayerException;
 
 import javax.swing.*;
@@ -18,11 +20,11 @@ public class BtmofGUI extends JPanel implements SetSong {
     /**
      * @throws IOException if not find icon throws exception
      */
-    public BtmofGUI(JFrame jFrame,File file) throws IOException, InterruptedException, JavaLayerException {
+    public BtmofGUI(JFrame jFrame,File file) throws IOException, InterruptedException, JavaLayerException, InvalidDataException, UnsupportedTagException {
         fileName=file;
         nL=new NameLabel(" "," ");
         PS=new PlayStop(jFrame , fileName);
-        Volume v=new Volume();
+        Volume v=new Volume(fileName);
         this.setLayout(new BorderLayout());
         this.add(nL,BorderLayout.WEST);
         this.add(PS,BorderLayout.CENTER);

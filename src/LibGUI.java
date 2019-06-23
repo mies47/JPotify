@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * library show manage
@@ -23,7 +24,7 @@ public class LibGUI extends JPanel {
     static JButton b1,b2,b3;
 
 
-
+    SongPlaylist songPlay;
     AddSongPlaylist songPlaylist;
 
     /**
@@ -64,22 +65,47 @@ public class LibGUI extends JPanel {
                 if(i==JFileChooser.APPROVE_OPTION){
                     File f=fileChooser.getSelectedFile();
                     String filepath=f.getPath();
+                    String songDir;
+                    File fileSong=new File(user+"songs");
+                    Boolean fileIsExist=false;
                     BufferedWriter out = null;//open append mode
                     try {
                         out = new BufferedWriter(new FileWriter(user+"songs", true));
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
-                    if(System.getProperty("os.name").contains("Windows")) {
+                    try {
+                        Scanner scannerSong = new Scanner(fileSong);
+                        while(scannerSong.hasNextLine()){
+                            songDir=scannerSong.nextLine();
+                            if(filepath.equals(songDir))
+                                fileIsExist=true;
+                        }
+                    } catch (FileNotFoundException ex) {
+                        ex.printStackTrace();
+                    }
+                    if(!fileIsExist) {
+                        if (System.getProperty("os.name").contains("Windows")) {
+                            try {
+                                out.write(filepath + "\r\n");
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
+                        } else {
+                            try {
+                                out.write(filepath + "\n");
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
                         try {
-                            out.write(filepath + "\r\n");
+                            songPlay=new SongPlaylist(filepath);
+                            songPlaylist.addSong(songPlay);
                         } catch (IOException ex) {
                             ex.printStackTrace();
-                        }
-                    }else {
-                        try {
-                            out.write(filepath + "\n");
-                        } catch (IOException ex) {
+                        } catch (InvalidDataException ex) {
+                            ex.printStackTrace();
+                        } catch (UnsupportedTagException ex) {
                             ex.printStackTrace();
                         }
                     }
@@ -89,15 +115,6 @@ public class LibGUI extends JPanel {
                         ex.printStackTrace();
                     }
 
-                    try {
-                        songPlaylist.addSong(new SongPlaylist(filepath));
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    } catch (InvalidDataException ex) {
-                        ex.printStackTrace();
-                    } catch (UnsupportedTagException ex) {
-                        ex.printStackTrace();
-                    }
                     frame.invalidate();
                     frame.validate();
                     frame.repaint();
