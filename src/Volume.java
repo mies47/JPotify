@@ -1,3 +1,10 @@
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.Mp3File;
+import com.mpatric.mp3agic.UnsupportedTagException;
+import javazoom.jl.decoder.JavaLayerException;
+import javazoom.jl.player.AudioDevice;
+import javax.swing.JDialog;
+//import sound.spectrogram.MyPlayer;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -8,6 +15,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import javax.sound.sampled.*;
 
@@ -22,7 +31,8 @@ public class Volume extends JPanel {
      * one slider for control volume
      * @throws IOException if not find icon throws exception
      */
-    public Volume() throws IOException {
+    public Volume(File file) throws IOException, InvalidDataException, UnsupportedTagException, JavaLayerException, InterruptedException {
+        JavaSoundAudioDevice JSAD=new JavaSoundAudioDevice();
         JButton btn=new JButton();
         JLabel l=new JLabel();
         l.setBackground(Color.BLACK);

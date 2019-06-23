@@ -33,7 +33,7 @@ public class PlayStop extends JPanel {
      */
     public PlayStop(JFrame jFrame, File fileName) throws IOException, InterruptedException, JavaLayerException {
         file=fileName;
-        JButton b1, b2, b3, b4, b5;
+        JButton b1, b2, b4, b5;
         b1 = new JButton();
         b2 = new JButton();
         b3 = new JButton();

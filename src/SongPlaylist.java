@@ -73,7 +73,7 @@ public class SongPlaylist extends JPanel {
         if(img1 == null) {
             img1 = ImageIO.read(getClass().getResource("musicLogo.jpg"));
         }
-        img1 = img1.getScaledInstance(200 , 200 , Image.SCALE_SMOOTH);
+        img1 = img1.getScaledInstance(200 , 150 , Image.SCALE_SMOOTH);
         pic = new JLabel();
         pic.setIcon(new ImageIcon(img1));
         this.description = new JLabel("<html>"+ "Song: " + song + "<br>" +"Album: " + album + "<br>" + "Date: " + date+"</html>");//to show the text in multiple lines
@@ -100,7 +100,8 @@ public class SongPlaylist extends JPanel {
 
             @Override
             public void mouseEntered(MouseEvent mouseEvent) {
-
+                Cursor cursor = new Cursor(Cursor.HAND_CURSOR);
+                setCursor(cursor);
             }
 
             @Override

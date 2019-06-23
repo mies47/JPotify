@@ -2,6 +2,8 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 
 /**
@@ -29,6 +31,33 @@ public class Slider extends  JPanel{
         l1.setOpaque(true);
         l2.setOpaque(true);
         b=new JProgressBar();
+        b.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+                Cursor cursor=new Cursor(Cursor.HAND_CURSOR);
+                setCursor(cursor);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+
+            }
+        });
         b.setValue(0);
 //        b.setPaintTrack(true);
 //        b.setPaintTicks(true);
