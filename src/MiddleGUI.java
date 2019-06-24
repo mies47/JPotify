@@ -43,5 +43,9 @@ public class MiddleGUI extends JPanel implements AddSongPlaylist{
         songPlaylists.add(songPlaylist);
         jPanel.add(songPlaylists.get(songPlaylists.size() - 1));
     }
+    public void setUserName(String user){
+        this.toolBar.userPanel.setName(user);
+
+    }
 
 }

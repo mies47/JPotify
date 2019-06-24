@@ -7,7 +7,7 @@ import java.awt.*;
  * @author milad
  */
 public class UserPanel extends JButton {
-    String name;
+    volatile String name;
     Image img;
 
     /**
@@ -29,6 +29,10 @@ public class UserPanel extends JButton {
     @Override
     public void setName(String name) {
         this.name = name;
+    }
+    public void setUserName(String name){
+        this.name = name;
+        this.setText(name);
     }
 
 }

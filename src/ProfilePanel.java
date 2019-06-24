@@ -214,6 +214,14 @@ public class ProfilePanel extends JFrame {
                         ex.printStackTrace();
                     }
                     user.setText("");
+                    Component[] components =frame.getContentPane().getComponents();//changing the username in toolbar
+                    for (Component p : components){
+                        if(p instanceof MiddleGUI){
+                            ToolBar toolBar = (ToolBar)((MiddleGUI) p).getComponent(0);
+                            toolBar.userName = finalUsername;
+                            toolBar.userPanel.setUserName(finalUsername);
+                        }
+                    }
                 }
                 user.setText(finalUsername);
                 user.setBorder(null);
@@ -258,6 +266,14 @@ public class ProfilePanel extends JFrame {
                     out.close();
                 } catch (IOException ex) {
                     ex.printStackTrace();
+                }
+                Component[] components =frame.getContentPane().getComponents();
+                for (Component p : components){
+                    if(p instanceof MiddleGUI){
+                        ToolBar toolBar = (ToolBar)((MiddleGUI) p).getComponent(0);
+                        toolBar.userName = finalUsername;
+                        toolBar.userPanel.setUserName(finalUsername);
+                    }
                 }
 //                changeUserName.changeUser(finalUsername);
                 user.setText("");
