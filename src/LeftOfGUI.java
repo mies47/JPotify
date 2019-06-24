@@ -2,6 +2,8 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 
 /**
@@ -9,6 +11,12 @@ import java.io.IOException;
  */
 public class LeftOfGUI extends JPanel {
     JLabel l;
+
+    public Homepanel getHomepanel() {
+        return homepanel;
+    }
+
+    Homepanel homepanel;
 
     public LibGUI getLibGUI() {
         return libGUI;
@@ -21,6 +29,7 @@ public class LeftOfGUI extends JPanel {
      */
     public LeftOfGUI(JFrame frame,String s,BtmofGUI b) throws IOException {
         l=new JLabel();
+        homepanel = new Homepanel();
         libGUI = new LibGUI(frame,s,b);
         Image img = ImageIO.read(getClass().getResource("images (2).png"));
         l.setIcon(new ImageIcon(img));
@@ -28,7 +37,7 @@ public class LeftOfGUI extends JPanel {
         box4.add(l);
         box4.add(Box.createHorizontalGlue());
         Box box= Box.createHorizontalBox();//set position to left of panel
-        box.add(new Homepanel());
+        box.add(homepanel);
         box.add(Box.createHorizontalGlue());
         Box box2= Box.createHorizontalBox();//set position to left of panel
         box2.add(libGUI);
@@ -45,6 +54,53 @@ public class LeftOfGUI extends JPanel {
         this.add(box4);
         this.setBackground(Color.BLACK);
         this.setVisible(true);
+        homepanel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Component c =frame.getRootPane().getContentPane().getComponent(2);
+                if(c instanceof MiddleGUI){
+                    ((MiddleGUI) c).jPanel.removeAll();
+                    JButton songs;
+                    JButton playList;
+                    JButton albums;
+                    JButton favorites;
+                    songs = new JButton("Songs");
+                    playList = new JButton("Playlist");
+                    albums = new JButton("Albums");
+                    favorites = new JButton("Favorites");
+                    songs.setBackground(Color.BLACK);
+                    albums.setBackground(Color.BLACK);
+                    playList.setBackground(Color.BLACK);
+                    favorites.setBackground(Color.BLACK);
+                    songs.setForeground(Color.WHITE);
+                    albums.setForeground(Color.WHITE);
+                    playList.setForeground(Color.WHITE);
+                    favorites.setForeground(Color.WHITE);
+                    try {
+                        songs.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("music-player.png")).getScaledInstance(
+                                300 , 300 , Image.SCALE_SMOOTH)));
+                        playList.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("playlist.png")).getScaledInstance(
+                                300 , 300 , Image.SCALE_SMOOTH)));
+                        albums.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("music-album.png")).getScaledInstance(
+                                300 , 300 , Image.SCALE_SMOOTH)));
+                        favorites.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("favourites.png")).getScaledInstance(
+                                300 , 300 , Image.SCALE_SMOOTH)));
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                    ((MiddleGUI) c).jPanel.setLayout(new WrapLayout(FlowLayout.LEFT));
+                    ((MiddleGUI) c).jPanel.add(songs);
+                    ((MiddleGUI) c).jPanel.add(playList);
+                    ((MiddleGUI) c).jPanel.add(albums);
+                    ((MiddleGUI) c).jPanel.add(favorites);
+                    ((MiddleGUI) c).jPanel.setBackground(Color.BLACK);
+                    ((MiddleGUI) c).jPanel.setVisible(true);
+                    frame.validate();
+                    frame.invalidate();
+                    frame.repaint();
+                }
+            }
+        });
     }
 
     public void setL(Image img) {

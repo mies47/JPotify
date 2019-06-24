@@ -3,12 +3,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 /**
  * home button
  *
  */
 public class Homepanel extends JButton {
+
     /**
      * set button text to "Home"
      * set button icon to a specified icon
@@ -28,12 +30,7 @@ public class Homepanel extends JButton {
         setForeground(Color.WHITE);
         setFont(new Font("dialog",Font.LAYOUT_NO_LIMIT_CONTEXT,20));
         this.setBorder(null);
-        this.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-
-            }
-        });
     }
+
 
 }

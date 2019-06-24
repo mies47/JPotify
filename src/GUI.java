@@ -56,6 +56,7 @@ public class GUI extends JFrame {
 
 
         j.add(mGUI , BorderLayout.CENTER);
+//        lGUI.setSetMiddlePanel(mGUI);
 
         ArrayList<OtherUsersSongs> list = new ArrayList<>();
         File file = new File("member.txt");
