@@ -5,14 +5,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-
 import com.mpatric.mp3agic.*;
 import javazoom.jl.decoder.JavaLayerException;
-
 import java.io.IOException;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * @author naha and milad
@@ -33,11 +29,13 @@ public class PlayStop extends JPanel implements PlayAddedSong {
     private volatile boolean newSong = false;
     private volatile boolean nextOrPreviousSong = false;
     private volatile boolean repeatAllFlag = false;
+    private volatile boolean isShuffle = false;
     private ArrayList<File> allMp3Files = new ArrayList<>();
     final PausablePlayer[] finalPlayer = new PausablePlayer[1];
     Slider slider;
     JButton b3;
     JButton b5;
+    JButton b1;
     JFrame jFrame;
     volatile File file;
     volatile String userName;
@@ -50,7 +48,7 @@ public class PlayStop extends JPanel implements PlayAddedSong {
         file=fileName;
         this.userName = userName;
         this.jFrame = jFrame;
-        JButton b1, b2, b4;
+        JButton  b2, b4;
         b1 = new JButton();
         b2 = new JButton();
         b3 = new JButton();
@@ -62,6 +60,7 @@ public class PlayStop extends JPanel implements PlayAddedSong {
         b1.setIcon(new ImageIcon(img2));
         b1.setBackground(Color.BLACK);
         b1.setForeground(Color.BLACK);
+//        String filePlayingPath = null;
         b1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {//Action for shuffle button
@@ -69,6 +68,9 @@ public class PlayStop extends JPanel implements PlayAddedSong {
                 if (keyPress2 % 2 == 1) {
                     Image img15 = null;
                     try {
+                        isShuffle = true;
+                        Collections.shuffle(allMp3Files);
+                        Collections.swap(allMp3Files , 0 , allMp3Files.indexOf(file));
                         img15 = ImageIO.read(getClass().getResource("shuffle (2).png"));
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -78,6 +80,7 @@ public class PlayStop extends JPanel implements PlayAddedSong {
                 } else {
                     Image img17 = null;
                     try {
+                        isShuffle = false;
                         img17 = ImageIO.read(getClass().getResource("shuffle (1).png"));
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -96,15 +99,17 @@ public class PlayStop extends JPanel implements PlayAddedSong {
                 if(keyPress3 % 3 == 2){
                     repeatAllFlag = true;
                 }
-
-                File userNameFile = new File(userName + "songs");
-                try {
-                    Scanner userScanner = new Scanner(userNameFile);
-                    while (userScanner.hasNextLine()){
-                        allMp3Files.add(new File(userScanner.nextLine()));
+                if(!isShuffle) {
+                    File userNameFile = new File(userName + "songs");
+                    try {
+                        allMp3Files = new ArrayList<>();
+                        Scanner userScanner = new Scanner(userNameFile);
+                        while (userScanner.hasNextLine()) {
+                            allMp3Files.add(new File(userScanner.nextLine()));
+                        }
+                    } catch (FileNotFoundException e1) {
+                        e1.printStackTrace();
                     }
-                } catch (FileNotFoundException e1) {
-                    e1.printStackTrace();
                 }
                 PlayStop.this.nextOrPreviousSong = true;
                 if(finalPlayer[0] != null){
@@ -172,45 +177,10 @@ public class PlayStop extends JPanel implements PlayAddedSong {
         } catch (IOException | UnsupportedTagException | InvalidDataException e) {
             e.printStackTrace();
         }
-        Mp3File finalMp3File = mp3File;
-
         final Thread[] finalTh = {th[0]};
-//        while (true) {
-//            if(newSong){
-//                keyPress = 0;
-//                finalPlayer[0].close();
-//                if(finalTh[0]!= null){
-//                    finalTh[0].interrupt();
-//                }
-//                b3.doClick();
-//                newSong = false;
-//
-//            }else {
-//                break;
-//            }
-//        }
-        Mp3File finalMp3File1 = mp3File;
         b3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-//                if(newSong){
-//                    keyPress = 0;
-//                }
-//                if(newSong){
-//                    newSong = false;
-//                    jFrame.invalidate();
-//                    jFrame.validate();
-//                    jFrame.repaint();
-//                }
-                File userNameFile = new File(userName + "songs");
-                try {
-                    Scanner userScanner = new Scanner(userNameFile);
-                    while (userScanner.hasNextLine()){
-                        allMp3Files.add(new File(userScanner.nextLine()));
-                    }
-                } catch (FileNotFoundException e1) {
-                    e1.printStackTrace();
-                }
                 keyPress++;
                 if (keyPress % 2 == 1) {
                     if(finalTh[0] != null && (newSong||nextOrPreviousSong)){
@@ -247,11 +217,18 @@ public class PlayStop extends JPanel implements PlayAddedSong {
                                             np.getNewFile().delete();
                                         }
                                         keyPress = 0;
+                                        if(isShuffle){
+                                            if(file.getPath().equals(allMp3Files.get(allMp3Files.size()-1).getPath())){
+                                                keyPress = 0;
+                                                repeatAllFlag = false;
+                                                break;
+                                            }
+                                            b4.doClick();
+                                            break;
+                                        }
                                         if(repeatAllFlag){
                                             if(file.getPath().equals(allMp3Files.get(allMp3Files.size()-1).getPath())){
-                                                repeatAllFlag = false;
                                                 keyPress = 0;
-                                                break;
                                             }
                                             b4.doClick();
                                             break;
@@ -337,7 +314,13 @@ public class PlayStop extends JPanel implements PlayAddedSong {
                                         if (mp3File.getId3v2Tag().getAlbumImage() != null) {
                                             BufferedImage image = ImageIO.read(new ByteArrayInputStream(mp3File.getId3v2Tag().getAlbumImage()));
                                             ((LeftOfGUI) c).setL(image);
+                                        }else{
+                                            Image img = ImageIO.read(getClass().getResource("images (2).png"));
+                                            ((LeftOfGUI) c).setL(img);
                                         }
+                                    }else{
+                                        Image img = ImageIO.read(getClass().getResource("images (2).png"));
+                                        ((LeftOfGUI) c).setL(img);
                                     }
                                 }
                             }
@@ -386,28 +369,32 @@ public class PlayStop extends JPanel implements PlayAddedSong {
         b4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 if(keyPress3 % 3 == 2){
                     repeatAllFlag = true;
                 }
-                File userNameFile = new File(userName + "songs");
-                try {
-                    Scanner userScanner = new Scanner(userNameFile);
-                    while (userScanner.hasNextLine()){
-                        allMp3Files.add(new File(userScanner.nextLine()));
+                if(!isShuffle) {
+                    allMp3Files = new ArrayList<>();
+                    File userNameFile = new File(userName + "songs");
+                    try {
+                        Scanner userScanner = new Scanner(userNameFile);
+                        while (userScanner.hasNextLine()) {
+                            allMp3Files.add(new File(userScanner.nextLine()));
+                        }
+                    } catch (FileNotFoundException e1) {
+                        e1.printStackTrace();
                     }
-                } catch (FileNotFoundException e1) {
-                    e1.printStackTrace();
                 }
                 PlayStop.this.nextOrPreviousSong = true;
                 if(finalPlayer[0] != null){
                     finalPlayer[0].close();
                 }
-                int counter = 0;
+                counter = 0;
                 for(File f : allMp3Files){
                     if(file.getPath().equals(f.getPath())){
                         break;
                     }
-                    counter++;
+                    ++counter;
                 }
                 if(counter >= allMp3Files.size() - 1){
                     counter = -1;
@@ -585,6 +572,10 @@ public class PlayStop extends JPanel implements PlayAddedSong {
         }
         if(keyPress3 % 3 == 2){
             repeatAllFlag = true;
+        }
+        if(keyPress2 % 2 ==1){
+            keyPress2 = 0;
+            b1.doClick();
         }
         finalPlayer[0] = new PausablePlayer(new FileInputStream(file));
         finalPlayer[0].play();

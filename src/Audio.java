@@ -99,7 +99,12 @@ public class Audio {
     public static Line getMasterOutputLine() {
         for (Mixer mixer : getMixers()) {
             for (Line line : getAvailableOutputLines(mixer)) {
-                if (line.getLineInfo().toString().contains("Master")) return line;
+                if(System.getProperty("os.name").contains("Windows")) {
+                    if (line.getLineInfo().toString().contains("SPEAKER")) return line;
+                }else {
+                    if (line.getLineInfo().toString().contains("Master")) return line;
+
+                }
             }
         }
         return null;
