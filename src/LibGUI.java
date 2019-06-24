@@ -99,6 +99,7 @@ public class LibGUI extends JPanel {
                             }
                         }
                         try {
+                            System.out.println(filepath);
                             songPlay=new SongPlaylist(filepath);
                             songPlaylist.addSong(songPlay);
                         } catch (IOException ex) {

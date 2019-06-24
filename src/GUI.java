@@ -31,7 +31,7 @@ public class GUI extends JFrame {
     public GUI(String user , String pass, String dir) throws IOException, InterruptedException, JavaLayerException, InvalidDataException, UnsupportedTagException {
         JFrame j=new JFrame("Jpotify");
         j.setLayout(new BorderLayout());
-        BtmofGUI btmofGUI =new BtmofGUI(j , new File("/home/naha/Downloads/Alexiane - A Million on My Soul.mp3"));
+        BtmofGUI btmofGUI =new BtmofGUI(j , null);
         j.add(btmofGUI,BorderLayout.PAGE_END);
         ArrayList<SongPlaylist> temp = new ArrayList<>();
         toolBar = new ToolBar(user , dir , pass , j);

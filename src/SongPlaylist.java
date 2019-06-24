@@ -40,6 +40,7 @@ public class SongPlaylist extends JPanel {
     public SongPlaylist(String s) throws IOException, InvalidDataException, UnsupportedTagException {
         //File songFile=new File(songDir);
         songDir=s;
+        System.out.println(songDir);
         Mp3File mp3File = new Mp3File(songDir,true);
         String song = "Unknown";
         String album = "Unknown";
