@@ -180,6 +180,47 @@ public class SongPlaylist extends JPanel {
                     e.printStackTrace();
                 }
                 setVisible(false);
+                File favTemp=new File(user+"favorite");
+                ArrayList<String> allFav=new ArrayList<String>();
+                String favPath;
+                Scanner scannerFav = null;
+                try {
+                    scannerFav = new Scanner(favTemp);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                while(scannerFav.hasNextLine()){
+                    favPath=scannerFav.nextLine();
+                    if(!favPath.equals(songDir)){
+                        allFav.add(favPath);
+                    }
+                }
+                BufferedWriter fav = null;//open append mode
+                try {
+                    fav = new BufferedWriter(new FileWriter(user+"favorite"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                for (String s:allFav) {
+                    if(System.getProperty("os.name").contains("Windows")) {
+                        try {
+                            fav.write( s+ "\r\n");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }else {
+                        try {
+                            fav.write(s + "\n");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                try {
+                    fav.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
         menu.add(item);

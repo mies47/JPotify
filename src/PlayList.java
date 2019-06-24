@@ -38,6 +38,7 @@ public class PlayList extends JPanel {
             public void actionPerformed(ActionEvent actionEvent) {
                 PlayListFrame p=new PlayListFrame();
                 p.setNewName(scroller);
+
             }
         });
         Box box2= Box.createHorizontalBox();//set position to left of panel
