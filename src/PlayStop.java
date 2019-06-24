@@ -38,6 +38,7 @@ public class PlayStop extends JPanel implements PlayAddedSong {
     JButton b1;
     JFrame jFrame;
     volatile File file;
+    Boolean fileIsExist=false;
     volatile String userName;
     volatile Mp3File mp3File;
     volatile int counter;
@@ -96,6 +97,7 @@ public class PlayStop extends JPanel implements PlayAddedSong {
         b2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                allMp3Files=new ArrayList<>();
                 if(keyPress3 % 3 == 2){
                     repeatAllFlag = true;
                 }
@@ -369,7 +371,6 @@ public class PlayStop extends JPanel implements PlayAddedSong {
         b4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 if(keyPress3 % 3 == 2){
                     repeatAllFlag = true;
                 }
@@ -495,6 +496,30 @@ public class PlayStop extends JPanel implements PlayAddedSong {
                     }
                     Image imgbtn16 = imgbtn15.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
                     btn.setIcon(new ImageIcon(imgbtn16));
+                    fileIsExist=false;
+                    Scanner scannerSong = null;
+                    try {
+                        scannerSong = new Scanner(new File(userName+"favorite"));
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    while(scannerSong.hasNextLine()){
+                        if(file.getPath().equals( scannerSong.nextLine()))
+                            fileIsExist=true;
+                    }
+                    if(!fileIsExist) {
+                        try {
+                            BufferedWriter fav = new BufferedWriter(new FileWriter(userName + "favorite", true));//open append mode
+                            if (System.getProperty("os.name").contains("Windows")) {
+                                fav.write(file.getPath() + "\r\n");
+                            } else {
+                                fav.write(file.getPath() + "\n");
+                            }
+                            fav.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 } else {
                     Image imgbtn17 = null;
                     try {
@@ -504,6 +529,47 @@ public class PlayStop extends JPanel implements PlayAddedSong {
                     }
                     Image imgbtn18 = imgbtn17.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
                     btn.setIcon(new ImageIcon(imgbtn18));
+                    File f=new File(userName+"favorite");
+                    ArrayList<String> allFav=new ArrayList<String>();
+                    String favPath;
+                    Scanner scannerFav = null;
+                    try {
+                        scannerFav = new Scanner(f);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    while(scannerFav.hasNextLine()){
+                        favPath=scannerFav.nextLine();
+                        if(!favPath.equals(file.getPath())){
+                            allFav.add(favPath);
+                        }
+                    }
+                    BufferedWriter fav = null;//open append mode
+                    try {
+                        fav = new BufferedWriter(new FileWriter(userName+"favorite"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    for (String s:allFav) {
+                        if(System.getProperty("os.name").contains("Windows")) {
+                            try {
+                                fav.write( s+ "\r\n");
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }else {
+                            try {
+                                fav.write(s + "\n");
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                    try {
+                        fav.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
