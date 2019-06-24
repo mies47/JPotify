@@ -41,12 +41,12 @@ public class GUI extends JFrame {
         Scanner scannerSong = new Scanner(f);
         while(scannerSong.hasNextLine()){
             songDir=scannerSong.nextLine();
-            temp.add(new SongPlaylist(songDir));
+            temp.add(new SongPlaylist(songDir,user));
         }
         for (int i = 0; i < temp.size(); i++) {
             temp.get(i).setNewSong(btmofGUI);
         }
-        LeftOfGUI lGUI = new LeftOfGUI(j,user);
+        LeftOfGUI lGUI = new LeftOfGUI(j,user,btmofGUI);
         mGUI = new MiddleGUI(temp , toolBar);
         for(SongPlaylist sp : mGUI.songPlaylists){
             sp.setPlayAddedSong(btmofGUI.PS);

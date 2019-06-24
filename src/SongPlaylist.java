@@ -8,14 +8,14 @@ import javax.swing.*;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * a jpanel that includes the song thumbnail and its description
@@ -37,7 +37,7 @@ public class SongPlaylist extends JPanel {
      * @param s set directory of song
      * @throws IOException if the directory given does not exist
      */
-    public SongPlaylist(String s) throws IOException, InvalidDataException, UnsupportedTagException {
+    public SongPlaylist(String s,String user) throws IOException, InvalidDataException, UnsupportedTagException {
         //File songFile=new File(songDir);
         songDir=s;
         Mp3File mp3File = new Mp3File(songDir,true);
@@ -85,10 +85,74 @@ public class SongPlaylist extends JPanel {
         this.setLayout(new BorderLayout());
         this.add(pic , BorderLayout.CENTER);
         this.add(this.description , BorderLayout.PAGE_END);
+        JPopupMenu menu = new JPopupMenu("More");
+        menu.setBackground(Color.BLACK);
+        menu.setForeground(Color.white);
+        JMenuItem item = new JMenuItem("add to PlayList");
+        item.setBackground(Color.BLACK);
+        item.setForeground(Color.white);
+        JMenuItem item2 = new JMenuItem("add to Favorite");
+        item2.setBackground(Color.BLACK);
+        item2.setForeground(Color.white);
+        JMenuItem item3 = new JMenuItem("Remove");
+        item3.setBackground(Color.BLACK);
+        item3.setForeground(Color.white);
+        item3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                File f=new File(user+"songs");
+                ArrayList<String> allSong=new ArrayList<String>();
+                String songPath;
+                Scanner scannerSong = null;
+                try {
+                    scannerSong = new Scanner(f);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                while(scannerSong.hasNextLine()){
+                    songPath=scannerSong.nextLine();
+                    if(!songPath.equals(songDir)){
+                        allSong.add(songPath);
+                    }
+                }
+
+                BufferedWriter song = null;//open append mode
+                try {
+                    song = new BufferedWriter(new FileWriter(user+"songs"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                for (String s:allSong) {
+                    if(System.getProperty("os.name").contains("Windows")) {
+                        try {
+                            song.write( s+ "\r\n");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }else {
+                        try {
+                            song.write(s + "\n");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                try {
+                    song.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                setVisible(false);
+            }
+        });
+        menu.add(item);
+        menu.add(item2);
+        menu.add(item3);
         this.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
-
+                if(SwingUtilities.isRightMouseButton(mouseEvent))
+                    menu.show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
             }
 
             @Override
@@ -98,19 +162,21 @@ public class SongPlaylist extends JPanel {
 
             @Override
             public void mouseReleased(MouseEvent mouseEvent) {
-                newSong.set(songDir);
-                try {
-                    playAddedSong.playAddedSong(true);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (JavaLayerException e) {
-                    e.printStackTrace();
-                } catch (UnsupportedTagException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InvalidDataException e) {
-                    e.printStackTrace();
+                if(SwingUtilities.isLeftMouseButton(mouseEvent)){
+                    newSong.set(songDir);
+                    try {
+                        playAddedSong.playAddedSong(true);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (JavaLayerException e) {
+                        e.printStackTrace();
+                    } catch (UnsupportedTagException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InvalidDataException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
