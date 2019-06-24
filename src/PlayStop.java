@@ -573,7 +573,6 @@ public class PlayStop extends JPanel implements PlayAddedSong {
                 keyPress4++;
                 if (keyPress4 % 2 == 1) {
                     Image imgbtn15 = null;
-
                     try {
                         imgbtn15 = ImageIO.read(getClass().getResource("favorite (3).png"));
                         isFavorite = true;
@@ -581,11 +580,6 @@ public class PlayStop extends JPanel implements PlayAddedSong {
                         e.printStackTrace();
                     }
                     File f=new File(userName + "favorite");
-                    try {
-                        BufferedWriter fav = new BufferedWriter(new FileWriter(f, true));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                     Image imgbtn16 = imgbtn15.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
                     btn.setIcon(new ImageIcon(imgbtn16));
                     fileIsExist=false;
@@ -601,7 +595,8 @@ public class PlayStop extends JPanel implements PlayAddedSong {
                     }
                     if(!fileIsExist) {
                         try {
-                            BufferedWriter fav = new BufferedWriter(new FileWriter(userName + "favorite", true));//open append mode
+                            BufferedWriter fav = new BufferedWriter(new FileWriter(f, true));
+                           //open append mode
                             if (System.getProperty("os.name").contains("Windows")) {
                                 fav.write(file.getPath() + "\r\n");
                             } else {

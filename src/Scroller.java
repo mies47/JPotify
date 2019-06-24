@@ -8,18 +8,18 @@ import java.awt.*;
  */
 public class Scroller extends JPanel implements ChangeName {
     DefaultListModel<String> DLM;
+
     /**
      * use Jlist and DefaultListModel
      * constructor of Scroller
      * show list of Play list as string
      */
-    public Scroller(){
-
-        DLM=new DefaultListModel<>();
-        JList<String> JL=new JList<>(DLM);
+    public Scroller() {
+        DLM = new DefaultListModel<>();
+        JList<String> JL = new JList<>(DLM);
         JL.setBackground(Color.BLACK);
         JL.setForeground(Color.WHITE);
-        JScrollPane scrollable= new JScrollPane(JL);
+        JScrollPane scrollable = new JScrollPane(JL);
         scrollable.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);//make just vertical scroll
         scrollable.setBackground(Color.BLACK);
         scrollable.setOpaque(true);
@@ -29,10 +29,11 @@ public class Scroller extends JPanel implements ChangeName {
         UIManager.put("ScrollBar.track", new ColorUIResource(Color.BLACK));
         scrollable.getVerticalScrollBar().setUI(new BasicScrollBarUI());
         this.setLayout(new BorderLayout());
-        this.add(scrollable,BorderLayout.CENTER);
+        this.add(scrollable, BorderLayout.CENTER);
         setVisible(true);
     }
-    public void add(String s){
+
+    public void add(String s) {
         DLM.addElement(s);
     }
 

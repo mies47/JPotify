@@ -31,6 +31,7 @@ public class SongPlaylist extends JPanel {
     }
 
     private SetSong newSong;
+    private Boolean isFavorite;
     private String songDir;
     /**
      *
@@ -97,6 +98,42 @@ public class SongPlaylist extends JPanel {
         JMenuItem item3 = new JMenuItem("Remove");
         item3.setBackground(Color.BLACK);
         item3.setForeground(Color.white);
+        item2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                BufferedWriter fav = null;
+                try {
+                    fav = new BufferedWriter(new FileWriter(user + "favorite", true));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                isFavorite=false;
+                Scanner scannerSong = null;
+                try {
+                    scannerSong = new Scanner(new File(user+"favorite"));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                while(scannerSong.hasNextLine()){
+                    if(songDir.equals( scannerSong.nextLine()))
+                        isFavorite=true;
+                }
+                if(!isFavorite) {
+                    try {
+                        //open append mode
+                        if (System.getProperty("os.name").contains("Windows")) {
+                            fav.write(songDir + "\r\n");
+                        } else {
+                            fav.write(songDir + "\n");
+                        }
+                        fav.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        });
         item3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
