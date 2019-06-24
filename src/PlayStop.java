@@ -32,10 +32,12 @@ public class PlayStop extends JPanel implements PlayAddedSong {
     private volatile boolean oneRepeatFlag = false;
     private volatile boolean newSong = false;
     private volatile boolean nextOrPreviousSong = false;
+    private volatile boolean repeatAllFlag = false;
     private ArrayList<File> allMp3Files = new ArrayList<>();
     final PausablePlayer[] finalPlayer = new PausablePlayer[1];
     Slider slider;
     JButton b3;
+    JButton b5;
     JFrame jFrame;
     volatile File file;
     volatile String userName;
@@ -48,7 +50,7 @@ public class PlayStop extends JPanel implements PlayAddedSong {
         file=fileName;
         this.userName = userName;
         this.jFrame = jFrame;
-        JButton b1, b2, b4, b5;
+        JButton b1, b2, b4;
         b1 = new JButton();
         b2 = new JButton();
         b3 = new JButton();
@@ -91,6 +93,10 @@ public class PlayStop extends JPanel implements PlayAddedSong {
         b2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(keyPress3 % 3 == 2){
+                    repeatAllFlag = true;
+                }
+
                 PlayStop.this.nextOrPreviousSong = true;
                 if(finalPlayer[0] != null){
                     finalPlayer[0].close();
@@ -223,6 +229,15 @@ public class PlayStop extends JPanel implements PlayAddedSong {
                                             np.getNewFile().delete();
                                         }
                                         keyPress = 0;
+                                        if(repeatAllFlag){
+                                            if(file.getPath().equals(allMp3Files.get(allMp3Files.size()-1).getPath())){
+                                                repeatAllFlag = false;
+                                                keyPress = 0;
+                                                break;
+                                            }
+                                            b4.doClick();
+                                            break;
+                                        }
                                         try {
                                             finalPlayer[0] = new PausablePlayer(new FileInputStream(file));
                                         } catch (JavaLayerException e) {
@@ -353,6 +368,9 @@ public class PlayStop extends JPanel implements PlayAddedSong {
         b4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(keyPress3 % 3 == 2){
+                    repeatAllFlag = true;
+                }
                 PlayStop.this.nextOrPreviousSong = true;
                 if(finalPlayer[0] != null){
                     finalPlayer[0].close();
@@ -408,6 +426,7 @@ public class PlayStop extends JPanel implements PlayAddedSong {
                     try {
                         img19 = ImageIO.read(getClass().getResource("repeat2.png"));
                         oneRepeatFlag = true;
+                        repeatAllFlag = false;
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -418,6 +437,8 @@ public class PlayStop extends JPanel implements PlayAddedSong {
                     try {
                         img23 = ImageIO.read(getClass().getResource("repeat3.png"));
                         oneRepeatFlag = false;
+                        repeatAllFlag = true;
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -428,6 +449,8 @@ public class PlayStop extends JPanel implements PlayAddedSong {
                     try {
                         img21 = ImageIO.read(getClass().getResource("repeat.png"));
                         oneRepeatFlag = false;
+                        repeatAllFlag = false;
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -532,6 +555,9 @@ public class PlayStop extends JPanel implements PlayAddedSong {
         this.newSong = newSong;
         if(finalPlayer[0] != null){
             finalPlayer[0].close();
+        }
+        if(keyPress3 % 3 == 2){
+            repeatAllFlag = true;
         }
         finalPlayer[0] = new PausablePlayer(new FileInputStream(file));
         finalPlayer[0].play();
