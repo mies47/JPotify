@@ -20,10 +20,10 @@ public class BtmofGUI extends JPanel implements SetSong {
     /**
      * @throws IOException if not find icon throws exception
      */
-    public BtmofGUI(JFrame jFrame,File file) throws IOException, InterruptedException, JavaLayerException, InvalidDataException, UnsupportedTagException {
+    public BtmofGUI(JFrame jFrame,File file , String user) throws IOException, InterruptedException, JavaLayerException, InvalidDataException, UnsupportedTagException {
         fileName=file;
         nL=new NameLabel(" "," ");
-        PS=new PlayStop(jFrame , fileName);
+        PS=new PlayStop(jFrame , fileName , user);
         Volume v=new Volume(fileName);
         this.setLayout(new BorderLayout());
         this.add(nL,BorderLayout.WEST);

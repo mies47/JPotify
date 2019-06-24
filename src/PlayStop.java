@@ -10,6 +10,9 @@ import com.mpatric.mp3agic.*;
 import javazoom.jl.decoder.JavaLayerException;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * @author naha and milad
@@ -28,18 +31,22 @@ public class PlayStop extends JPanel implements PlayAddedSong {
     private int total;
     private volatile boolean oneRepeatFlag = false;
     private volatile boolean newSong = false;
+    private volatile boolean nextOrPreviousSong = false;
+    private ArrayList<File> allMp3Files = new ArrayList<>();
     final PausablePlayer[] finalPlayer = new PausablePlayer[1];
     Slider slider;
     JButton b3;
     JFrame jFrame;
     volatile File file;
-
+    volatile String userName;
     volatile Mp3File mp3File;
+    volatile int counter;
     /**
      * @throws IOException if not find icon throw exception
      */
-    public PlayStop(JFrame jFrame, File fileName) throws IOException, InterruptedException, JavaLayerException {
+    public PlayStop(JFrame jFrame, File fileName , String userName) throws IOException, InterruptedException, JavaLayerException {
         file=fileName;
+        this.userName = userName;
         this.jFrame = jFrame;
         JButton b1, b2, b4, b5;
         b1 = new JButton();
@@ -81,6 +88,50 @@ public class PlayStop extends JPanel implements PlayAddedSong {
         Image img3 = ImageIO.read(getClass().getResource("left-arrow.png"));
         Image img4 = img3.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
         b2.setIcon(new ImageIcon(img4));
+        b2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlayStop.this.nextOrPreviousSong = true;
+                if(finalPlayer[0] != null){
+                    finalPlayer[0].close();
+                }
+                counter = 0;
+                for(File f : allMp3Files){
+                    if(file.getPath().equals(f.getPath())){
+                        break;
+                    }
+                    ++counter;
+                }
+                if(counter <= 0){
+                    counter = allMp3Files.size();
+                }
+                try {
+                    finalPlayer[0] = new PausablePlayer(new FileInputStream(allMp3Files.get(--counter)));
+                    file = allMp3Files.get(counter);
+                } catch (JavaLayerException e1) {
+                    e1.printStackTrace();
+                } catch (FileNotFoundException e1) {
+                    e1.printStackTrace();
+                }
+                try {
+                    finalPlayer[0].play();
+                } catch (JavaLayerException e1) {
+                    e1.printStackTrace();
+                }
+                slider.b.setValue(0);
+                try {
+                    mp3File = new Mp3File(file);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                } catch (UnsupportedTagException e1) {
+                    e1.printStackTrace();
+                } catch (InvalidDataException e1) {
+                    e1.printStackTrace();
+                }
+                keyPress = 0;
+                PlayStop.this.b3.doClick();
+            }
+        });
         Image img5 = ImageIO.read(getClass().getResource("play3.png"));
         Image img6 = img5.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
         b2.setBackground(Color.BLACK);
@@ -138,7 +189,7 @@ public class PlayStop extends JPanel implements PlayAddedSong {
 //                }
                 keyPress++;
                 if (keyPress % 2 == 1) {
-                    if(finalTh[0] != null && newSong){
+                    if(finalTh[0] != null && (newSong||nextOrPreviousSong)){
                         finalTh[0].interrupt();
                     }
                     if (finalThread == null || !finalThread.isAlive()) {//check if the thread for seek is dead
@@ -184,6 +235,7 @@ public class PlayStop extends JPanel implements PlayAddedSong {
                                                 finalPlayer[0].play();
                                                 b3.setIcon(new ImageIcon((ImageIO.read(getClass().getResource("pause2.png"))).getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
                                                 keyPress = 1;
+                                                newSong = false;
                                                 jFrame.invalidate();
                                                 jFrame.validate();
                                                 jFrame.repaint();
@@ -201,8 +253,9 @@ public class PlayStop extends JPanel implements PlayAddedSong {
                             }
                         });
                         try {
-                            assert finalPlayer[0] != null;
-                            finalPlayer[0].play();
+                            if(finalPlayer[0] != null) {
+                                finalPlayer[0].play();
+                            }
                             synchronized (finalTh[0]) {//start the progressbar thread
                                 finalTh[0].start();
                             }
@@ -285,9 +338,62 @@ public class PlayStop extends JPanel implements PlayAddedSong {
         });
         Image img7 = ImageIO.read(getClass().getResource("right-arrow.png"));
         Image img8 = img7.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
+        File userNameFile = new File(userName + "songs");
+        try {
+            Scanner userScanner = new Scanner(userNameFile);
+            while (userScanner.hasNextLine()){
+                allMp3Files.add(new File(userScanner.nextLine()));
+            }
+        } catch (FileNotFoundException e1) {
+            e1.printStackTrace();
+        }
         b4.setBackground(Color.BLACK);
         b4.setForeground(Color.WHITE);
         b4.setIcon(new ImageIcon(img8));
+        b4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlayStop.this.nextOrPreviousSong = true;
+                if(finalPlayer[0] != null){
+                    finalPlayer[0].close();
+                }
+                int counter = 0;
+                for(File f : allMp3Files){
+                    if(file.getPath().equals(f.getPath())){
+                        break;
+                    }
+                    counter++;
+                }
+                if(counter >= allMp3Files.size() - 1){
+                    counter = -1;
+                }
+                try {
+                    finalPlayer[0] = new PausablePlayer(new FileInputStream(allMp3Files.get(++counter)));
+                    file = allMp3Files.get(counter);
+                } catch (JavaLayerException e1) {
+                    e1.printStackTrace();
+                } catch (FileNotFoundException e1) {
+                    e1.printStackTrace();
+                }
+                try {
+                    finalPlayer[0].play();
+                } catch (JavaLayerException e1) {
+                    e1.printStackTrace();
+                }
+                slider.b.setValue(0);
+                try {
+                    mp3File = new Mp3File(file);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                } catch (UnsupportedTagException e1) {
+                    e1.printStackTrace();
+                } catch (InvalidDataException e1) {
+                    e1.printStackTrace();
+                }
+                keyPress = 0;
+                PlayStop.this.b3.doClick();
+            }
+        });
         Image img9 = ImageIO.read(getClass().getResource("repeat.png"));
         Image img10 = img9.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
         b5.setIcon(new ImageIcon(img10));

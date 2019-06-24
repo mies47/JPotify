@@ -22,6 +22,7 @@ import java.util.Scanner;
 public class GUI extends JFrame {
     private ToolBar toolBar;
     private BtmofGUI btmofGUI;
+    private MiddleGUI mGUI;
     public ToolBar getToolBar() {
         return toolBar;
     }
@@ -31,7 +32,7 @@ public class GUI extends JFrame {
     public GUI(String user , String pass, String dir) throws IOException, InterruptedException, JavaLayerException, InvalidDataException, UnsupportedTagException {
         JFrame j=new JFrame("Jpotify");
         j.setLayout(new BorderLayout());
-        BtmofGUI btmofGUI =new BtmofGUI(j , null);
+        BtmofGUI btmofGUI =new BtmofGUI(j , null , user);
         j.add(btmofGUI,BorderLayout.PAGE_END);
         ArrayList<SongPlaylist> temp = new ArrayList<>();
         toolBar = new ToolBar(user , dir , pass , j);
@@ -46,7 +47,7 @@ public class GUI extends JFrame {
             temp.get(i).setNewSong(btmofGUI);
         }
         LeftOfGUI lGUI = new LeftOfGUI(j,user);
-        MiddleGUI mGUI = new MiddleGUI(temp , toolBar);
+        mGUI = new MiddleGUI(temp , toolBar);
         for(SongPlaylist sp : mGUI.songPlaylists){
             sp.setPlayAddedSong(btmofGUI.PS);
         }
@@ -87,4 +88,9 @@ public class GUI extends JFrame {
         j.setExtendedState(JFrame.MAXIMIZED_BOTH);
         j.setVisible(true);
     }
+
+    public MiddleGUI getmGUI() {
+        return mGUI;
+    }
+
 }
