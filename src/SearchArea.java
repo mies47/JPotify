@@ -29,6 +29,7 @@ public class SearchArea extends JPanel {
         searchArea.setForeground(Color.LIGHT_GRAY);
         searchArea.setFocusable(true);
         searchArea.setEditable(true);
+        searchArea.setMinimumSize(new Dimension(searchArea.getHeight() , 100));
         btn = new JButton();
         btn.setBackground(Color.WHITE);
         btn.setBorder(null);
