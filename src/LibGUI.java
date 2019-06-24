@@ -31,7 +31,7 @@ public class LibGUI extends JPanel {
      * 1 label and 3 button
      * @throws IOException if not find icon throws exception
      */
-    public LibGUI(JFrame frame,String user) throws IOException {
+    public LibGUI(JFrame frame,String user,BtmofGUI b) throws IOException {
         l=new JLabel("YOUR LIBRARY: ");
         l.setBackground(Color.BLACK);
         l.setFont(new Font("",Font.PLAIN,20));
@@ -99,8 +99,9 @@ public class LibGUI extends JPanel {
                             }
                         }
                         try {
-                            System.out.println(filepath);
-                            songPlay=new SongPlaylist(filepath);
+                            songPlay=new SongPlaylist(filepath,user);
+                            songPlay.setNewSong(b);
+                            songPlay.setPlayAddedSong(b.PS);
                             songPlaylist.addSong(songPlay);
                         } catch (IOException ex) {
                             ex.printStackTrace();

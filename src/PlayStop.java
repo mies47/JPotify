@@ -91,6 +91,15 @@ public class PlayStop extends JPanel implements PlayAddedSong {
         b2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                File userNameFile = new File(userName + "songs");
+                try {
+                    Scanner userScanner = new Scanner(userNameFile);
+                    while (userScanner.hasNextLine()){
+                        allMp3Files.add(new File(userScanner.nextLine()));
+                    }
+                } catch (FileNotFoundException e1) {
+                    e1.printStackTrace();
+                }
                 PlayStop.this.nextOrPreviousSong = true;
                 if(finalPlayer[0] != null){
                     finalPlayer[0].close();
@@ -187,6 +196,15 @@ public class PlayStop extends JPanel implements PlayAddedSong {
 //                    jFrame.validate();
 //                    jFrame.repaint();
 //                }
+                File userNameFile = new File(userName + "songs");
+                try {
+                    Scanner userScanner = new Scanner(userNameFile);
+                    while (userScanner.hasNextLine()){
+                        allMp3Files.add(new File(userScanner.nextLine()));
+                    }
+                } catch (FileNotFoundException e1) {
+                    e1.printStackTrace();
+                }
                 keyPress++;
                 if (keyPress % 2 == 1) {
                     if(finalTh[0] != null && (newSong||nextOrPreviousSong)){
@@ -353,6 +371,15 @@ public class PlayStop extends JPanel implements PlayAddedSong {
         b4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                File userNameFile = new File(userName + "songs");
+                try {
+                    Scanner userScanner = new Scanner(userNameFile);
+                    while (userScanner.hasNextLine()){
+                        allMp3Files.add(new File(userScanner.nextLine()));
+                    }
+                } catch (FileNotFoundException e1) {
+                    e1.printStackTrace();
+                }
                 PlayStop.this.nextOrPreviousSong = true;
                 if(finalPlayer[0] != null){
                     finalPlayer[0].close();
