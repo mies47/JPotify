@@ -72,6 +72,7 @@ public class Login2 extends JFrame {
                                         while(scanner2.hasNextLine())
                                             imgDir=scanner2.nextLine();
                                         GUI all =new GUI(s,s1,imgDir);
+                                        break;
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     } catch (InterruptedException e) {
@@ -137,6 +138,7 @@ public class Login2 extends JFrame {
                                         while(scanner2.hasNextLine())
                                             imgDir=scanner2.nextLine();
                                         GUI all =new GUI(s,s1,imgDir);
+                                        break;
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     } catch (InterruptedException e) {
@@ -214,6 +216,7 @@ public class Login2 extends JFrame {
                                         while(scanner2.hasNextLine())
                                             imgDir=scanner2.nextLine();
                                         GUI all =new GUI(s,s1,imgDir);
+                                        break;
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     } catch (InterruptedException e) {

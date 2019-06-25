@@ -325,6 +325,7 @@ public class PlayStop extends JPanel implements PlayAddedSong {
                         try {
                             if(finalPlayer[0] != null) {
                                 finalPlayer[0].play();
+
                             }
                             synchronized (finalTh[0]) {//start the progressbar thread
                                 finalTh[0].start();

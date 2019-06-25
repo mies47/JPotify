@@ -66,8 +66,16 @@ public class GUI extends JFrame {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        Boolean a=false;
         while (scanner3.hasNextLine()) {
             String line = scanner3.nextLine();
+            for (int i = 0; i < list.size(); i++) {
+                if(line.equals(list.get(i).getUser()))
+                    a=true;
+            }
+            if(a==true){
+                continue;
+            }
             if(line.equals(user))
                 continue;
             File fileImg = new File(line);
