@@ -2,6 +2,7 @@ import javax.swing.*;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -9,14 +10,15 @@ import java.util.ArrayList;
  * contains a jpanel with flow layout
  * @author Milad
  */
-public class MiddleGUI extends JPanel implements AddSongPlaylist{
+public class MiddleGUI extends JPanel implements AddSongPlaylist {
     ArrayList<SongPlaylist> songPlaylists = new ArrayList<>();
     JPanel jPanel;
     ToolBar toolBar;
+    JScrollPane scrollPane;
     /**
      * @param list all of the songs or playlists added
      */
-    public MiddleGUI(ArrayList<SongPlaylist> list , ToolBar toolBar){
+    public MiddleGUI(ArrayList<SongPlaylist> list , ToolBar toolBar) throws IOException {
         songPlaylists = list;
         jPanel = new JPanel();
         jPanel.setLayout(new WrapLayout(WrapLayout.LEFT));
@@ -27,7 +29,7 @@ public class MiddleGUI extends JPanel implements AddSongPlaylist{
         this.toolBar = toolBar;
         this.setLayout(new BorderLayout());
         this.add(this.toolBar , BorderLayout.PAGE_START);
-        this.add(jPanel , BorderLayout.CENTER);
+        this.add(jPanel, BorderLayout.CENTER);
         this.setBackground(Color.BLACK);
         JScrollPane scrollPane = new JScrollPane(jPanel);
         UIManager.put("ScrollBar.thumbShadow", new ColorUIResource(Color.BLACK));
@@ -47,5 +49,4 @@ public class MiddleGUI extends JPanel implements AddSongPlaylist{
         this.toolBar.userPanel.setName(user);
 
     }
-
 }

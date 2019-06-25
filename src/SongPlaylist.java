@@ -4,6 +4,7 @@ import com.mpatric.mp3agic.UnsupportedTagException;
 import javazoom.jl.decoder.JavaLayerException;
 
 import javax.imageio.ImageIO;
+import javax.print.DocFlavor;
 import javax.swing.*;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
@@ -138,7 +139,7 @@ public class SongPlaylist extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 File f=new File(user+"songs");
-                ArrayList<String> allSong=new ArrayList<String>();
+                ArrayList<String> allSong=new ArrayList<>();
                 String songPath;
                 Scanner scannerSong = null;
                 try {
@@ -179,6 +180,32 @@ public class SongPlaylist extends JPanel {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                File f2=new File(user+"Recentsongs");
+                ArrayList<String> recentSong=new ArrayList<>();
+                String recentPath;
+                Scanner scannerRecent = null;
+                try {
+                    scannerRecent = new Scanner(f2);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                while(scannerRecent.hasNextLine()){
+                    recentPath=scannerRecent.nextLine();
+                    if(!recentPath.equals(songDir)){
+                        recentSong.add(recentPath);
+                    }
+                }
+
+                PrintStream Recent = null;//open append mode
+                try {
+                    Recent = new PrintStream(new FileOutputStream(user+"Recentsongs"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                for (String s:recentSong) {
+                    Recent.println(s);
+                }
+                Recent.close();
                 setVisible(false);
                 File favTemp=new File(user+"favorite");
                 ArrayList<String> allFav=new ArrayList<String>();
@@ -255,6 +282,7 @@ public class SongPlaylist extends JPanel {
                     } catch (InvalidDataException e) {
                         e.printStackTrace();
                     }
+
                 }
             }
 
