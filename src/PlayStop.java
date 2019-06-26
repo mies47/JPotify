@@ -422,7 +422,7 @@ public class PlayStop extends JPanel implements PlayAddedSong, FavoriteOrSong {
                                 if (c instanceof BtmofGUI) {
                                     if (mp3File.hasId3v1Tag()) {
                                         if (mp3File.getId3v1Tag().getTrack() != null) {
-                                            ((BtmofGUI) c).nL.l1.setText("Song: " + mp3File.getId3v1Tag().getTrack());
+                                            ((BtmofGUI) c).nL.l1.setText("Song: " + mp3File.getId3v1Tag().getTitle());
                                             if (mp3File.getId3v1Tag().getArtist() != null) {
                                                 ((BtmofGUI) c).nL.l2.setText("Artist: " + mp3File.getId3v1Tag().getArtist());
                                             } else {
@@ -438,7 +438,7 @@ public class PlayStop extends JPanel implements PlayAddedSong, FavoriteOrSong {
                                         }
                                     } else if (mp3File.hasId3v2Tag()) {
                                         if (mp3File.getId3v2Tag().getTrack() != null) {
-                                            ((BtmofGUI) c).nL.l1.setText("Song: " + mp3File.getId3v2Tag().getTrack());
+                                            ((BtmofGUI) c).nL.l1.setText("Song: " + mp3File.getId3v2Tag().getTitle());
                                             if (mp3File.getId3v2Tag().getArtist() != null) {
                                                 ((BtmofGUI) c).nL.l2.setText("Artist: " + mp3File.getId3v2Tag().getArtist());
                                             } else {

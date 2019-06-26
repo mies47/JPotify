@@ -31,6 +31,7 @@ public class GUI extends JFrame {
     }
     public GUI(String user , String pass, String dir) throws IOException, InterruptedException, JavaLayerException, InvalidDataException, UnsupportedTagException {
         JFrame j=new JFrame("Jpotify");
+        j.setDefaultCloseOperation(EXIT_ON_CLOSE);
         j.setLayout(new BorderLayout());
         BtmofGUI btmofGUI =new BtmofGUI(j , null , user);
         j.add(btmofGUI,BorderLayout.PAGE_END);

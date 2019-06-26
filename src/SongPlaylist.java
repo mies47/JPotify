@@ -52,7 +52,7 @@ public class SongPlaylist extends JPanel {
                 image =ImageIO.read(new ByteArrayInputStream(mp3File.getId3v2Tag().getAlbumImage()));
             }
             if(mp3File.getId3v2Tag().getTrack() != null){
-                song = mp3File.getId3v2Tag().getTrack();
+                song = mp3File.getId3v2Tag().getTitle();
             }
             if(mp3File.getId3v2Tag().getAlbum() != null){
                 album = mp3File.getId3v2Tag().getAlbum();
@@ -63,7 +63,7 @@ public class SongPlaylist extends JPanel {
 
         }else if(mp3File.getId3v1Tag() != null){
             if(mp3File.getId3v1Tag().getTrack() != null){
-                song = mp3File.getId3v2Tag().getTrack();
+                song = mp3File.getId3v2Tag().getTitle();
             }
             if(mp3File.getId3v1Tag().getAlbum() != null){
                 album = mp3File.getId3v2Tag().getAlbum();
@@ -253,6 +253,7 @@ public class SongPlaylist extends JPanel {
         menu.add(item);
         menu.add(item2);
         menu.add(item3);
+        this.setTransferHandler(new TransferHandler("icon"));
         this.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
