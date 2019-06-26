@@ -1,10 +1,17 @@
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.UnsupportedTagException;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * indicates left of gui
@@ -76,15 +83,105 @@ public class LeftOfGUI extends JPanel {
                     albums.setForeground(Color.WHITE);
                     playList.setForeground(Color.WHITE);
                     favorites.setForeground(Color.WHITE);
+                    favorites.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent actionEvent) {
+                            Component c =frame.getRootPane().getContentPane().getComponent(2);
+                            if(c instanceof MiddleGUI){
+                                ((MiddleGUI) c).jPanel.removeAll();
+                                ((MiddleGUI) c).jPanel.setLayout(new WrapLayout(FlowLayout.LEFT));
+                                ArrayList<SongPlaylist> list = new ArrayList<>();
+                                String songDir;
+                                File f=new File(s+"favorite");
+                                Scanner scannerSong = null;
+                                try {
+                                    scannerSong = new Scanner(f);
+                                } catch (FileNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                                while(scannerSong.hasNextLine()){
+                                    songDir=scannerSong.nextLine();
+                                    try {
+                                        list.add(new SongPlaylist(songDir,s));
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    } catch (InvalidDataException e) {
+                                        e.printStackTrace();
+                                    } catch (UnsupportedTagException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                for (int i = 0; i < list.size(); i++) {
+                                    list.get(i).setNewSong(b);
+                                    list.get(i).setPlayAddedSong(b.PS);
+                                }
+                                for (int i = 0 ; i < list.size() ; i++){
+                                    ((MiddleGUI) c).jPanel.add(list.get(i));
+                                }
+                                ((MiddleGUI) c).jPanel.setBackground(Color.BLACK);
+                                ((MiddleGUI) c).jPanel.setVisible(true);
+                                frame.validate();
+                                frame.invalidate();
+                                frame.repaint();
+                            }
+                        }
+                    });
+                    songs.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent actionEvent) {
+                            Component c =frame.getRootPane().getContentPane().getComponent(2);
+                            if(c instanceof MiddleGUI){
+                                ((MiddleGUI) c).jPanel.removeAll();
+                                ((MiddleGUI) c).jPanel.setLayout(new WrapLayout(FlowLayout.LEFT));
+                                ArrayList<SongPlaylist> list = new ArrayList<>();
+                                String songDir;
+                                File f=new File(s+"songs");
+                                Scanner scannerSong = null;
+                                try {
+                                    scannerSong = new Scanner(f);
+                                } catch (FileNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                                while(scannerSong.hasNextLine()){
+                                    songDir=scannerSong.nextLine();
+                                    try {
+                                        list.add(new SongPlaylist(songDir,s));
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    } catch (InvalidDataException e) {
+                                        e.printStackTrace();
+                                    } catch (UnsupportedTagException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                for (int i = 0; i < list.size(); i++) {
+                                    list.get(i).setNewSong(b);
+                                    list.get(i).setPlayAddedSong(b.PS);
+                                }
+                                for (int i = 0 ; i < list.size() ; i++){
+                                    ((MiddleGUI) c).jPanel.add(list.get(i));
+                                }
+                                ((MiddleGUI) c).jPanel.setBackground(Color.BLACK);
+                                ((MiddleGUI) c).jPanel.setVisible(true);
+                                frame.validate();
+                                frame.invalidate();
+                                frame.repaint();
+                            }
+                        }
+                    });
+//                    songs.setBorder(null);
+//                    albums.setBorder(null);
+//                    playList.setBorder(null);
+//                    favorites.setBorder(null);
                     try {
-                        songs.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("music-player.png")).getScaledInstance(
-                                300 , 300 , Image.SCALE_SMOOTH)));
-                        playList.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("playlist.png")).getScaledInstance(
-                                300 , 300 , Image.SCALE_SMOOTH)));
-                        albums.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("music-album.png")).getScaledInstance(
-                                300 , 300 , Image.SCALE_SMOOTH)));
-                        favorites.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("favourites.png")).getScaledInstance(
-                                300 , 300 , Image.SCALE_SMOOTH)));
+                        songs.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("allsong2.jpeg")).getScaledInstance(
+                                600 , 430 , Image.SCALE_SMOOTH)));
+                        playList.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("playlist.jpeg")).getScaledInstance(
+                                630 , 430 , Image.SCALE_SMOOTH)));
+                        albums.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("album.jpg")).getScaledInstance(
+                                590 , 430 , Image.SCALE_SMOOTH)));
+                        favorites.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("download (1).jpeg")).getScaledInstance(
+                                620 , 430 , Image.SCALE_SMOOTH)));
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }

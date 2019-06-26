@@ -31,6 +31,7 @@ public class GUI extends JFrame {
     }
     public GUI(String user , String pass, String dir) throws IOException, InterruptedException, JavaLayerException, InvalidDataException, UnsupportedTagException {
         JFrame j=new JFrame("Jpotify");
+        j.setDefaultCloseOperation(EXIT_ON_CLOSE);
         j.setLayout(new BorderLayout());
         BtmofGUI btmofGUI =new BtmofGUI(j , null , user);
         j.add(btmofGUI,BorderLayout.PAGE_END);
@@ -47,6 +48,7 @@ public class GUI extends JFrame {
             temp.get(i).setNewSong(btmofGUI);
         }
         LeftOfGUI lGUI = new LeftOfGUI(j,user,btmofGUI);
+        lGUI.getLibGUI().setFavoriteOrSong(btmofGUI.PS);
         mGUI = new MiddleGUI(temp , toolBar);
         for(SongPlaylist sp : mGUI.songPlaylists){
             sp.setPlayAddedSong(btmofGUI.PS);

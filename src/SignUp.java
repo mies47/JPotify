@@ -8,7 +8,8 @@ public class SignUp {
     public SignUp(String name,char[] pass) throws IOException {
         BufferedWriter out = new BufferedWriter(new FileWriter("member.txt", true));//open append mode
         BufferedWriter song = new BufferedWriter(new FileWriter(name+"songs", true));//open append mode
-        BufferedWriter fav = new BufferedWriter(new FileWriter(name+"favorite", true));
+        BufferedWriter fav = new BufferedWriter(new FileWriter(name+"favorite", true));//open append mode
+        BufferedWriter Rec = new BufferedWriter(new FileWriter(name+"Recentsongs", true));//open append mode
         if(System.getProperty("os.name").contains("Windows")) {
             out.write(name + "\r\n");
         }else {

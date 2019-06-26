@@ -29,7 +29,7 @@ public class MiddleGUI extends JPanel implements AddSongPlaylist {
         this.toolBar = toolBar;
         this.setLayout(new BorderLayout());
         this.add(this.toolBar , BorderLayout.PAGE_START);
-        this.add(jPanel , BorderLayout.CENTER);
+        this.add(jPanel, BorderLayout.CENTER);
         this.setBackground(Color.BLACK);
         JScrollPane scrollPane = new JScrollPane(jPanel);
         UIManager.put("ScrollBar.thumbShadow", new ColorUIResource(Color.BLACK));

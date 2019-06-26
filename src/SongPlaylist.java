@@ -4,6 +4,7 @@ import com.mpatric.mp3agic.UnsupportedTagException;
 import javazoom.jl.decoder.JavaLayerException;
 
 import javax.imageio.ImageIO;
+import javax.print.DocFlavor;
 import javax.swing.*;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
@@ -51,7 +52,7 @@ public class SongPlaylist extends JPanel {
                 image =ImageIO.read(new ByteArrayInputStream(mp3File.getId3v2Tag().getAlbumImage()));
             }
             if(mp3File.getId3v2Tag().getTrack() != null){
-                song = mp3File.getId3v2Tag().getTrack();
+                song = mp3File.getId3v2Tag().getTitle();
             }
             if(mp3File.getId3v2Tag().getAlbum() != null){
                 album = mp3File.getId3v2Tag().getAlbum();
@@ -62,7 +63,7 @@ public class SongPlaylist extends JPanel {
 
         }else if(mp3File.getId3v1Tag() != null){
             if(mp3File.getId3v1Tag().getTrack() != null){
-                song = mp3File.getId3v2Tag().getTrack();
+                song = mp3File.getId3v2Tag().getTitle();
             }
             if(mp3File.getId3v1Tag().getAlbum() != null){
                 album = mp3File.getId3v2Tag().getAlbum();
@@ -138,7 +139,7 @@ public class SongPlaylist extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 File f=new File(user+"songs");
-                ArrayList<String> allSong=new ArrayList<String>();
+                ArrayList<String> allSong=new ArrayList<>();
                 String songPath;
                 Scanner scannerSong = null;
                 try {
@@ -179,12 +180,80 @@ public class SongPlaylist extends JPanel {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                File f2=new File(user+"Recentsongs");
+                ArrayList<String> recentSong=new ArrayList<>();
+                String recentPath;
+                Scanner scannerRecent = null;
+                try {
+                    scannerRecent = new Scanner(f2);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                while(scannerRecent.hasNextLine()){
+                    recentPath=scannerRecent.nextLine();
+                    if(!recentPath.equals(songDir)){
+                        recentSong.add(recentPath);
+                    }
+                }
+
+                PrintStream Recent = null;//open append mode
+                try {
+                    Recent = new PrintStream(new FileOutputStream(user+"Recentsongs"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                for (String s:recentSong) {
+                    Recent.println(s);
+                }
+                Recent.close();
                 setVisible(false);
+                File favTemp=new File(user+"favorite");
+                ArrayList<String> allFav=new ArrayList<String>();
+                String favPath;
+                Scanner scannerFav = null;
+                try {
+                    scannerFav = new Scanner(favTemp);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                while(scannerFav.hasNextLine()){
+                    favPath=scannerFav.nextLine();
+                    if(!favPath.equals(songDir)){
+                        allFav.add(favPath);
+                    }
+                }
+                BufferedWriter fav = null;//open append mode
+                try {
+                    fav = new BufferedWriter(new FileWriter(user+"favorite"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                for (String s:allFav) {
+                    if(System.getProperty("os.name").contains("Windows")) {
+                        try {
+                            fav.write( s+ "\r\n");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }else {
+                        try {
+                            fav.write(s + "\n");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                try {
+                    fav.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
         menu.add(item);
         menu.add(item2);
         menu.add(item3);
+        this.setTransferHandler(new TransferHandler("icon"));
         this.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
@@ -214,6 +283,7 @@ public class SongPlaylist extends JPanel {
                     } catch (InvalidDataException e) {
                         e.printStackTrace();
                     }
+
                 }
             }
 

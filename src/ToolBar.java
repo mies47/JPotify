@@ -24,9 +24,10 @@ public class ToolBar extends JPanel {
      * @param pass the password of user
      */
     public ToolBar(String name , String dir , String pass , JFrame frame){
-        searchArea = new SearchArea();
         userName = name;
         passWord = pass;
+        searchArea = new SearchArea(userName,frame);
+
         /*
           check to see if the directory was empty to set profile picture
           to default picture
