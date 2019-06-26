@@ -1,52 +1,70 @@
+import com.sun.jna.platform.FileUtils;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
 public class ClientObj implements Serializable {
-    private File member;
-    private HashMap<User , ArrayList<File>> userSongs = new HashMap<>();
-    private HashMap<User ,ArrayList<File>> userFavorites = new HashMap<>();
-    private HashMap<User ,ArrayList<File>> userRecents = new HashMap<>();
+    private byte[] member;
+    private HashMap<User , ArrayList<String>> allSongNames = new HashMap<>();
+    private HashMap<User , ArrayList<byte[]>> userSongs = new HashMap<>();
+    private File userFavorite;
+    private File userRecent;
+    private HashMap<User ,byte[]> userFavorites = new HashMap<>();
+    private HashMap<User ,byte[]> userRecents = new HashMap<>();
     User thisUser;
-
     public ClientObj(File member) throws IOException {
-        this.member = member;
+        this.member = Files.readAllBytes(Paths.get(member.getPath()));
         Scanner scUser = new Scanner(member);
         while (scUser.hasNextLine()){
+            ArrayList<byte[]> songs = new ArrayList<>();
             String user = scUser.nextLine();
-            Scanner userSc = new Scanner(user);
+            File f=new File(user);
+            Scanner userSc = new Scanner(f);
             String pass = null;
-            Image img = null;
-            if(userSc.hasNextLine())
-                pass=userSc.nextLine();
-            while (userSc.hasNextLine()){
-                img = ImageIO.read(new File(userSc.nextLine()));
+            File img = new File("C:\\Users\\behesht\\IdeaProjects\\Jpotify\\src\\DefaultPhotoPic.jpg");
+            if(userSc.hasNextLine()) {
+                pass = userSc.nextLine();
+                while (userSc.hasNextLine()) {
+                    img = new File(userSc.nextLine());
+                }
             }
             thisUser = new User(user ,pass , img );
-            ArrayList<File> songs = new ArrayList<>();
-            Scanner scSongs = new Scanner(user + "songs");
-            while (scSongs.hasNextLine()){
-                songs.add(new File(scSongs.nextLine()));
+            Scanner songSC = new Scanner(new File(thisUser.name + "songs"));
+            ArrayList<String> eachUserSongs = new ArrayList<>();
+            while (songSC.hasNextLine()){
+                String path = songSC.nextLine();
+                eachUserSongs.add(new File(path).getName());
+                songs.add(Files.readAllBytes(Paths.get(new File(path).getPath())));
             }
             userSongs.put(thisUser , songs);
-            ArrayList<File> favorite = new ArrayList<>();
-            Scanner scFavorite = new Scanner(user + "favorite");
-            while (scFavorite.hasNextLine()){
-                favorite.add(new File(scFavorite.nextLine()));
-            }
-            userFavorites.put(thisUser , favorite);
-            ArrayList<File> userRecentSongs = new ArrayList<>();
-            Scanner scRecent = new Scanner(user + "Recentsongs");
-            while (scRecent.hasNextLine()){
-                userRecentSongs.add(new File(scRecent.nextLine()));
-            }
-            userRecents.put(thisUser , userRecentSongs);
+            allSongNames.put(thisUser , eachUserSongs);
+            userFavorites.put(thisUser , Files.readAllBytes(Paths.get(thisUser.name + "favorite")));
+            userRecents.put(thisUser , Files.readAllBytes(Paths.get(thisUser.name + "Recentsongs")));
         }
+    }
+    public byte[] getMember() {
+        return member;
+    }
 
+    public HashMap<User, ArrayList<byte[]>> getUserSongs() {
+        return userSongs;
+    }
+
+    public HashMap<User, byte[]> getUserFavorites() {
+        return userFavorites;
+    }
+
+    public HashMap<User, byte[]> getUserRecents() {
+        return userRecents;
+    }
+    public HashMap<User, ArrayList<String>> getAllSongNames() {
+        return allSongNames;
     }
 }
