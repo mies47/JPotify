@@ -19,10 +19,20 @@ import java.util.Scanner;
 public class LeftOfGUI extends JPanel {
     JLabel l;
 
+
     public Homepanel getHomepanel() {
         return homepanel;
     }
+    FavoriteOrSong favoriteOrSong;
 
+    public void setRecentOrSong(RecentOrSong recentOrSong) {
+        this.recentOrSong = recentOrSong;
+    }
+
+    RecentOrSong recentOrSong;
+    public void setFavoriteOrSong(FavoriteOrSong favoriteOrSong) {
+        this.favoriteOrSong = favoriteOrSong;
+    }
     Homepanel homepanel;
 
     public LibGUI getLibGUI() {
@@ -64,6 +74,9 @@ public class LeftOfGUI extends JPanel {
         homepanel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                recentOrSong.changeRecent(false);
+                favoriteOrSong.changeFav(false);
                 Component c =frame.getRootPane().getContentPane().getComponent(2);
                 if(c instanceof MiddleGUI){
                     ((MiddleGUI) c).jPanel.removeAll();
@@ -83,9 +96,56 @@ public class LeftOfGUI extends JPanel {
                     albums.setForeground(Color.WHITE);
                     playList.setForeground(Color.WHITE);
                     favorites.setForeground(Color.WHITE);
+                    albums.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent actionEvent) {
+                            favoriteOrSong.changeFav(false);
+                            Component c = frame.getRootPane().getContentPane().getComponent(2);
+                            Component c1 = frame.getRootPane().getContentPane().getComponent(0);
+                            if (c instanceof MiddleGUI) {
+                                ((MiddleGUI) c).jPanel.removeAll();
+                                ((MiddleGUI) c).jPanel.setLayout(new WrapLayout(FlowLayout.LEFT));
+                                ArrayList<Album> list = new ArrayList<>();
+//                                ArrayList<String> temp=new ArrayList<>();
+//                                temp.add("/home/naha/Downloads/Reza_Bahram-Atash_Gratomic.com.mp3");
+//                                temp.add("/home/naha/Downloads/Mohsen Ebrahimzadeh - Emshab.mp3");
+//                                try {
+//                                    list.add(new Album(s,frame));
+//                                } catch (InvalidDataException e) {
+//                                    e.printStackTrace();
+//                                } catch (IOException e) {
+//                                    e.printStackTrace();
+//                                } catch (UnsupportedTagException e) {
+//                                    e.printStackTrace();
+//                                }
+//                    String songDir;
+//                    for (String s:a) {
+//                        try {
+//                            list.add(new Album(s,user));
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        } catch (InvalidDataException e) {
+//                            e.printStackTrace();
+//                        } catch (UnsupportedTagException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//
+                                for (int i = 0; i < list.size(); i++) {
+                                    ((MiddleGUI) c).jPanel.add(list.get(i));
+                                }
+                                ((MiddleGUI) c).jPanel.setBackground(Color.BLACK);
+                                ((MiddleGUI) c).jPanel.setVisible(true);
+                                frame.validate();
+                                frame.invalidate();
+                                frame.repaint();
+                            }
+                        }
+                    });
                     favorites.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent actionEvent) {
+                            favoriteOrSong.changeFav(true);
                             Component c =frame.getRootPane().getContentPane().getComponent(2);
                             if(c instanceof MiddleGUI){
                                 ((MiddleGUI) c).jPanel.removeAll();
@@ -102,7 +162,7 @@ public class LeftOfGUI extends JPanel {
                                 while(scannerSong.hasNextLine()){
                                     songDir=scannerSong.nextLine();
                                     try {
-                                        list.add(new SongPlaylist(songDir,s));
+                                        list.add(new SongPlaylist(songDir,s,frame));
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     } catch (InvalidDataException e) {
@@ -129,6 +189,7 @@ public class LeftOfGUI extends JPanel {
                     songs.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent actionEvent) {
+                            favoriteOrSong.changeFav(false);
                             Component c =frame.getRootPane().getContentPane().getComponent(2);
                             if(c instanceof MiddleGUI){
                                 ((MiddleGUI) c).jPanel.removeAll();
@@ -145,7 +206,7 @@ public class LeftOfGUI extends JPanel {
                                 while(scannerSong.hasNextLine()){
                                     songDir=scannerSong.nextLine();
                                     try {
-                                        list.add(new SongPlaylist(songDir,s));
+                                        list.add(new SongPlaylist(songDir,s,frame));
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     } catch (InvalidDataException e) {

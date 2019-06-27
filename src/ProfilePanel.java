@@ -200,6 +200,9 @@ public class ProfilePanel extends JFrame {
                             File oldfile2 =new File(username+"favorite");
                             File newfile2 =new File(finalUsername+"favorite");
                             oldfile2.renameTo(newfile2);
+                            File oldfile3 =new File(username+"Recentsongs");
+                            File newfile3 =new File(finalUsername+"Recentsongs");
+                            oldfile3.renameTo(newfile3);
                         }
                         i++;
                     }
@@ -257,6 +260,10 @@ public class ProfilePanel extends JFrame {
                         File oldfile2 =new File(username+"favorite");
                         File newfile2 =new File(finalUsername+"favorite");
                         oldfile2.renameTo(newfile2);
+                        File oldfile3 =new File(username+"Recentsongs");
+                        File newfile3 =new File(finalUsername+"Recentsongs");
+                        oldfile3.renameTo(newfile3);
+
                     }
                     i++;
                 }
@@ -476,6 +483,10 @@ public class ProfilePanel extends JFrame {
                 frame.dispose();
                 try {
                     new Login2();
+                    Component c = frame.getRootPane().getContentPane().getComponent(0);
+                    if (c instanceof BtmofGUI) {
+                        ((BtmofGUI) c).PS.b3.doClick();
+                    }
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }

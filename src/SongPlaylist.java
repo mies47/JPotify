@@ -9,6 +9,10 @@ import javax.swing.*;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 import java.awt.*;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DragGestureRecognizer;
+import java.awt.dnd.DragSource;
+import java.awt.dnd.DropTarget;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -27,6 +31,37 @@ public class SongPlaylist extends JPanel {
     private JLabel description;
     private PlayAddedSong playAddedSong;
 
+    private DragGestureRecognizer dgr;
+    private DragGestureHandler dragGestureHandler;
+
+    @Override
+    public void addNotify() {
+
+        super.addNotify();
+
+        if (dgr == null) {
+
+            dragGestureHandler = new DragGestureHandler(this);
+            dgr = DragSource.getDefaultDragSource().createDefaultDragGestureRecognizer(this, DnDConstants.ACTION_MOVE, dragGestureHandler);
+        }
+
+    }
+
+    @Override
+    public void removeNotify() {
+
+        if (dgr != null) {
+
+            dgr.removeDragGestureListener(dragGestureHandler);
+            dragGestureHandler = null;
+
+        }
+
+        dgr = null;
+
+        super.removeNotify();
+
+    }
     public void setNewSong(SetSong newSong) {
         this.newSong = newSong;
     }
@@ -39,8 +74,12 @@ public class SongPlaylist extends JPanel {
      * @param s set directory of song
      * @throws IOException if the directory given does not exist
      */
-    public SongPlaylist(String s,String user) throws IOException, InvalidDataException, UnsupportedTagException {
+    public SongPlaylist(String s,String user,JFrame frame) throws IOException, InvalidDataException, UnsupportedTagException {
         //File songFile=new File(songDir);
+        DropTarget dropTarget;
+        DropHandler dropHandler;
+        dropHandler = new DropHandler();
+        dropTarget = new DropTarget(this, DnDConstants.ACTION_MOVE, dropHandler, true);
         songDir=s;
         Mp3File mp3File = new Mp3File(songDir,true);
         String song = "Unknown";
@@ -147,11 +186,17 @@ public class SongPlaylist extends JPanel {
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
+                int l=0;
+                int i=0;
                 while(scannerSong.hasNextLine()){
                     songPath=scannerSong.nextLine();
                     if(!songPath.equals(songDir)){
                         allSong.add(songPath);
                     }
+                    if(songPath.equals(songDir)){
+                        l=i;
+                    }
+                    i++;
                 }
 
                 BufferedWriter song = null;//open append mode
@@ -247,6 +292,12 @@ public class SongPlaylist extends JPanel {
                     fav.close();
                 } catch (IOException e) {
                     e.printStackTrace();
+                }
+
+                Component c = frame.getRootPane().getContentPane().getComponent(0);
+                if(((BtmofGUI)c).PS.file.getPath().equals(songDir)){
+                    for (int p=0;p<l+1;p++)
+                        ((BtmofGUI)c).PS.b4.doClick();
                 }
             }
         });

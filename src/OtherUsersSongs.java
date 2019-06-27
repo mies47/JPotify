@@ -17,6 +17,11 @@ public class OtherUsersSongs extends JPanel {
     private JLabel status;//if the user is online or not
     private JLabel picture;//profile pic
 
+    public String getUser() {
+        return user;
+    }
+
+    private String user;
     /**
      * @param userName user name
      * @param time Last time that user was online if it's "0" user is online
@@ -26,7 +31,8 @@ public class OtherUsersSongs extends JPanel {
      * @throws IOException if the icon image for online user is not found
      */
     public OtherUsersSongs(String userName  ,String time , String song , String artist , Image img) throws IOException {
-        this.userName = new JLabel(userName);
+        this.user=userName;
+        this.userName = new JLabel(user);
         this.userName.setOpaque(true);
         this.userName.setBackground(Color.BLACK);
         this.userName.setForeground(Color.WHITE);

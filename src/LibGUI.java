@@ -15,6 +15,8 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+
 import java.util.Scanner;
 
 /**
@@ -31,6 +33,10 @@ public class LibGUI extends JPanel {
     SongPlaylist songPlay;
     AddSongPlaylist songPlaylist;
 
+    public void setRecentOrSong(RecentOrSong recentOrSong) {
+        this.recentOrSong = recentOrSong;
+    }
+    RecentOrSong recentOrSong;
     /**
      * 1 label and 3 button
      *
@@ -51,6 +57,8 @@ public class LibGUI extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 favoriteOrSong.changeFav(false);
+                recentOrSong.changeRecent(false);
+
                 Component c = frame.getRootPane().getContentPane().getComponent(2);
                 if (c instanceof MiddleGUI) {
                     ((MiddleGUI) c).jPanel.removeAll();
@@ -67,7 +75,9 @@ public class LibGUI extends JPanel {
                     while (scannerSong.hasNextLine()) {
                         songDir = scannerSong.nextLine();
                         try {
-                            list.add(new SongPlaylist(songDir, user));
+
+                            list.add(new SongPlaylist(songDir, user,frame));
+
                         } catch (IOException e) {
                             e.printStackTrace();
                         } catch (InvalidDataException e) {
@@ -97,6 +107,93 @@ public class LibGUI extends JPanel {
         b2.setBorder(null);
         b2.setBackground(Color.BLACK);
         b2.setForeground(Color.WHITE);
+        b2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                favoriteOrSong.changeFav(false);
+                recentOrSong.changeRecent(false);
+                Component c = frame.getRootPane().getContentPane().getComponent(2);
+                Component c1 = frame.getRootPane().getContentPane().getComponent(0);
+                if (c instanceof MiddleGUI) {
+                    ((MiddleGUI) c).jPanel.removeAll();
+                    ((MiddleGUI) c).jPanel.setLayout(new WrapLayout(FlowLayout.LEFT));
+                    ArrayList<Album> list = new ArrayList<>();
+                    HashMap<String,ArrayList<String>> a=new HashMap<>();
+                    File f=new File(user+"songs");
+                    Scanner s=null;
+                    try {
+                        s=new Scanner(f);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    String trash;
+                    while(s.hasNextLine()) {
+                        trash = s.nextLine();
+                        Mp3File mp3File = null;
+                        try {
+                            mp3File = new Mp3File(trash);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (UnsupportedTagException e) {
+                            e.printStackTrace();
+                        } catch (InvalidDataException e) {
+                            e.printStackTrace();
+                        }
+                        if (mp3File.hasId3v1Tag()){
+                            if (a.containsKey(mp3File.getId3v1Tag().getAlbum())) {
+                                a.get(mp3File.getId3v1Tag().getAlbum()).add(trash);
+                            } else {
+                                ArrayList<String> rate=new ArrayList<>();
+                                rate.add(trash);
+                                a.put(mp3File.getId3v1Tag().getAlbum(),rate);
+                            }
+                        }
+                        else if(mp3File.hasId3v2Tag()){
+                            if (a.containsKey(mp3File.getId3v2Tag().getAlbum())) {
+                                a.get(mp3File.getId3v2Tag().getAlbum()).add(trash);
+                            } else {
+                                ArrayList<String> rate=new ArrayList<>();
+                                rate.add(trash);
+                                a.put(mp3File.getId3v2Tag().getAlbum(),rate);
+                            }
+                        }
+                    }
+                    for(String p:a.keySet()){
+                        try {
+                            Album album=new Album(a.get(p),user,frame);
+                            list.add(album);
+                        } catch (InvalidDataException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (UnsupportedTagException e) {
+                            e.printStackTrace();
+                        }
+                    }
+//                    String songDir;
+//                    for (String s:a) {
+//                        try {
+//                            list.add(new Album(s,user));
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        } catch (InvalidDataException e) {
+//                            e.printStackTrace();
+//                        } catch (UnsupportedTagException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//
+                    for (int i = 0; i < list.size(); i++) {
+                        ((MiddleGUI) c).jPanel.add(list.get(i));
+                    }
+                    ((MiddleGUI) c).jPanel.setBackground(Color.BLACK);
+                    ((MiddleGUI) c).jPanel.setVisible(true);
+                    frame.validate();
+                    frame.invalidate();
+                    frame.repaint();
+                }
+            }
+        });
         JButton bFavorite = new JButton("Favorite");
         bFavorite.setBorder(null);
         bFavorite.setFont(new Font("", Font.PLAIN, 17));
@@ -105,6 +202,8 @@ public class LibGUI extends JPanel {
         bFavorite.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                recentOrSong.changeRecent(false);
+
                 favoriteOrSong.changeFav(true);
                 Component c = frame.getRootPane().getContentPane().getComponent(2);
                 if (c instanceof MiddleGUI) {
@@ -122,7 +221,8 @@ public class LibGUI extends JPanel {
                     while (scannerSong.hasNextLine()) {
                         songDir = scannerSong.nextLine();
                         try {
-                            list.add(new SongPlaylist(songDir, user));
+                            list.add(new SongPlaylist(songDir, user,frame));
+
                         } catch (IOException e) {
                             e.printStackTrace();
                         } catch (InvalidDataException e) {
@@ -161,9 +261,6 @@ public class LibGUI extends JPanel {
                 int returnValue = jfc.showDialog(null, "choose");
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
                     File[] files = jfc.getSelectedFiles();
-                    System.out.println("Directories found\n");
-                    System.out.println("\n- - - - - - - - - - -\n");
-                    System.out.println("Files Found\n");
                     Arrays.asList(files).forEach(x -> {
                         if (x.isFile()) {
                             File f =x;
@@ -209,7 +306,7 @@ public class LibGUI extends JPanel {
                                     }
                                 }
                                 try {
-                                    songPlay = new SongPlaylist(filepath, user);
+                                    songPlay = new SongPlaylist(filepath, user,frame);
                                     songPlay.setNewSong(b);
                                     songPlay.setPlayAddedSong(b.PS);
                                     songPlaylist.addSong(songPlay);
@@ -317,6 +414,8 @@ public class LibGUI extends JPanel {
         bPlayMovie.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                recentOrSong.changeRecent(true);
+
                 File recent = new File(user + "Recentsongs");
                 ArrayList<String> a = new ArrayList<>();
                 Scanner scannerRecent = null;
@@ -361,7 +460,8 @@ public class LibGUI extends JPanel {
                     while (scannerSong.hasNextLine()) {
                         songDir = scannerSong.nextLine();
                         try {
-                            list.add(new SongPlaylist(songDir, user));
+                            list.add(new SongPlaylist(songDir, user,frame));
+
                         } catch (IOException e) {
                             e.printStackTrace();
                         } catch (InvalidDataException e) {
