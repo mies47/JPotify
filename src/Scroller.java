@@ -1,24 +1,28 @@
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
+import java.awt.event.*;
 
 /**
  * indicates list of playlist in scroller
  */
 public class Scroller extends JPanel implements ChangeName {
     DefaultListModel<String> DLM;
-
+    JList<String> JL;
     /**
      * use Jlist and DefaultListModel
      * constructor of Scroller
      * show list of Play list as string
      */
-    public Scroller() {
+    public Scroller(JFrame frame) {
         DLM = new DefaultListModel<>();
-        JList<String> JL = new JList<>(DLM);
+        JL = new JList<>(DLM);
         JL.setBackground(Color.BLACK);
         JL.setForeground(Color.WHITE);
+
         JScrollPane scrollable = new JScrollPane(JL);
         scrollable.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);//make just vertical scroll
         scrollable.setBackground(Color.BLACK);
@@ -40,5 +44,24 @@ public class Scroller extends JPanel implements ChangeName {
     @Override
     public void change(String s) {
         DLM.addElement(s);
+    }
+    public void addActionListener(final ActionListener al) {
+
+        JL.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    al.actionPerformed(new ActionEvent(e.getSource(), e.getID(), "ENTER"));
+                }
+            }
+        });
+
+        JL.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    al.actionPerformed(new ActionEvent(e.getSource(), e.getID(), "ENTER"));
+                }
+            }
+        });
+
     }
 }

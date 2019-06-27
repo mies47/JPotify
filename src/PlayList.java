@@ -14,8 +14,8 @@ public class PlayList extends JPanel {
     /**
      * @throws IOException if not Find icon throw exception
      */
-    public PlayList() throws IOException {
-        scroller=new Scroller();
+    public PlayList(JFrame frame) throws IOException {
+        scroller=new Scroller(frame);
         JPanel p1=new JPanel();
         JLabel l=new JLabel("PlayList");
         l.setBackground(Color.BLACK);

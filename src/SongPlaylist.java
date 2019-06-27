@@ -6,6 +6,7 @@ import javazoom.jl.decoder.JavaLayerException;
 import javax.imageio.ImageIO;
 import javax.print.DocFlavor;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 import java.awt.*;
@@ -132,6 +133,12 @@ public class SongPlaylist extends JPanel {
         JMenuItem item = new JMenuItem("add to PlayList");
         item.setBackground(Color.BLACK);
         item.setForeground(Color.white);
+        item.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+            }
+        });
         JMenuItem item2 = new JMenuItem("add to Favorite");
         item2.setBackground(Color.BLACK);
         item2.setForeground(Color.white);
@@ -352,6 +359,7 @@ public class SongPlaylist extends JPanel {
         this.setBackground(Color.BLACK);
         this.setPreferredSize(new Dimension(200 + this.description.getWidth() , 200 + this.description.getHeight()));
         this.setBorder(BorderFactory.createSoftBevelBorder(0 , Color.GRAY , Color.LIGHT_GRAY));
+        //this.setBorder(new EmptyBorder(0,0,0,10));
 
     }
 

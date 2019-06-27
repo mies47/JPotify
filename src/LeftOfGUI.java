@@ -1,4 +1,5 @@
 import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.UnsupportedTagException;
 
 import javax.imageio.ImageIO;
@@ -11,6 +12,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 /**
@@ -60,7 +62,7 @@ public class LeftOfGUI extends JPanel {
         box2.add(libGUI);
         box2.add(Box.createHorizontalGlue());
         Box box3= Box.createHorizontalBox();//set position to left of panel
-        box3.add(new PlayList());
+        box3.add(new PlayList(frame));
         box3.add(Box.createHorizontalGlue());
         box.setBorder(new EmptyBorder(0,0,20,0));//space between home and library
         box2.setBorder(new EmptyBorder(0,0,15,0));//space between play list and library
@@ -100,24 +102,65 @@ public class LeftOfGUI extends JPanel {
                         @Override
                         public void actionPerformed(ActionEvent actionEvent) {
                             favoriteOrSong.changeFav(false);
+                            recentOrSong.changeRecent(false);
                             Component c = frame.getRootPane().getContentPane().getComponent(2);
                             Component c1 = frame.getRootPane().getContentPane().getComponent(0);
                             if (c instanceof MiddleGUI) {
                                 ((MiddleGUI) c).jPanel.removeAll();
                                 ((MiddleGUI) c).jPanel.setLayout(new WrapLayout(FlowLayout.LEFT));
                                 ArrayList<Album> list = new ArrayList<>();
-//                                ArrayList<String> temp=new ArrayList<>();
-//                                temp.add("/home/naha/Downloads/Reza_Bahram-Atash_Gratomic.com.mp3");
-//                                temp.add("/home/naha/Downloads/Mohsen Ebrahimzadeh - Emshab.mp3");
-//                                try {
-//                                    list.add(new Album(s,frame));
-//                                } catch (InvalidDataException e) {
-//                                    e.printStackTrace();
-//                                } catch (IOException e) {
-//                                    e.printStackTrace();
-//                                } catch (UnsupportedTagException e) {
-//                                    e.printStackTrace();
-//                                }
+                                HashMap<String,ArrayList<String>> a=new HashMap<>();
+                                File f=new File(s+"songs");
+                                Scanner s1=null;
+                                try {
+                                    s1=new Scanner(f);
+                                } catch (FileNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                                String trash;
+                                while(s1.hasNextLine()) {
+                                    trash = s1.nextLine();
+                                    Mp3File mp3File = null;
+                                    try {
+                                        mp3File = new Mp3File(trash);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    } catch (UnsupportedTagException e) {
+                                        e.printStackTrace();
+                                    } catch (InvalidDataException e) {
+                                        e.printStackTrace();
+                                    }
+                                    if (mp3File.hasId3v1Tag()){
+                                        if (a.containsKey(mp3File.getId3v1Tag().getAlbum())) {
+                                            a.get(mp3File.getId3v1Tag().getAlbum()).add(trash);
+                                        } else {
+                                            ArrayList<String> rate=new ArrayList<>();
+                                            rate.add(trash);
+                                            a.put(mp3File.getId3v1Tag().getAlbum(),rate);
+                                        }
+                                    }
+                                    else if(mp3File.hasId3v2Tag()){
+                                        if (a.containsKey(mp3File.getId3v2Tag().getAlbum())) {
+                                            a.get(mp3File.getId3v2Tag().getAlbum()).add(trash);
+                                        } else {
+                                            ArrayList<String> rate=new ArrayList<>();
+                                            rate.add(trash);
+                                            a.put(mp3File.getId3v2Tag().getAlbum(),rate);
+                                        }
+                                    }
+                                }
+                                for(String p:a.keySet()){
+                                    try {
+                                        Album album=new Album(a.get(p),s,frame);
+                                        list.add(album);
+                                    } catch (InvalidDataException e) {
+                                        e.printStackTrace();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    } catch (UnsupportedTagException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
 //                    String songDir;
 //                    for (String s:a) {
 //                        try {

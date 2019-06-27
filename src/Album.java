@@ -18,7 +18,7 @@ import java.util.Scanner;
 public class Album extends JPanel{
     private JLabel pic;
     private JLabel description;
-
+    boolean isClickedAlbum;
 //    public void add(String s){
 //        a.add(s);
 //    }
@@ -85,6 +85,7 @@ public class Album extends JPanel{
 
             @Override
             public void mouseReleased(MouseEvent mouseEvent) {
+                isClickedAlbum=true;
                 Component c = frame.getRootPane().getContentPane().getComponent(2);
                 Component c1 = frame.getRootPane().getContentPane().getComponent(0);
                 if (c instanceof MiddleGUI) {
@@ -137,6 +138,8 @@ public class Album extends JPanel{
         this.setLayout(new BorderLayout());
         this.add(pic , BorderLayout.CENTER);
         this.add(this.description , BorderLayout.PAGE_END);
+        this.setPreferredSize(new Dimension(200 + this.description.getWidth() , 200 + this.description.getHeight()));
+        this.setBorder(BorderFactory.createSoftBevelBorder(0 , Color.GRAY , Color.LIGHT_GRAY));
     }
 
 }
