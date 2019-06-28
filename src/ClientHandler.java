@@ -6,6 +6,9 @@ import java.sql.Time;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 
 public class ClientHandler implements Runnable {
     Socket socket;

@@ -1,12 +1,9 @@
-import com.sun.jna.platform.FileUtils;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.*;
-import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -74,6 +71,5 @@ public class ClientObj implements Serializable {
     public JFrame getFrame() {
         return frame;
     }
-
 
 }

@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * @author naha
@@ -10,6 +12,16 @@ public class SignUp {
         BufferedWriter song = new BufferedWriter(new FileWriter(name+"songs", true));//open append mode
         BufferedWriter fav = new BufferedWriter(new FileWriter(name+"favorite", true));//open append mode
         BufferedWriter Rec = new BufferedWriter(new FileWriter(name+"Recentsongs", true));//open append mode
+        HashMap<String, ArrayList<String>> ldapContent = new HashMap<>();
+        File toRead = new File(name + "PLay");
+        ArrayList<String> a=new ArrayList<>();
+        ldapContent.put("SharedPlayList",a);
+        FileOutputStream fos = new FileOutputStream(toRead);
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(ldapContent);
+        oos.flush();
+        oos.close();
+        fos.close();
         if(System.getProperty("os.name").contains("Windows")) {
             out.write(name + "\r\n");
         }else {
@@ -17,8 +29,8 @@ public class SignUp {
         }
         out.close();
         PrintWriter writer1=new PrintWriter(name,"UTF-8");
-        String a=String.valueOf(pass);
-        writer1.print(a.hashCode());
+        String passString=String.valueOf(pass);
+        writer1.print(passString.hashCode());
         writer1.close();
     }
 }

@@ -42,13 +42,17 @@ public class GUI extends JFrame {
         Scanner scannerSong = new Scanner(f);
         while(scannerSong.hasNextLine()){
             songDir=scannerSong.nextLine();
-            temp.add(new SongPlaylist(songDir,user));
+            temp.add(new SongPlaylist(songDir,user,this));
         }
         for (int i = 0; i < temp.size(); i++) {
             temp.get(i).setNewSong(btmofGUI);
         }
         LeftOfGUI lGUI = new LeftOfGUI(j,user,btmofGUI);
         lGUI.getLibGUI().setFavoriteOrSong(btmofGUI.PS);
+
+        lGUI.getLibGUI().setRecentOrSong(btmofGUI.PS);
+        lGUI.setRecentOrSong(btmofGUI.PS);
+        lGUI.setFavoriteOrSong(btmofGUI.PS);
         mGUI = new MiddleGUI(temp , toolBar);
         for(SongPlaylist sp : mGUI.songPlaylists){
             sp.setPlayAddedSong(btmofGUI.PS);
@@ -94,7 +98,8 @@ public class GUI extends JFrame {
             }
         }
         j.add(new FriendsActivity(list) , BorderLayout.EAST);
-        j.setMinimumSize(new Dimension(900, 900));
+
+        j.setMinimumSize(new Dimension(1100, 900));
         j.setLocationRelativeTo(null);
         j.setExtendedState(JFrame.MAXIMIZED_BOTH);
         j.setVisible(true);

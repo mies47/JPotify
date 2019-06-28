@@ -1,20 +1,8 @@
 import javazoom.jl.decoder.JavaLayerException;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.*;
-import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.stream.Stream;
 
 public class Server {
     volatile HashMap<Socket , ObjectInputStream> allSocketsInput = new HashMap<>();
@@ -46,8 +34,5 @@ public class Server {
 
     public static void main(String[] args) throws IOException, JavaLayerException, ClassNotFoundException, InterruptedException {
         new Server();
-//        for (int i = 0 ; i < 6 ; i++){
-//            new Client();
-//        }
     }
 }
