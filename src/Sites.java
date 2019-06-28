@@ -3,7 +3,7 @@ public enum Sites {
     AZLYRICS(1, "azlyrics", "http", "www.azlyrics.com"), SONGMEANINGS(2,
             "songmeanings", "http", "songmeanings.com"), LYRICS(3, "lyrics",
             "http", "www.lyrics.com"), METROLYRICS(4, "metrolyrics", "http",
-            "www.metrolyrics.com");
+            "www.metrolyrics.com"),NIC(5,"nicmusic","http","www.nicmusic.net");
 
     private int id = 0;
     private String name = "";

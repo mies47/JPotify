@@ -415,7 +415,7 @@ public class LibGUI extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 recentOrSong.changeRecent(true);
-
+                favoriteOrSong.changeFav(false);
                 File recent = new File(user + "Recentsongs");
                 ArrayList<String> a = new ArrayList<>();
                 Scanner scannerRecent = null;

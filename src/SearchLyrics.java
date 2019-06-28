@@ -64,8 +64,7 @@ public class SearchLyrics {
     public List<Lyrics> searchLyrics(SearchLyricsBean bean)
             throws SearchLyricsException {
         List<Lyrics> lyrics = new ArrayList<Lyrics>();
-        lyrics = searchLyrics(bean, getSearchEngine(bean.getEngines()),
-                getLyricsParser(bean.getSites()));
+        lyrics = searchLyrics(bean, getSearchEngine(bean.getEngines()), getLyricsParser(bean.getSites()));
         return lyrics;
     }
 
@@ -78,8 +77,7 @@ public class SearchLyrics {
      * @param lyricsParser
      * @return
      */
-    public List<Lyrics> searchLyrics(SearchLyricsBean bean,
-                                     SearchEngine searchEngine, LyricsParser lyricsParser)
+    public List<Lyrics> searchLyrics(SearchLyricsBean bean, SearchEngine searchEngine, LyricsParser lyricsParser)
             throws SearchLyricsException {
         List<Lyrics> lyrics = new ArrayList<Lyrics>();
 
@@ -88,9 +86,9 @@ public class SearchLyrics {
             List<URL> urls = FilterURL.filter(bean.getSites(),
                     searchEngine.search(searchEngine.getSearchString(bean)),
                     bean.getTopMaxResult());
-
+            System.out.println(urls);
             lyrics = lyricsParser.getLyrics(urls);
-
+            System.out.println(lyrics);
         } catch (MalformedURLException exception) {
             exception.printStackTrace();
         }

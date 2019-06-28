@@ -8,9 +8,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -30,7 +28,7 @@ public class LeftOfGUI extends JPanel {
     public void setRecentOrSong(RecentOrSong recentOrSong) {
         this.recentOrSong = recentOrSong;
     }
-
+    PlayList p;
     RecentOrSong recentOrSong;
     public void setFavoriteOrSong(FavoriteOrSong favoriteOrSong) {
         this.favoriteOrSong = favoriteOrSong;
@@ -61,8 +59,9 @@ public class LeftOfGUI extends JPanel {
         Box box2= Box.createHorizontalBox();//set position to left of panel
         box2.add(libGUI);
         box2.add(Box.createHorizontalGlue());
+        p=new PlayList(frame,s);
         Box box3= Box.createHorizontalBox();//set position to left of panel
-        box3.add(new PlayList(frame));
+        box3.add(new PlayList(frame,s));
         box3.add(Box.createHorizontalGlue());
         box.setBorder(new EmptyBorder(0,0,20,0));//space between home and library
         box2.setBorder(new EmptyBorder(0,0,15,0));//space between play list and library
@@ -98,6 +97,92 @@ public class LeftOfGUI extends JPanel {
                     albums.setForeground(Color.WHITE);
                     playList.setForeground(Color.WHITE);
                     favorites.setForeground(Color.WHITE);
+                    playList.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent actionEvent) {
+                            favoriteOrSong.changeFav(false);
+                            recentOrSong.changeRecent(false);
+                            Component c = frame.getRootPane().getContentPane().getComponent(2);
+                            Component c1 = frame.getRootPane().getContentPane().getComponent(0);
+                            Component c2 = frame.getRootPane().getContentPane().getComponent(1);
+                            if (c instanceof MiddleGUI) {
+                                ((MiddleGUI) c).jPanel.removeAll();
+                                ((MiddleGUI) c).jPanel.setLayout(new WrapLayout(FlowLayout.LEFT));
+                                ArrayList<PlayListFinal> list = new ArrayList<>();
+                                HashMap<String,ArrayList<String>> a=new HashMap<>();
+                                File toRead=new File(s+"PLay");
+                                FileInputStream fis= null;
+                                try {
+                                    fis = new FileInputStream(toRead);
+                                } catch (FileNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                                ObjectInputStream ois= null;
+                                try {
+                                    ois = new ObjectInputStream(fis);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                                try {
+                                    a=(HashMap<String,ArrayList<String>>)ois.readObject();
+                                    System.out.println(a);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                } catch (ClassNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+
+                                try {
+                                    ois.close();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                try {
+                                    fis.close();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                                for(String p:a.keySet()){
+                                    try {
+                                        PlayListFinal playListFinal=new PlayListFinal(a.get(p),s,frame,p);
+                                        list.add(playListFinal);
+                                    } catch (InvalidDataException e) {
+                                        e.printStackTrace();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    } catch (UnsupportedTagException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                for (int i = 0; i <list.size() ; i++){
+                                    list.get(i).setRemoveDLM(((LeftOfGUI)c2).p.scroller);
+                                }
+//                    String songDir;
+//                    for (String s:a) {
+//                        try {
+//                            list.add(new Album(s,user));
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        } catch (InvalidDataException e) {
+//                            e.printStackTrace();
+//                        } catch (UnsupportedTagException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//
+                                for (int i = 0; i < list.size(); i++) {
+                                    ((MiddleGUI) c).jPanel.add(list.get(i));
+                                }
+                                ((MiddleGUI) c).jPanel.setBackground(Color.BLACK);
+                                ((MiddleGUI) c).jPanel.setVisible(true);
+                                frame.validate();
+                                frame.invalidate();
+                                frame.repaint();
+                            }
+                        }
+                    });
                     albums.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent actionEvent) {

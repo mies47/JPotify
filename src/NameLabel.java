@@ -16,7 +16,6 @@ public class NameLabel extends JPanel {
     private int keyPress2=0;
     JLabel l1;
     JLabel l2;
-
     /**
      * @param s1 set name of song
      * @param s2 set name of artist
@@ -31,11 +30,12 @@ public class NameLabel extends JPanel {
         l2.setBackground(Color.BLACK);
         l1.setForeground(Color.WHITE);
         l2.setForeground(Color.WHITE);
-        l1.setFont(new Font("",Font.PLAIN,20));
-        l2.setFont(new Font("",Font.PLAIN,20));
+        l1.setFont(new Font("",Font.PLAIN,18));
+        l2.setFont(new Font("",Font.PLAIN,18));
         l1.setOpaque(true);
         l2.setOpaque(true);
-        l1.setBorder(new EmptyBorder(0,0,10,0));
+        l1.setBorder(new EmptyBorder(0,0,5,0));
+        this.setPreferredSize(new Dimension(275,5));
         this.add(l1);
         this.add(l2);
         this.setBackground(Color.BLACK);

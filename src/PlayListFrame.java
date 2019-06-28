@@ -2,19 +2,25 @@ import javax.swing.*;
 import javax.swing.border.SoftBevelBorder;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * @author naha
  * make new frame to add Play list on Jlist in leftofGUI
  */
-public class PlayListFrame extends JFrame{
+public class PlayListFrame extends JFrame {
     public void setNewName(ChangeName newName) {
         this.newName = newName;
     }
 
     String nameOfPlayList;
     ChangeName newName;
-    public PlayListFrame() {
+
+    public PlayListFrame(String user) {
         this.setTitle("PlayList");
         JButton btn1 = new JButton();
         JButton btn2 = new JButton();
@@ -51,7 +57,59 @@ public class PlayListFrame extends JFrame{
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 nameOfPlayList = namePlayList.getText();
-                newName.change(nameOfPlayList);
+                HashMap<String, ArrayList<String>> ldapContent = new HashMap<>();
+                File toRead = new File(user + "PLay");
+                if (toRead.exists()) {
+                    FileInputStream fis = null;
+                    try {
+                        fis = new FileInputStream(toRead);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    ObjectInputStream ois = null;
+                    try {
+                        ois = new ObjectInputStream(fis);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    try {
+                        ldapContent = (HashMap<String, ArrayList<String>>) ois.readObject();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+                    try {
+                        ois.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        fis.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                ArrayList<String> b = new ArrayList<>();
+                System.out.println(ldapContent);
+                if (!ldapContent.containsKey(nameOfPlayList)) {
+                    ldapContent.put(nameOfPlayList, b);
+                    try {
+                        File fileOne = new File(user + "PLay");
+                        FileOutputStream fos = new FileOutputStream(fileOne);
+                        ObjectOutputStream oos = new ObjectOutputStream(fos);
+                        oos.writeObject(ldapContent);
+                        oos.flush();
+                        oos.close();
+                        fos.close();
+                    } catch (Exception e) {
+                    }
+                    System.out.println(ldapContent);
+                    newName.change(nameOfPlayList);
+
+                }
                 dispose();
             }
         });

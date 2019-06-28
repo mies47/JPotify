@@ -5,12 +5,13 @@ import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Vector;
 
 /**
  * indicates list of playlist in scroller
  */
-public class Scroller extends JPanel implements ChangeName {
-    DefaultListModel<String> DLM;
+public class Scroller extends JPanel implements ChangeName , RemoveDLM {
+    Vector<String> DLM;
     JList<String> JL;
     /**
      * use Jlist and DefaultListModel
@@ -18,11 +19,10 @@ public class Scroller extends JPanel implements ChangeName {
      * show list of Play list as string
      */
     public Scroller(JFrame frame) {
-        DLM = new DefaultListModel<>();
+        DLM = new Vector<>();
         JL = new JList<>(DLM);
         JL.setBackground(Color.BLACK);
         JL.setForeground(Color.WHITE);
-
         JScrollPane scrollable = new JScrollPane(JL);
         scrollable.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);//make just vertical scroll
         scrollable.setBackground(Color.BLACK);
@@ -43,8 +43,10 @@ public class Scroller extends JPanel implements ChangeName {
 
     @Override
     public void change(String s) {
-        DLM.addElement(s);
+        DLM.add(s);
+        JL.setListData(DLM);
     }
+
     public void addActionListener(final ActionListener al) {
 
         JL.addKeyListener(new KeyAdapter() {
@@ -63,5 +65,14 @@ public class Scroller extends JPanel implements ChangeName {
             }
         });
 
+    }
+
+    @Override
+    public void remove(String s) {
+        System.out.println(s);
+        DLM.remove(s);
+        JL.setListData(DLM);
+        JL.revalidate();
+        JL.repaint();
     }
 }

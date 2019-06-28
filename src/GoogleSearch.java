@@ -16,15 +16,17 @@ import java.util.List;
  * @version 1.0
  *
  */
+
 public class GoogleSearch implements SearchEngine {
 
+    public static URL url;
     @Override
     public List<String> search(String searchString)
             throws SearchLyricsException {
         List<String> urls = new ArrayList<String>();
         try {
 
-            final URL url = encodeGoogleQuery(searchString);
+            url = encodeGoogleQuery(searchString);
             // Download the content from Google.
             System.out.println("Downloading [" + url + "]...\n");
 

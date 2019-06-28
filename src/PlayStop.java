@@ -468,32 +468,32 @@ public class PlayStop extends JPanel implements PlayAddedSong, FavoriteOrSong, R
                                 if (c instanceof BtmofGUI) {
                                     if (mp3File.hasId3v1Tag()) {
                                         if (mp3File.getId3v1Tag().getTrack() != null) {
-                                            ((BtmofGUI) c).nL.l1.setText("Song: " + mp3File.getId3v1Tag().getTitle());
+                                            ((BtmofGUI) c).nL.l1.setText("<html>Song: " + mp3File.getId3v1Tag().getTitle()+"</html>");
                                             if (mp3File.getId3v1Tag().getArtist() != null) {
-                                                ((BtmofGUI) c).nL.l2.setText("Artist: " + mp3File.getId3v1Tag().getArtist());
+                                                ((BtmofGUI) c).nL.l2.setText("<html>Artist: " + mp3File.getId3v1Tag().getArtist()+"</html>");
                                             } else {
                                                 ((BtmofGUI) c).nL.l2.setText("Artist: Unknown ");
                                             }
                                         } else {
                                             ((BtmofGUI) c).nL.l1.setText("Song: Unknown");
                                             if (mp3File.getId3v1Tag().getArtist() != null) {
-                                                ((BtmofGUI) c).nL.l2.setText("Artist: " + mp3File.getId3v1Tag().getArtist());
+                                                ((BtmofGUI) c).nL.l2.setText("<html>Artist: " + mp3File.getId3v1Tag().getArtist()+"</html>");
                                             } else {
                                                 ((BtmofGUI) c).nL.l2.setText("Artist: Unknown ");
                                             }
                                         }
                                     } else if (mp3File.hasId3v2Tag()) {
                                         if (mp3File.getId3v2Tag().getTrack() != null) {
-                                            ((BtmofGUI) c).nL.l1.setText("Song: " + mp3File.getId3v2Tag().getTitle());
+                                            ((BtmofGUI) c).nL.l1.setText("<html>Song: " + mp3File.getId3v2Tag().getTitle()+"</html>");
                                             if (mp3File.getId3v2Tag().getArtist() != null) {
-                                                ((BtmofGUI) c).nL.l2.setText("Artist: " + mp3File.getId3v2Tag().getArtist());
+                                                ((BtmofGUI) c).nL.l2.setText("<html>Artist: " + mp3File.getId3v2Tag().getArtist()+"</html>");
                                             } else {
                                                 ((BtmofGUI) c).nL.l2.setText("Artist: Unknown ");
                                             }
                                         } else {
                                             ((BtmofGUI) c).nL.l1.setText("Song: Unknown");
                                             if (mp3File.getId3v2Tag().getArtist() != null) {
-                                                ((BtmofGUI) c).nL.l2.setText("Artist: " + mp3File.getId3v2Tag().getArtist());
+                                                ((BtmofGUI) c).nL.l2.setText("<html>Artist: " + mp3File.getId3v1Tag().getArtist()+"</html>");
                                             } else {
                                                 ((BtmofGUI) c).nL.l2.setText("Artist: Unknown ");
                                             }
@@ -594,15 +594,15 @@ public class PlayStop extends JPanel implements PlayAddedSong, FavoriteOrSong, R
                     repeatAllFlag = true;
                 }
                 if (!isShuffle) {
-                    allMp3Files = new ArrayList<>();
-                    File userNameFile = new File(userName + "songs");
-                    try {
-                        Scanner userScanner = new Scanner(userNameFile);
-                        while (userScanner.hasNextLine()) {
-                            allMp3Files.add(new File(userScanner.nextLine()));
-                        }
-                    } catch (FileNotFoundException e1) {
-                        e1.printStackTrace();
+//                    allMp3Files = new ArrayList<>();
+//                    File userNameFile = new File(userName + "songs");
+//                    try {
+//                        Scanner userScanner = new Scanner(userNameFile);
+//                        while (userScanner.hasNextLine()) {
+//                            allMp3Files.add(new File(userScanner.nextLine()));
+//                        }
+//                    } catch (FileNotFoundException e1) {
+//                        e1.printStackTrace();
 
                         if (isClickedFav) {
                             File userNameFile2 = new File(userName + "favorite");
@@ -668,7 +668,7 @@ public class PlayStop extends JPanel implements PlayAddedSong, FavoriteOrSong, R
                     keyPress = 0;
                     PlayStop.this.b3.doClick();
                 }
-            }
+
         });
         Image img9 = ImageIO.read(getClass().getResource("repeat.png"));
         Image img10 = img9.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
