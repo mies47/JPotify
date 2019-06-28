@@ -132,6 +132,86 @@ public class SongPlaylist extends JPanel {
         JPopupMenu menu = new JPopupMenu("More");
         menu.setBackground(Color.BLACK);
         menu.setForeground(Color.white);
+        JMenuItem item4 = new JMenuItem("Share this Song");
+        item4.setBackground(Color.BLACK);
+        item4.setForeground(Color.white);
+        item4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                tr="SharedPlayList";
+                HashMap<String, ArrayList<String>> ldapContent = new HashMap<>();
+                File toRead = new File(user + "PLay");
+                FileInputStream fis = null;
+                try {
+                    fis = new FileInputStream(toRead);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                ObjectInputStream ois = null;
+                try {
+                    ois = new ObjectInputStream(fis);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    ldapContent = (HashMap<String, ArrayList<String>>) ois.readObject();
+                    System.out.println(ldapContent);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    ois.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                if (!ldapContent.get(tr).contains(songDir)) {
+                    ldapContent.get(tr).add(songDir);
+                    FileOutputStream fos = null;
+                    try {
+                        fos = new FileOutputStream(toRead);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    ObjectOutputStream oos = null;
+                    try {
+                        oos = new ObjectOutputStream(fos);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        System.out.println(ldapContent);
+                        oos.writeObject(ldapContent);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        oos.flush();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        oos.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        fos.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
         JMenuItem item = new JMenuItem("add to PlayList");
         item.setBackground(Color.BLACK);
         item.setForeground(Color.white);
@@ -458,6 +538,7 @@ public class SongPlaylist extends JPanel {
             }
         });
         menu.add(item);
+        menu.add(item4);
         menu.add(item2);
         menu.add(item3);
         this.setTransferHandler(new TransferHandler("icon"));

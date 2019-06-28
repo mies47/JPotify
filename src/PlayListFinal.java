@@ -23,6 +23,7 @@ public class PlayListFinal extends JPanel {
     }
 
     RemoveDLM removeDLM;
+
     public PlayListFinal(ArrayList<String> a, String user, JFrame frame, String name) throws InvalidDataException, IOException, UnsupportedTagException {
         Mp3File mp3File = null;
         if (a.size() != 0) {
@@ -52,77 +53,83 @@ public class PlayListFinal extends JPanel {
         item.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                HashMap<String, ArrayList<String>> ldapContent = new HashMap<>();
-                File toRead = new File(user + "PLay");
-                if (toRead.exists()) {
+                if (!name.equals("SharedPlayList")) {
+                    HashMap<String, ArrayList<String>> ldapContent = new HashMap<>();
+                    File toRead = new File(user + "PLay");
+                    if (toRead.exists()) {
 //            FileOutputStream fos = new FileOutputStream(toRead);
 //            ObjectOutputStream oos = new ObjectOutputStream(fos);
-                    FileInputStream fis = null;
-                    try {
-                        fis = new FileInputStream(toRead);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
+                        FileInputStream fis = null;
+                        try {
+                            fis = new FileInputStream(toRead);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        ObjectInputStream ois = null;
+                        try {
+                            ois = new ObjectInputStream(fis);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            ldapContent = (HashMap<String, ArrayList<String>>) ois.readObject();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            ois.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            fis.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        ldapContent.remove(name);
+                        File fileOne = new File(user + "PLay");
+                        FileOutputStream fos = null;
+                        try {
+                            fos = new FileOutputStream(fileOne);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        ObjectOutputStream oos = null;
+                        try {
+                            oos = new ObjectOutputStream(fos);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            System.out.println(ldapContent);
+                            oos.writeObject(ldapContent);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            oos.flush();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            oos.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            fos.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        removeDLM.remove(name);
+                        setVisible(false);
+                    }else{
+                        JOptionPane.showMessageDialog(null,"You can't remove SharedPlayList","Wrong",JOptionPane.INFORMATION_MESSAGE);
                     }
-                    ObjectInputStream ois = null;
-                    try {
-                        ois = new ObjectInputStream(fis);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        ldapContent = (HashMap<String, ArrayList<String>>) ois.readObject();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        ois.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        fis.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    ldapContent.remove(name);
-                    File fileOne = new File(user + "PLay");
-                    FileOutputStream fos = null;
-                    try {
-                        fos = new FileOutputStream(fileOne);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    ObjectOutputStream oos = null;
-                    try {
-                        oos = new ObjectOutputStream(fos);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        System.out.println(ldapContent);
-                        oos.writeObject(ldapContent);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        oos.flush();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        oos.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        fos.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    removeDLM.remove(name);
-                    setVisible(false);
+                    JOptionPane.showMessageDialog(null,"You can't remove SharedPlayList","Wrong",JOptionPane.INFORMATION_MESSAGE);
+
                 }
             }
         });

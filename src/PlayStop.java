@@ -18,6 +18,10 @@ import java.util.*;
  */
 
 public class PlayStop extends JPanel implements PlayAddedSong, FavoriteOrSong, RecentOrSong {
+    public int getKeyPress() {
+        return keyPress;
+    }
+
     private volatile int keyPress = 0;
     private int keyPress2 = 0;
     private int keyPress4 = 0;
