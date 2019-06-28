@@ -1,6 +1,7 @@
 import com.sun.jna.platform.FileUtils;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.nio.file.Files;
@@ -18,8 +19,10 @@ public class ClientObj implements Serializable {
     private File userRecent;
     private HashMap<User ,byte[]> userFavorites = new HashMap<>();
     private HashMap<User ,byte[]> userRecents = new HashMap<>();
+    private JFrame frame;
     User thisUser;
-    public ClientObj(File member) throws IOException {
+    public ClientObj(File member , JFrame jFrame) throws IOException {
+        frame = jFrame;
         this.member = Files.readAllBytes(Paths.get(member.getPath()));
         Scanner scUser = new Scanner(member);
         while (scUser.hasNextLine()){
@@ -67,4 +70,10 @@ public class ClientObj implements Serializable {
     public HashMap<User, ArrayList<String>> getAllSongNames() {
         return allSongNames;
     }
+
+    public JFrame getFrame() {
+        return frame;
+    }
+
+
 }

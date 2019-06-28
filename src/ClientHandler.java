@@ -1,73 +1,149 @@
-import org.apache.commons.io.FileUtils;
-
 import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.sql.Time;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.stream.BaseStream;
 
 public class ClientHandler implements Runnable {
     Socket socket;
     ClientObj clientObj;
-    public ClientHandler (Socket socket1){
+    volatile HashMap<Socket , ObjectInputStream> allSocketsInput;
+    volatile HashMap<Socket , ObjectOutputStream> allSocketsOutput;
+    volatile HashMap<Socket , ClientObj> allClientObjects;
+    ArrayList<ClientObj> clientObjs = new ArrayList<>();
+    Thread th = null;
+
+    public ClientHandler(Socket socket1, HashMap<Socket , ObjectInputStream> sockets , HashMap<Socket , ObjectOutputStream> socket2
+            , HashMap<Socket , ClientObj> allClientObjects) {
+        allSocketsInput = sockets;
+        allSocketsOutput = socket2;
+        this.allClientObjects = allClientObjects;
         socket = socket1;
     }
+
     @Override
     public void run() {
-        try(ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream())) {
-            clientObj = (ClientObj) objectInputStream.readObject();
-            File member = new File("member.txt");
-            try(PrintStream memberWriter = new PrintStream(new FileOutputStream(member,true) , true)) {
-                byte[] memberInByte = clientObj.getMember();
-                for (byte b : memberInByte) {
-                    memberWriter.print((char) b);
-                }
+        ObjectInputStream thisSocketInput = allSocketsInput.get(socket);
+        ObjectOutputStream arrayListWriter = allSocketsOutput.get(socket);
+
+
+        clientObj = allClientObjects.get(socket);
+        clientObjs.add(clientObj);
+//            for (Socket s : allSocketsInput.keySet()) {
+//                System.out.println(allSocketsInput.size());
+//                if (!s.equals(socket)) {
+//                    try {
+//                        allSocketsOutput.get(s).writeObject(new Flag(true));
+//                        allSocketsOutput.get(s).flush();
+//                        clientObjs.add((ClientObj) allSocketsInput.get(s).readObject());
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    } catch (ClassNotFoundException e) {
+//                        e.printStackTrace();
+//                    }
+//                }else {
+//                    try {
+//                        allSocketsOutput.get(s).writeObject(new Flag(false));
+//                        allSocketsOutput.get(s).flush();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//
+//            }
+        for(Socket s: allClientObjects.keySet()){
+            if(s != socket){
+                clientObjs.add(allClientObjects.get(s));
             }
-            for (User user :clientObj.getUserSongs().keySet()) {
-                try(PrintStream outputStream = new PrintStream(new FileOutputStream(new File(user.name) , true) , true)){
-                    outputStream.println(user.password);
-                    File f = new File(user.name + "Pic");
-                    FileUtils.writeByteArrayToFile(f , user.image);
-                    outputStream.println(f.getName());
-                    FileUtils.writeByteArrayToFile(new File(user.name + "Recentsongs") , clientObj.getUserRecents().get(user));
-                    FileUtils.writeByteArrayToFile(new File(user.name + "favorites") , clientObj.getUserFavorites().get(user));
-                }
-                File userSong = new File(user.name + "songs");
-                File userRecent = new File("new " +user.name + "RecentSongs");
-                File userFavorite = new File("new" + user.name + "Favorites");
-                File mainUserRecent = new File(user.name + "Recentsongs");
-                File mainUserFavorite = new File(user.name + "favorites");
-                PrintStream recentWriter = new PrintStream(new FileOutputStream(userRecent) , true);
-                PrintStream favoriteWriter = new PrintStream(new FileOutputStream(userFavorite) , true);
-                try (PrintStream songWriter = new PrintStream(new FileOutputStream(userSong) , true)) {
-                    int counter = 0;
-                    for (byte[] bytes : clientObj.getUserSongs().get(user)) {
-                        File temp = new File(clientObj.getAllSongNames().get(user).get(counter));
-                        FileUtils.writeByteArrayToFile(temp, bytes);
-                        songWriter.println(clientObj.getAllSongNames().get(user).get(counter));
-                        if(FileUtils.readFileToString(mainUserFavorite).contains(clientObj.getAllSongNames().get(user).get(counter))){
-                            favoriteWriter.println(clientObj.getAllSongNames().get(user).get(counter));
+        }
+
+        for (Socket s : allSocketsOutput.keySet()){
+            th = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if(s != socket){
+                        try {
+                            System.out.println(clientObjs);
+                            allSocketsOutput.get(s).writeObject(clientObjs);
+                            allSocketsOutput.get(s).flush();
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                        if(FileUtils.readFileToString(mainUserRecent).contains(clientObj.getAllSongNames().get(user).get(counter))){
-                            recentWriter.println(clientObj.getAllSongNames().get(user).get(counter));
+                    }else{
+                        try {
+                            System.out.println("FFFFFFFFFF");
+                            arrayListWriter.writeObject(clientObjs);
+                            arrayListWriter.flush();
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                        counter++;
                     }
                 }
-                FileUtils.forceDelete(mainUserFavorite);
-                FileUtils.forceDelete(mainUserRecent);
-                recentWriter.close();
-                favoriteWriter.close();
-                Files.move(userRecent.toPath(), new File(user.name + "Recentsongs").toPath() , StandardCopyOption.REPLACE_EXISTING );
-                Files.move(userFavorite.toPath(), new File(user.name + "favorite").toPath() , StandardCopyOption.REPLACE_EXISTING );
-
-
+            });
+            synchronized (th) {
+                th.start();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
+//            clientObj.getFrame().addWindowListener(new WindowListener() {
+//                @Override
+//                public void windowOpened(WindowEvent e) {
+//
+//                }
+//
+//                @Override
+//                public void windowClosing(WindowEvent e) {
+//                    clientObj.thisUser.setTime(Time.valueOf(LocalTime.now()));
+//                    try {
+//                        socket.close();
+//                    } catch (IOException e1) {
+//                        e1.printStackTrace();
+//                    }
+//                }
+//
+//                @Override
+//                public void windowClosed(WindowEvent e) {
+//                    clientObj.thisUser.setTime(Time.valueOf(LocalTime.now()));
+//                    try {
+//                        socket.close();
+//                    } catch (IOException e1) {
+//                        e1.printStackTrace();
+//                    }
+//                }
+//
+//                @Override
+//                public void windowIconified(WindowEvent e) {
+//
+//                }
+//
+//                @Override
+//                public void windowDeiconified(WindowEvent e) {
+//
+//                }
+//
+//                @Override
+//                public void windowActivated(WindowEvent e) {
+//
+//                }
+//
+//                @Override
+//                public void windowDeactivated(WindowEvent e) {
+//
+//                }
+//            });
+//            try {
+//                thisSocketInput.close();
+//                arrayListWriter.close();
+//                socket.close();
+//                break;
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+
+
     }
 }
