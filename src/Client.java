@@ -1,17 +1,16 @@
 import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.*;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.channels.SocketChannel;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.sql.Time;
+import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Client implements Runnable {
     String message;
@@ -21,7 +20,7 @@ public class Client implements Runnable {
     volatile ArrayList<ClientObj> objs = null;
     Thread th = null;
 
-    public Client() throws IOException, ClassNotFoundException, InterruptedException {
+    public Client() {
 
     }
 
@@ -30,6 +29,19 @@ public class Client implements Runnable {
         JFrame frame = new JFrame();
         frame.setVisible(true);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                try {
+                    socket.close();
+                    System.out.println(Time.valueOf(LocalTime.now()));
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+                return;
+            }
+        });
         try {
             socket = new Socket("localhost", 3543);
         } catch (IOException e) {
@@ -43,38 +55,24 @@ public class Client implements Runnable {
             e.printStackTrace();
         }
         try {
-            System.out.println("SSSSSSSS");
             objectOutputStream.writeObject(new ClientObj(new File("member.txt"), frame));
             objectOutputStream.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        int counter2 = 0;
-//            try {
-//                Flag flag = (Flag) mainObjectInputStream.readObject();
-//                System.out.println(flag.flag);
-//                if(flag.flag){
-//                    objectOutputStream.writeObject(tempSend);
-//                }
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            } catch (ClassNotFoundException e) {
-//                e.printStackTrace();
-//            }
-        while (true){
+        while (true) {
             try {
-                objs = (ArrayList<ClientObj>)mainObjectInputStream.readObject();
+                objs = (ArrayList<ClientObj>) mainObjectInputStream.readObject();
             } catch (IOException e) {
                 continue;
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
-            System.out.println("kir");
             th = new Thread(new Runnable() {
                 @Override
                 public void run() {
 
-                    if(objs != null) {
+                    if (objs != null) {
                         ArrayList<ClientObj> clientObjs;
                         clientObjs = objs;
                         for (ClientObj clientObj : clientObjs) {
@@ -91,6 +89,7 @@ public class Client implements Runnable {
                             for (User user : clientObj.getUserSongs().keySet()) {
                                 try (PrintStream outputStream = new PrintStream(new FileOutputStream(new File(user.name)), true)) {
                                     outputStream.println(user.password);
+                                    outputStream.println(user.time);
                                     File f = new File(user.name + "Pic");
                                     FileUtils.writeByteArrayToFile(f, user.image);
                                     outputStream.println(f.getName());
@@ -139,68 +138,6 @@ public class Client implements Runnable {
                                 }
                                 PrintStream finalRecentWriter = recentWriter;
                                 PrintStream finalFavoriteWriter = favoriteWriter;
-//                    frame.addWindowListener(new WindowListener() {
-//                        @Override
-//                        public void windowOpened(WindowEvent e) {
-//
-//                        }
-//
-//                        @Override
-//                        public void windowClosing(WindowEvent e) {
-//                            try {
-//                                objectOutputStream.close();
-//                                mainObjectInputStream.close();
-//                                FileUtils.forceDelete(mainUserFavorite);
-//                                FileUtils.forceDelete(mainUserRecent);
-//                                finalRecentWriter.close();
-//                                finalFavoriteWriter.close();
-//                                Files.move(userRecent.toPath(), new File(user.name + "Recentsongs").toPath(), StandardCopyOption.REPLACE_EXISTING);
-//                                Files.move(userFavorite.toPath(), new File(user.name + "favorite").toPath(), StandardCopyOption.REPLACE_EXISTING);
-//                                socket.close();
-//                            } catch (IOException e1) {
-//                                e1.printStackTrace();
-//                            }
-//                            return;
-//                        }
-//
-//                        @Override
-//                        public void windowClosed(WindowEvent e) {
-//                            try {
-//                                objectOutputStream.close();
-//                                mainObjectInputStream.close();
-//                                FileUtils.forceDelete(mainUserFavorite);
-//                                FileUtils.forceDelete(mainUserRecent);
-//                                finalRecentWriter.close();
-//                                finalFavoriteWriter.close();
-//                                Files.move(userRecent.toPath(), new File(user.name + "Recentsongs").toPath(), StandardCopyOption.REPLACE_EXISTING);
-//                                Files.move(userFavorite.toPath(), new File(user.name + "favorite").toPath(), StandardCopyOption.REPLACE_EXISTING);
-//                                socket.close();
-//                            } catch (IOException e1) {
-//                                e1.printStackTrace();
-//                            }
-//                            return;
-//                        }
-//
-//                        @Override
-//                        public void windowIconified(WindowEvent e) {
-//
-//                        }
-//
-//                        @Override
-//                        public void windowDeiconified(WindowEvent e) {
-//
-//                        }
-//
-//                        @Override
-//                        public void windowActivated(WindowEvent e) {
-//
-//                        }
-//
-//                        @Override
-//                        public void windowDeactivated(WindowEvent e) {
-//
-//                        }
-//                    });
                                 try {
                                     FileUtils.forceDelete(mainUserFavorite);
                                 } catch (IOException e) {
@@ -235,10 +172,9 @@ public class Client implements Runnable {
             }
         }
     }
-    public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
+
+    public static void main(String[] args) {
         Thread th = new Thread(new Client());
-//        synchronized (th) {
         th.start();
-//        }
     }
 }
