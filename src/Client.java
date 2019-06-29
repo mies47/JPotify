@@ -65,10 +65,10 @@ public class Client implements Runnable {
         while (true) {
             try {
                 objs = (ArrayList<ClientObj>) mainObjectInputStream.readObject();
-            } catch (IOException e) {
+            } catch (IOException e2) {
                 continue;
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+            } catch (ClassNotFoundException e3) {
+                e3.printStackTrace();
             }
             th = new Thread(new Runnable() {
                 @Override
@@ -100,7 +100,7 @@ public class Client implements Runnable {
                                     outputStream.println(f.getName());
                                     FileUtils.writeByteArrayToFile(new File(user.name + "Recentsongs"), clientObj.getUserRecents().get(user));
                                     FileUtils.writeByteArrayToFile(new File(user.name + "favorites"), clientObj.getUserFavorites().get(user));
-                                    FileUtils.writeByteArrayToFile(new File(user.name + "PLay"), clientObj.getUserFavorites().get(user));
+                                    FileUtils.writeByteArrayToFile(new File(user.name + "PlayList"), clientObj.getUserPlayList().get(user));
                                 } catch (FileNotFoundException e) {
                                     e.printStackTrace();
                                 } catch (IOException e) {
@@ -134,9 +134,9 @@ public class Client implements Runnable {
                                     e.printStackTrace();
                                 }
                                 HashMap<String , ArrayList<String>> userPlayListHashmap = null;
-                                try {
-                                    userPlayListHashmap = (HashMap<String, ArrayList<String>>) new ObjectInputStream(new FileInputStream(
-                                            mainUserPlayList)).readObject();
+                                try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
+                                        mainUserPlayList))) {
+                                    userPlayListHashmap = (HashMap<String, ArrayList<String>>) ois.readObject();
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 } catch (ClassNotFoundException e) {
@@ -202,7 +202,7 @@ public class Client implements Runnable {
                                     e.printStackTrace();
                                 }
                                 try {
-                                    Files.move(userFavorite.toPath(), new File(user.name + "PLay").toPath(), StandardCopyOption.REPLACE_EXISTING);
+                                    Files.move(userPlayList.toPath(), new File(user.name + "PLay").toPath(), StandardCopyOption.REPLACE_EXISTING);
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
@@ -217,7 +217,7 @@ public class Client implements Runnable {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main (String[] args) {
         Thread th = new Thread(new Client());
         th.start();
     }

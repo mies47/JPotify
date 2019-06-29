@@ -60,6 +60,9 @@ public class LibGUI extends JPanel {
                 recentOrSong.changeRecent(false);
 
                 Component c = frame.getRootPane().getContentPane().getComponent(2);
+                Component c1 = frame.getRootPane().getContentPane().getComponent(0);
+                ((BtmofGUI) c1).PS.isClickedPlay=false;
+                ((BtmofGUI) c1).PS.other=false;
                 if (c instanceof MiddleGUI) {
                     ((MiddleGUI) c).jPanel.removeAll();
                     ((MiddleGUI) c).jPanel.setLayout(new WrapLayout(FlowLayout.LEFT));
@@ -114,6 +117,8 @@ public class LibGUI extends JPanel {
                 recentOrSong.changeRecent(false);
                 Component c = frame.getRootPane().getContentPane().getComponent(2);
                 Component c1 = frame.getRootPane().getContentPane().getComponent(0);
+                ((BtmofGUI) c1).PS.isClickedPlay=false;
+                ((BtmofGUI) c1).PS.other=false;
                 if (c instanceof MiddleGUI) {
                     ((MiddleGUI) c).jPanel.removeAll();
                     ((MiddleGUI) c).jPanel.setLayout(new WrapLayout(FlowLayout.LEFT));
@@ -206,6 +211,9 @@ public class LibGUI extends JPanel {
 
                 favoriteOrSong.changeFav(true);
                 Component c = frame.getRootPane().getContentPane().getComponent(2);
+                Component c1 = frame.getRootPane().getContentPane().getComponent(0);
+                ((BtmofGUI) c1).PS.isClickedPlay=false;
+                ((BtmofGUI) c1).PS.other=false;
                 if (c instanceof MiddleGUI) {
                     ((MiddleGUI) c).jPanel.removeAll();
                     ((MiddleGUI) c).jPanel.setLayout(new WrapLayout(FlowLayout.LEFT));
@@ -416,6 +424,9 @@ public class LibGUI extends JPanel {
             public void actionPerformed(ActionEvent actionEvent) {
                 recentOrSong.changeRecent(true);
                 favoriteOrSong.changeFav(false);
+                Component c1 = frame.getRootPane().getContentPane().getComponent(0);
+                ((BtmofGUI)c1).PS.isClickedPlay=false;
+                ((BtmofGUI) c1).PS.other=false;
                 File recent = new File(user + "Recentsongs");
                 ArrayList<String> a = new ArrayList<>();
                 Scanner scannerRecent = null;

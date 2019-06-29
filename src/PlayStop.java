@@ -17,7 +17,7 @@ import java.util.*;
  * 3 int param for time
  */
 
-public class PlayStop extends JPanel implements PlayAddedSong, FavoriteOrSong, RecentOrSong,PlayListChange {
+public class PlayStop extends JPanel implements PlayAddedSong, FavoriteOrSong, RecentOrSong {
     public int getKeyPress() {
         return keyPress;
     }
@@ -57,6 +57,8 @@ public class PlayStop extends JPanel implements PlayAddedSong, FavoriteOrSong, R
     volatile String userName;
     volatile Mp3File mp3File;
     volatile int counter;
+    volatile String name;
+    volatile boolean other = false;
 
     /**
      * @throws IOException if not find icon throw exception
@@ -81,29 +83,31 @@ public class PlayStop extends JPanel implements PlayAddedSong, FavoriteOrSong, R
         b1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {//Action for shuffle button
-                keyPress2++;
-                if (keyPress2 % 2 == 1) {
-                    Image img15 = null;
-                    try {
-                        isShuffle = true;
-                        Collections.shuffle(allMp3Files);
-                        Collections.swap(allMp3Files, 0, allMp3Files.indexOf(file));
-                        img15 = ImageIO.read(getClass().getResource("shuffle (2).png"));
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                if (!other) {
+                    keyPress2++;
+                    if (keyPress2 % 2 == 1) {
+                        Image img15 = null;
+                        try {
+                            isShuffle = true;
+                            Collections.shuffle(allMp3Files);
+                            Collections.swap(allMp3Files, 0, allMp3Files.indexOf(file));
+                            img15 = ImageIO.read(getClass().getResource("shuffle (2).png"));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        Image img16 = img15.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
+                        b1.setIcon(new ImageIcon(img16));
+                    } else {
+                        Image img17 = null;
+                        try {
+                            isShuffle = false;
+                            img17 = ImageIO.read(getClass().getResource("shuffle (1).png"));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        Image img18 = img17.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
+                        b1.setIcon(new ImageIcon(img18));
                     }
-                    Image img16 = img15.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
-                    b1.setIcon(new ImageIcon(img16));
-                } else {
-                    Image img17 = null;
-                    try {
-                        isShuffle = false;
-                        img17 = ImageIO.read(getClass().getResource("shuffle (1).png"));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    Image img18 = img17.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
-                    b1.setIcon(new ImageIcon(img18));
                 }
             }
         });
@@ -113,101 +117,146 @@ public class PlayStop extends JPanel implements PlayAddedSong, FavoriteOrSong, R
         b2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Scanner sc = null;//finding favorite songs
-                favoriteSong = new ArrayList<>();
-                try {
-                    sc = new Scanner(new File(userName + "favorite"));
-                } catch (FileNotFoundException e1) {
-                    e1.printStackTrace();
-                }
-                while (sc.hasNextLine()) {
-                    favoriteSong.add(new File(sc.nextLine()));
-                }
-                if (favoriteSong.contains(file)) {
+                if (!other) {
+                    Scanner sc = null;//finding favorite songs
+                    favoriteSong = new ArrayList<>();
                     try {
-                        btn.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("favorite (3).png")).getScaledInstance(
-                                40, 40, Image.SCALE_SMOOTH
-                        )));
-                    } catch (IOException e2) {
-                        e2.printStackTrace();
+                        sc = new Scanner(new File(userName + "favorite"));
+                    } catch (FileNotFoundException e1) {
+                        e1.printStackTrace();
                     }
-                } else {
-                    try {
-                        btn.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("favorite (2).png")).getScaledInstance(
-                                40, 40, Image.SCALE_SMOOTH
-                        )));
-                    } catch (IOException e2) {
-                        e2.printStackTrace();
+                    while (sc.hasNextLine()) {
+                        favoriteSong.add(new File(sc.nextLine()));
                     }
-                }
-                allMp3Files = new ArrayList<>();
-                if (keyPress3 % 3 == 2) {
-                    repeatAllFlag = true;
-                }
-                if (!isShuffle) {
-                    if (isClickedFav) {
-                        File userNameFile = new File(userName + "favorite");
+                    if (favoriteSong.contains(file)) {
                         try {
-                            allMp3Files = new ArrayList<>();
-                            Scanner userScanner = new Scanner(userNameFile);
-                            while (userScanner.hasNextLine()) {
-                                allMp3Files.add(new File(userScanner.nextLine()));
-                            }
-                        } catch (FileNotFoundException e1) {
-                            e1.printStackTrace();
+                            btn.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("favorite (3).png")).getScaledInstance(
+                                    40, 40, Image.SCALE_SMOOTH
+                            )));
+                        } catch (IOException e2) {
+                            e2.printStackTrace();
                         }
                     } else {
-                        File userNameFile = new File(userName + "songs");
                         try {
-                            allMp3Files = new ArrayList<>();
-                            Scanner userScanner = new Scanner(userNameFile);
-                            while (userScanner.hasNextLine()) {
-                                allMp3Files.add(new File(userScanner.nextLine()));
-                            }
-                        } catch (FileNotFoundException e1) {
-                            e1.printStackTrace();
+                            btn.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("favorite (2).png")).getScaledInstance(
+                                    40, 40, Image.SCALE_SMOOTH
+                            )));
+                        } catch (IOException e2) {
+                            e2.printStackTrace();
                         }
                     }
-                }
-                PlayStop.this.nextOrPreviousSong = true;
-                if (finalPlayer[0] != null) {
-                    finalPlayer[0].close();
-                }
-                counter = 0;
-                for (File f : allMp3Files) {
-                    if (file.getPath().equals(f.getPath())) {
-                        break;
+                    allMp3Files = new ArrayList<>();
+                    if (keyPress3 % 3 == 2) {
+                        repeatAllFlag = true;
                     }
-                    ++counter;
+                    if (!isShuffle) {
+                        if (isClickedFav) {
+                            File userNameFile = new File(userName + "favorite");
+                            try {
+                                allMp3Files = new ArrayList<>();
+                                Scanner userScanner = new Scanner(userNameFile);
+                                while (userScanner.hasNextLine()) {
+                                    allMp3Files.add(new File(userScanner.nextLine()));
+                                }
+                            } catch (FileNotFoundException e1) {
+                                e1.printStackTrace();
+                            }
+                        } else if (isClickedPlay == true) {
+                            HashMap<String, ArrayList<String>> a = new HashMap<>();
+                            File toRead = new File(userName + "PLay");
+                            FileInputStream fis = null;
+                            try {
+                                fis = new FileInputStream(toRead);
+                            } catch (FileNotFoundException z) {
+                                z.printStackTrace();
+                            }
+                            ObjectInputStream ois = null;
+                            try {
+                                ois = new ObjectInputStream(fis);
+                            } catch (IOException w) {
+                                w.printStackTrace();
+                            }
+
+                            try {
+                                a = (HashMap<String, ArrayList<String>>) ois.readObject();
+                                System.out.println(a);
+                            } catch (IOException w2) {
+                                w2.printStackTrace();
+                            } catch (ClassNotFoundException w3) {
+                                w3.printStackTrace();
+                            }
+
+                            try {
+                                ois.close();
+                            } catch (IOException w3) {
+                                w3.printStackTrace();
+                            }
+                            try {
+                                fis.close();
+                            } catch (IOException w4) {
+                                w4.printStackTrace();
+                            }
+                            for (String p : a.keySet()) {
+                                if (p.equals(name)) {
+                                    allMp3Files = new ArrayList<>();
+                                    for (String s : a.get(p)) {
+                                        allMp3Files.add(new File(s));
+                                    }
+                                }
+                            }
+                        } else {
+                            File userNameFile = new File(userName + "songs");
+                            try {
+                                allMp3Files = new ArrayList<>();
+                                Scanner userScanner = new Scanner(userNameFile);
+                                while (userScanner.hasNextLine()) {
+                                    allMp3Files.add(new File(userScanner.nextLine()));
+                                }
+                            } catch (FileNotFoundException e1) {
+                                e1.printStackTrace();
+                            }
+                        }
+                    }
+                    PlayStop.this.nextOrPreviousSong = true;
+                    if (finalPlayer[0] != null) {
+                        finalPlayer[0].close();
+                    }
+                    counter = 0;
+                    for (File f : allMp3Files) {
+                        if (file.getPath().equals(f.getPath())) {
+                            break;
+                        }
+                        ++counter;
+                    }
+                    if (counter <= 0) {
+                        counter = allMp3Files.size();
+                    }
+                    try {
+                        finalPlayer[0] = new PausablePlayer(new FileInputStream(allMp3Files.get(--counter)));
+                        file = allMp3Files.get(counter);
+                    } catch (JavaLayerException e1) {
+                        e1.printStackTrace();
+                    } catch (FileNotFoundException e1) {
+                        e1.printStackTrace();
+                    }
+                    try {
+                        finalPlayer[0].play();
+                    } catch (JavaLayerException e1) {
+                        e1.printStackTrace();
+                    }
+                    slider.b.setValue(0);
+                    try {
+                        mp3File = new Mp3File(file);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    } catch (UnsupportedTagException e1) {
+                        e1.printStackTrace();
+                    } catch (InvalidDataException e1) {
+                        e1.printStackTrace();
+                    }
+                    keyPress = 0;
+                    PlayStop.this.b3.doClick();
                 }
-                if (counter <= 0) {
-                    counter = allMp3Files.size();
-                }
-                try {
-                    finalPlayer[0] = new PausablePlayer(new FileInputStream(allMp3Files.get(--counter)));
-                    file = allMp3Files.get(counter);
-                } catch (JavaLayerException e1) {
-                    e1.printStackTrace();
-                } catch (FileNotFoundException e1) {
-                    e1.printStackTrace();
-                }
-                try {
-                    finalPlayer[0].play();
-                } catch (JavaLayerException e1) {
-                    e1.printStackTrace();
-                }
-                slider.b.setValue(0);
-                try {
-                    mp3File = new Mp3File(file);
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                } catch (UnsupportedTagException e1) {
-                    e1.printStackTrace();
-                } catch (InvalidDataException e1) {
-                    e1.printStackTrace();
-                }
-                keyPress = 0;
-                PlayStop.this.b3.doClick();
             }
         });
         Image img5 = ImageIO.read(getClass().getResource("play3.png"));
@@ -241,34 +290,35 @@ public class PlayStop extends JPanel implements PlayAddedSong, FavoriteOrSong, R
             public void actionPerformed(ActionEvent actionEvent) {
                 keyPress++;
                 if (keyPress % 2 == 1) {
-                    File recent = new File(userName + "Recentsongs");
-                    ArrayList<String> a = new ArrayList<>();
-                    Scanner scannerRecent = null;
-                    try {
-                        scannerRecent = new Scanner(recent);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    if (scannerRecent.hasNextLine()) {
-                        while (scannerRecent.hasNextLine()) {
-                            a.add(scannerRecent.nextLine());
-                        }
-                        int p = a.indexOf(file.getPath());
-                        a.add(0, a.get(a.indexOf(file.getPath())));
-                        a.remove(p + 1);
-                        PrintStream out = null;//open append mode
+                    if (!other) {
+                        File recent = new File(userName + "Recentsongs");
+                        ArrayList<String> a = new ArrayList<>();
+                        Scanner scannerRecent = null;
                         try {
-                            out = new PrintStream(new FileOutputStream(userName + "Recentsongs"));
-                        } catch (IOException ex) {
-                            ex.printStackTrace();
+                            scannerRecent = new Scanner(recent);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
                         }
-                        for (String s : a) {
-                            if (System.getProperty("os.name").contains("Windows")) {
-                                out.println(s);
-                            } else {
-                                out.print(s + "\n");
+                        if (scannerRecent.hasNextLine()) {
+                            while (scannerRecent.hasNextLine()) {
+                                a.add(scannerRecent.nextLine());
                             }
-                        }
+                            int p = a.indexOf(file.getPath());
+                            a.add(0, a.get(a.indexOf(file.getPath())));
+                            a.remove(p + 1);
+                            PrintStream out = null;//open append mode
+                            try {
+                                out = new PrintStream(new FileOutputStream(userName + "Recentsongs"));
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
+                            for (String s : a) {
+                                if (System.getProperty("os.name").contains("Windows")) {
+                                    out.println(s);
+                                } else {
+                                    out.print(s + "\n");
+                                }
+                            }
 
 //                        Component cTemp = jFrame.getRootPane().getContentPane().getComponent(2);
 //                        if (cTemp instanceof MiddleGUI) {
@@ -311,75 +361,76 @@ public class PlayStop extends JPanel implements PlayAddedSong, FavoriteOrSong, R
 //                            jFrame.invalidate();
 //                            jFrame.repaint();
 //                        }
-                    }
-                    Scanner sc = null;//finding favorite songs
-                    try {
-                        favoriteSong = new ArrayList<>();
-                        sc = new Scanner(new File(userName + "favorite"));
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    while (sc.hasNextLine()) {
-                        favoriteSong.add(new File(sc.nextLine()));
-                    }
-                    if (favoriteSong.contains(file)) {
+                        }
+                        Scanner sc = null;//finding favorite songs
                         try {
-                            btn.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("favorite (3).png")).getScaledInstance(
-                                    40, 40, Image.SCALE_SMOOTH
-                            )));
-                        } catch (IOException e) {
+                            favoriteSong = new ArrayList<>();
+                            sc = new Scanner(new File(userName + "favorite"));
+                        } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
-                    } else {
-                        try {
-                            btn.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("favorite (2).png")).getScaledInstance(
-                                    40, 40, Image.SCALE_SMOOTH
-                            )));
-                        } catch (IOException e2) {
-                            e2.printStackTrace();
+                        while (sc.hasNextLine()) {
+                            favoriteSong.add(new File(sc.nextLine()));
                         }
-                    }
-                    if (isRecent == true) {
-                        Component cTemp = jFrame.getRootPane().getContentPane().getComponent(2);
-                        if (cTemp instanceof MiddleGUI) {
-                            ((MiddleGUI) cTemp).jPanel.removeAll();
-                            ((MiddleGUI) cTemp).jPanel.setLayout(new WrapLayout(FlowLayout.LEFT));
-                            ArrayList<SongPlaylist> list = new ArrayList<>();
-                            String songDir;
-                            File f = new File(userName + "Recentsongs");
-                            Scanner scannerSong = null;
+                        if (favoriteSong.contains(file)) {
                             try {
-                                scannerSong = new Scanner(f);
-                            } catch (FileNotFoundException e) {
+                                btn.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("favorite (3).png")).getScaledInstance(
+                                        40, 40, Image.SCALE_SMOOTH
+                                )));
+                            } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                            while (scannerSong.hasNextLine()) {
-                                songDir = scannerSong.nextLine();
+                        } else {
+                            try {
+                                btn.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("favorite (2).png")).getScaledInstance(
+                                        40, 40, Image.SCALE_SMOOTH
+                                )));
+                            } catch (IOException e2) {
+                                e2.printStackTrace();
+                            }
+                        }
+                        if (isRecent == true) {
+                            Component cTemp = jFrame.getRootPane().getContentPane().getComponent(2);
+                            if (cTemp instanceof MiddleGUI) {
+                                ((MiddleGUI) cTemp).jPanel.removeAll();
+                                ((MiddleGUI) cTemp).jPanel.setLayout(new WrapLayout(FlowLayout.LEFT));
+                                ArrayList<SongPlaylist> list = new ArrayList<>();
+                                String songDir;
+                                File f = new File(userName + "Recentsongs");
+                                Scanner scannerSong = null;
                                 try {
-                                    list.add(new SongPlaylist(songDir, userName, jFrame));
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                } catch (InvalidDataException e) {
-                                    e.printStackTrace();
-                                } catch (UnsupportedTagException e) {
+                                    scannerSong = new Scanner(f);
+                                } catch (FileNotFoundException e) {
                                     e.printStackTrace();
                                 }
-                            }
+                                while (scannerSong.hasNextLine()) {
+                                    songDir = scannerSong.nextLine();
+                                    try {
+                                        list.add(new SongPlaylist(songDir, userName, jFrame));
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    } catch (InvalidDataException e) {
+                                        e.printStackTrace();
+                                    } catch (UnsupportedTagException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
 
-                            //songPlaylist.addSong(songPlay);
-                            for (int i = 0; i < list.size(); i++) {
-                                Component c = jFrame.getRootPane().getContentPane().getComponent(0);
-                                list.get(i).setNewSong((BtmofGUI) c);
-                                list.get(i).setPlayAddedSong(((BtmofGUI) c).PS);
+                                //songPlaylist.addSong(songPlay);
+                                for (int i = 0; i < list.size(); i++) {
+                                    Component c = jFrame.getRootPane().getContentPane().getComponent(0);
+                                    list.get(i).setNewSong((BtmofGUI) c);
+                                    list.get(i).setPlayAddedSong(((BtmofGUI) c).PS);
+                                }
+                                for (int i = 0; i < list.size(); i++) {
+                                    ((MiddleGUI) cTemp).jPanel.add(list.get(i));
+                                }
+                                ((MiddleGUI) cTemp).jPanel.setBackground(Color.BLACK);
+                                ((MiddleGUI) cTemp).jPanel.setVisible(true);
+                                jFrame.validate();
+                                jFrame.invalidate();
+                                jFrame.repaint();
                             }
-                            for (int i = 0; i < list.size(); i++) {
-                                ((MiddleGUI) cTemp).jPanel.add(list.get(i));
-                            }
-                            ((MiddleGUI) cTemp).jPanel.setBackground(Color.BLACK);
-                            ((MiddleGUI) cTemp).jPanel.setVisible(true);
-                            jFrame.validate();
-                            jFrame.invalidate();
-                            jFrame.repaint();
                         }
                     }
                     if (finalTh[0] != null && (newSong || nextOrPreviousSong)) {
@@ -474,32 +525,32 @@ public class PlayStop extends JPanel implements PlayAddedSong, FavoriteOrSong, R
                                 if (c instanceof BtmofGUI) {
                                     if (mp3File.hasId3v1Tag()) {
                                         if (mp3File.getId3v1Tag().getTrack() != null) {
-                                            ((BtmofGUI) c).nL.l1.setText("<html>Song: " + mp3File.getId3v1Tag().getTitle()+"</html>");
+                                            ((BtmofGUI) c).nL.l1.setText("<html>Song: " + mp3File.getId3v1Tag().getTitle() + "</html>");
                                             if (mp3File.getId3v1Tag().getArtist() != null) {
-                                                ((BtmofGUI) c).nL.l2.setText("<html>Artist: " + mp3File.getId3v1Tag().getArtist()+"</html>");
+                                                ((BtmofGUI) c).nL.l2.setText("<html>Artist: " + mp3File.getId3v1Tag().getArtist() + "</html>");
                                             } else {
                                                 ((BtmofGUI) c).nL.l2.setText("Artist: Unknown ");
                                             }
                                         } else {
                                             ((BtmofGUI) c).nL.l1.setText("Song: Unknown");
                                             if (mp3File.getId3v1Tag().getArtist() != null) {
-                                                ((BtmofGUI) c).nL.l2.setText("<html>Artist: " + mp3File.getId3v1Tag().getArtist()+"</html>");
+                                                ((BtmofGUI) c).nL.l2.setText("<html>Artist: " + mp3File.getId3v1Tag().getArtist() + "</html>");
                                             } else {
                                                 ((BtmofGUI) c).nL.l2.setText("Artist: Unknown ");
                                             }
                                         }
                                     } else if (mp3File.hasId3v2Tag()) {
                                         if (mp3File.getId3v2Tag().getTrack() != null) {
-                                            ((BtmofGUI) c).nL.l1.setText("<html>Song: " + mp3File.getId3v2Tag().getTitle()+"</html>");
+                                            ((BtmofGUI) c).nL.l1.setText("<html>Song: " + mp3File.getId3v2Tag().getTitle() + "</html>");
                                             if (mp3File.getId3v2Tag().getArtist() != null) {
-                                                ((BtmofGUI) c).nL.l2.setText("<html>Artist: " + mp3File.getId3v2Tag().getArtist()+"</html>");
+                                                ((BtmofGUI) c).nL.l2.setText("<html>Artist: " + mp3File.getId3v2Tag().getArtist() + "</html>");
                                             } else {
                                                 ((BtmofGUI) c).nL.l2.setText("Artist: Unknown ");
                                             }
                                         } else {
                                             ((BtmofGUI) c).nL.l1.setText("Song: Unknown");
                                             if (mp3File.getId3v2Tag().getArtist() != null) {
-                                                ((BtmofGUI) c).nL.l2.setText("<html>Artist: " + mp3File.getId3v1Tag().getArtist()+"</html>");
+                                                ((BtmofGUI) c).nL.l2.setText("<html>Artist: " + mp3File.getId3v1Tag().getArtist() + "</html>");
                                             } else {
                                                 ((BtmofGUI) c).nL.l2.setText("Artist: Unknown ");
                                             }
@@ -569,37 +620,38 @@ public class PlayStop extends JPanel implements PlayAddedSong, FavoriteOrSong, R
         b4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Scanner sc = null;//finding favorite songs
-                favoriteSong = new ArrayList<>();
-                try {
-                    sc = new Scanner(new File(userName + "favorite"));
-                } catch (FileNotFoundException e1) {
-                    e1.printStackTrace();
-                }
-                while (sc.hasNextLine()) {
-                    favoriteSong.add(new File(sc.nextLine()));
-                }
-                if (favoriteSong.contains(file)) {
+                if (!other) {
+                    Scanner sc = null;//finding favorite songs
+                    favoriteSong = new ArrayList<>();
                     try {
-                        btn.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("favorite (3).png")).getScaledInstance(
-                                40, 40, Image.SCALE_SMOOTH
-                        )));
-                    } catch (IOException e2) {
-                        e2.printStackTrace();
+                        sc = new Scanner(new File(userName + "favorite"));
+                    } catch (FileNotFoundException e1) {
+                        e1.printStackTrace();
                     }
-                } else {
-                    try {
-                        btn.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("favorite (2).png")).getScaledInstance(
-                                40, 40, Image.SCALE_SMOOTH
-                        )));
-                    } catch (IOException e2) {
-                        e2.printStackTrace();
+                    while (sc.hasNextLine()) {
+                        favoriteSong.add(new File(sc.nextLine()));
                     }
-                }
-                if (keyPress3 % 3 == 2) {
-                    repeatAllFlag = true;
-                }
-                if (!isShuffle) {
+                    if (favoriteSong.contains(file)) {
+                        try {
+                            btn.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("favorite (3).png")).getScaledInstance(
+                                    40, 40, Image.SCALE_SMOOTH
+                            )));
+                        } catch (IOException e2) {
+                            e2.printStackTrace();
+                        }
+                    } else {
+                        try {
+                            btn.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("favorite (2).png")).getScaledInstance(
+                                    40, 40, Image.SCALE_SMOOTH
+                            )));
+                        } catch (IOException e2) {
+                            e2.printStackTrace();
+                        }
+                    }
+                    if (keyPress3 % 3 == 2) {
+                        repeatAllFlag = true;
+                    }
+                    if (!isShuffle) {
 //                    allMp3Files = new ArrayList<>();
 //                    File userNameFile = new File(userName + "songs");
 //                    try {
@@ -620,6 +672,49 @@ public class PlayStop extends JPanel implements PlayAddedSong, FavoriteOrSong, R
                                 }
                             } catch (FileNotFoundException e3) {
                                 e3.printStackTrace();
+                            }
+                        } else if (isClickedPlay == true) {
+                            HashMap<String, ArrayList<String>> a = new HashMap<>();
+                            File toRead = new File(userName + "PLay");
+                            FileInputStream fis = null;
+                            try {
+                                fis = new FileInputStream(toRead);
+                            } catch (FileNotFoundException z) {
+                                z.printStackTrace();
+                            }
+                            ObjectInputStream ois = null;
+                            try {
+                                ois = new ObjectInputStream(fis);
+                            } catch (IOException w) {
+                                w.printStackTrace();
+                            }
+
+                            try {
+                                a = (HashMap<String, ArrayList<String>>) ois.readObject();
+                                System.out.println(a);
+                            } catch (IOException w2) {
+                                w2.printStackTrace();
+                            } catch (ClassNotFoundException w3) {
+                                w3.printStackTrace();
+                            }
+
+                            try {
+                                ois.close();
+                            } catch (IOException w3) {
+                                w3.printStackTrace();
+                            }
+                            try {
+                                fis.close();
+                            } catch (IOException w4) {
+                                w4.printStackTrace();
+                            }
+                            for (String p : a.keySet()) {
+                                if (p.equals(name)) {
+                                    allMp3Files = new ArrayList<>();
+                                    for (String s : a.get(p)) {
+                                        allMp3Files.add(new File(s));
+                                    }
+                                }
                             }
                         } else {
                             allMp3Files = new ArrayList<>();
@@ -674,7 +769,7 @@ public class PlayStop extends JPanel implements PlayAddedSong, FavoriteOrSong, R
                     keyPress = 0;
                     PlayStop.this.b3.doClick();
                 }
-
+            }
         });
         Image img9 = ImageIO.read(getClass().getResource("repeat.png"));
         Image img10 = img9.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
@@ -684,45 +779,46 @@ public class PlayStop extends JPanel implements PlayAddedSong, FavoriteOrSong, R
         b5.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                keyPress3++;
-                if (keyPress3 % 3 == 1) {
-                    Image img19 = null;
-                    try {
-                        img19 = ImageIO.read(getClass().getResource("repeat2.png"));
-                        oneRepeatFlag = true;
-                        repeatAllFlag = false;
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    Image img20 = img19.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
-                    b5.setIcon(new ImageIcon(img20));
-                } else if (keyPress3 % 3 == 2) {
-                    Image img23 = null;
-                    try {
-                        img23 = ImageIO.read(getClass().getResource("repeat3.png"));
-                        oneRepeatFlag = false;
-                        repeatAllFlag = true;
+                if (!other) {
+                    keyPress3++;
+                    if (keyPress3 % 3 == 1) {
+                        Image img19 = null;
+                        try {
+                            img19 = ImageIO.read(getClass().getResource("repeat2.png"));
+                            oneRepeatFlag = true;
+                            repeatAllFlag = false;
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        Image img20 = img19.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
+                        b5.setIcon(new ImageIcon(img20));
+                    } else if (keyPress3 % 3 == 2) {
+                        Image img23 = null;
+                        try {
+                            img23 = ImageIO.read(getClass().getResource("repeat3.png"));
+                            oneRepeatFlag = false;
+                            repeatAllFlag = true;
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    Image img24 = img23.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
-                    b5.setIcon(new ImageIcon(img24));
-                } else {
-                    Image img21 = null;
-                    try {
-                        img21 = ImageIO.read(getClass().getResource("repeat.png"));
-                        oneRepeatFlag = false;
-                        repeatAllFlag = false;
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        Image img24 = img23.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
+                        b5.setIcon(new ImageIcon(img24));
+                    } else {
+                        Image img21 = null;
+                        try {
+                            img21 = ImageIO.read(getClass().getResource("repeat.png"));
+                            oneRepeatFlag = false;
+                            repeatAllFlag = false;
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        Image img22 = img21.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
+                        b5.setIcon(new ImageIcon(img22));
                     }
-                    Image img22 = img21.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
-                    b5.setIcon(new ImageIcon(img22));
                 }
             }
-
         });
         b1.setBorder(null);
         b2.setBorder(null);
@@ -739,173 +835,175 @@ public class PlayStop extends JPanel implements PlayAddedSong, FavoriteOrSong, R
                                       ActionListener() {
                                           @Override
                                           public void actionPerformed(ActionEvent actionEvent) { // favorite button
-                                              keyPress4++;
-                                              if (keyPress4 % 2 == 1) {
-                                                  Image imgbtn15 = null;
-                                                  try {
-                                                      imgbtn15 = ImageIO.read(getClass().getResource("favorite (3).png"));
-                                                      isFavorite = true;
-                                                  } catch (IOException e) {
-                                                      e.printStackTrace();
-                                                  }
-                                                  File f = new File(userName + "favorite");
-                                                  Image imgbtn16 = imgbtn15.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
-                                                  btn.setIcon(new ImageIcon(imgbtn16));
-                                                  fileIsExist = false;
-                                                  Scanner scannerSong = null;
-                                                  try {
-                                                      scannerSong = new Scanner(new File(userName + "favorite"));
-                                                  } catch (FileNotFoundException e) {
-                                                      e.printStackTrace();
-                                                  }
-                                                  while (scannerSong.hasNextLine()) {
-                                                      if (file.getPath().equals(scannerSong.nextLine()))
-                                                          fileIsExist = true;
-                                                  }
-                                                  if (!fileIsExist) {
+                                              if (!other) {
+                                                  keyPress4++;
+                                                  if (keyPress4 % 2 == 1) {
+                                                      Image imgbtn15 = null;
                                                       try {
-                                                          BufferedWriter fav = new BufferedWriter(new FileWriter(f, true));//open append mode
-                                                          if (System.getProperty("os.name").contains("Windows")) {
-                                                              fav.write(file.getPath() + "\r\n");
-                                                          } else {
-                                                              fav.write(file.getPath() + "\n");
+                                                          imgbtn15 = ImageIO.read(getClass().getResource("favorite (3).png"));
+                                                          isFavorite = true;
+                                                      } catch (IOException e) {
+                                                          e.printStackTrace();
+                                                      }
+                                                      File f = new File(userName + "favorite");
+                                                      Image imgbtn16 = imgbtn15.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
+                                                      btn.setIcon(new ImageIcon(imgbtn16));
+                                                      fileIsExist = false;
+                                                      Scanner scannerSong = null;
+                                                      try {
+                                                          scannerSong = new Scanner(new File(userName + "favorite"));
+                                                      } catch (FileNotFoundException e) {
+                                                          e.printStackTrace();
+                                                      }
+                                                      while (scannerSong.hasNextLine()) {
+                                                          if (file.getPath().equals(scannerSong.nextLine()))
+                                                              fileIsExist = true;
+                                                      }
+                                                      if (!fileIsExist) {
+                                                          try {
+                                                              BufferedWriter fav = new BufferedWriter(new FileWriter(f, true));//open append mode
+                                                              if (System.getProperty("os.name").contains("Windows")) {
+                                                                  fav.write(file.getPath() + "\r\n");
+                                                              } else {
+                                                                  fav.write(file.getPath() + "\n");
+                                                              }
+                                                              fav.close();
+                                                          } catch (IOException e) {
+                                                              e.printStackTrace();
                                                           }
+                                                      }
+                                                      if (isClickedFav) {
+                                                          Component c = jFrame.getRootPane().getContentPane().getComponent(2);
+                                                          if (c instanceof MiddleGUI) {
+                                                              ((MiddleGUI) c).jPanel.removeAll();
+                                                              ((MiddleGUI) c).jPanel.setLayout(new WrapLayout(FlowLayout.LEFT));
+                                                              ArrayList<SongPlaylist> list = new ArrayList<>();
+                                                              String songDir;
+                                                              File fad = new File(userName + "favorite");
+                                                              Scanner scannerSongTemp = null;
+                                                              try {
+                                                                  scannerSongTemp = new Scanner(fad);
+                                                              } catch (FileNotFoundException e) {
+                                                                  e.printStackTrace();
+                                                              }
+                                                              while (scannerSongTemp.hasNextLine()) {
+                                                                  songDir = scannerSongTemp.nextLine();
+                                                                  try {
+                                                                      list.add(new SongPlaylist(songDir, userName, jFrame));
+                                                                  } catch (IOException e) {
+                                                                      e.printStackTrace();
+                                                                  } catch (InvalidDataException e) {
+                                                                      e.printStackTrace();
+                                                                  } catch (UnsupportedTagException e) {
+                                                                      e.printStackTrace();
+                                                                  }
+                                                              }
+                                                              Component c1 = jFrame.getRootPane().getContentPane().getComponent(0);
+                                                              for (int i = 0; i < list.size(); i++) {
+                                                                  list.get(i).setNewSong(((BtmofGUI) c1));
+                                                                  list.get(i).setPlayAddedSong(((BtmofGUI) c1).PS);
+                                                              }
+                                                              for (int i = 0; i < list.size(); i++) {
+                                                                  ((MiddleGUI) c).jPanel.add(list.get(i));
+                                                              }
+                                                              ((MiddleGUI) c).jPanel.setBackground(Color.BLACK);
+                                                              ((MiddleGUI) c).jPanel.setVisible(true);
+                                                              jFrame.validate();
+                                                              jFrame.invalidate();
+                                                              jFrame.repaint();
+                                                          }
+                                                      }
+                                                  } else {
+                                                      Image imgbtn17 = null;
+                                                      isFavorite = false;
+                                                      try {
+                                                          imgbtn17 = ImageIO.read(getClass().getResource("favorite (2).png"));
+                                                      } catch (IOException e) {
+                                                          e.printStackTrace();
+                                                      }
+                                                      Image imgbtn18 = imgbtn17.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
+                                                      btn.setIcon(new ImageIcon(imgbtn18));
+                                                      File f = new File(userName + "favorite");
+                                                      ArrayList<String> allFav = new ArrayList<String>();
+                                                      String favPath;
+                                                      Scanner scannerFav = null;
+                                                      try {
+                                                          scannerFav = new Scanner(f);
+                                                      } catch (FileNotFoundException e) {
+                                                          e.printStackTrace();
+                                                      }
+                                                      while (scannerFav.hasNextLine()) {
+                                                          favPath = scannerFav.nextLine();
+                                                          if (!favPath.equals(file.getPath())) {
+                                                              allFav.add(favPath);
+                                                          }
+                                                      }
+                                                      BufferedWriter fav = null;//open append mode
+                                                      try {
+                                                          fav = new BufferedWriter(new FileWriter(userName + "favorite"));
+                                                      } catch (IOException e) {
+                                                          e.printStackTrace();
+                                                      }
+                                                      for (String s : allFav) {
+                                                          if (System.getProperty("os.name").contains("Windows")) {
+                                                              try {
+                                                                  fav.write(s + "\r\n");
+                                                              } catch (IOException e) {
+                                                                  e.printStackTrace();
+                                                              }
+                                                          } else {
+                                                              try {
+                                                                  fav.write(s + "\n");
+                                                              } catch (IOException e) {
+                                                                  e.printStackTrace();
+                                                              }
+                                                          }
+                                                      }
+                                                      try {
                                                           fav.close();
                                                       } catch (IOException e) {
                                                           e.printStackTrace();
                                                       }
-                                                  }
-                                                  if (isClickedFav) {
-                                                      Component c = jFrame.getRootPane().getContentPane().getComponent(2);
-                                                      if (c instanceof MiddleGUI) {
-                                                          ((MiddleGUI) c).jPanel.removeAll();
-                                                          ((MiddleGUI) c).jPanel.setLayout(new WrapLayout(FlowLayout.LEFT));
-                                                          ArrayList<SongPlaylist> list = new ArrayList<>();
-                                                          String songDir;
-                                                          File fad = new File(userName + "favorite");
-                                                          Scanner scannerSongTemp = null;
-                                                          try {
-                                                              scannerSongTemp = new Scanner(fad);
-                                                          } catch (FileNotFoundException e) {
-                                                              e.printStackTrace();
-                                                          }
-                                                          while (scannerSongTemp.hasNextLine()) {
-                                                              songDir = scannerSongTemp.nextLine();
+                                                      if (isClickedFav) {
+                                                          Component c = jFrame.getRootPane().getContentPane().getComponent(2);
+                                                          if (c instanceof MiddleGUI) {
+                                                              ((MiddleGUI) c).jPanel.removeAll();
+                                                              ((MiddleGUI) c).jPanel.setLayout(new WrapLayout(FlowLayout.LEFT));
+                                                              ArrayList<SongPlaylist> list = new ArrayList<>();
+                                                              String songDir;
+                                                              File fad = new File(userName + "favorite");
+                                                              Scanner scannerSong = null;
                                                               try {
-                                                                  list.add(new SongPlaylist(songDir, userName, jFrame));
-                                                              } catch (IOException e) {
-                                                                  e.printStackTrace();
-                                                              } catch (InvalidDataException e) {
-                                                                  e.printStackTrace();
-                                                              } catch (UnsupportedTagException e) {
+                                                                  scannerSong = new Scanner(fad);
+                                                              } catch (FileNotFoundException e) {
                                                                   e.printStackTrace();
                                                               }
-                                                          }
-                                                          Component c1 = jFrame.getRootPane().getContentPane().getComponent(0);
-                                                          for (int i = 0; i < list.size(); i++) {
-                                                              list.get(i).setNewSong(((BtmofGUI) c1));
-                                                              list.get(i).setPlayAddedSong(((BtmofGUI) c1).PS);
-                                                          }
-                                                          for (int i = 0; i < list.size(); i++) {
-                                                              ((MiddleGUI) c).jPanel.add(list.get(i));
-                                                          }
-                                                          ((MiddleGUI) c).jPanel.setBackground(Color.BLACK);
-                                                          ((MiddleGUI) c).jPanel.setVisible(true);
-                                                          jFrame.validate();
-                                                          jFrame.invalidate();
-                                                          jFrame.repaint();
-                                                      }
-                                                  }
-                                              } else {
-                                                  Image imgbtn17 = null;
-                                                  isFavorite = false;
-                                                  try {
-                                                      imgbtn17 = ImageIO.read(getClass().getResource("favorite (2).png"));
-                                                  } catch (IOException e) {
-                                                      e.printStackTrace();
-                                                  }
-                                                  Image imgbtn18 = imgbtn17.getScaledInstance(40, 40, Image.SCALE_SMOOTH);//changing the scale of icon
-                                                  btn.setIcon(new ImageIcon(imgbtn18));
-                                                  File f = new File(userName + "favorite");
-                                                  ArrayList<String> allFav = new ArrayList<String>();
-                                                  String favPath;
-                                                  Scanner scannerFav = null;
-                                                  try {
-                                                      scannerFav = new Scanner(f);
-                                                  } catch (FileNotFoundException e) {
-                                                      e.printStackTrace();
-                                                  }
-                                                  while (scannerFav.hasNextLine()) {
-                                                      favPath = scannerFav.nextLine();
-                                                      if (!favPath.equals(file.getPath())) {
-                                                          allFav.add(favPath);
-                                                      }
-                                                  }
-                                                  BufferedWriter fav = null;//open append mode
-                                                  try {
-                                                      fav = new BufferedWriter(new FileWriter(userName + "favorite"));
-                                                  } catch (IOException e) {
-                                                      e.printStackTrace();
-                                                  }
-                                                  for (String s : allFav) {
-                                                      if (System.getProperty("os.name").contains("Windows")) {
-                                                          try {
-                                                              fav.write(s + "\r\n");
-                                                          } catch (IOException e) {
-                                                              e.printStackTrace();
-                                                          }
-                                                      } else {
-                                                          try {
-                                                              fav.write(s + "\n");
-                                                          } catch (IOException e) {
-                                                              e.printStackTrace();
-                                                          }
-                                                      }
-                                                  }
-                                                  try {
-                                                      fav.close();
-                                                  } catch (IOException e) {
-                                                      e.printStackTrace();
-                                                  }
-                                                  if (isClickedFav) {
-                                                      Component c = jFrame.getRootPane().getContentPane().getComponent(2);
-                                                      if (c instanceof MiddleGUI) {
-                                                          ((MiddleGUI) c).jPanel.removeAll();
-                                                          ((MiddleGUI) c).jPanel.setLayout(new WrapLayout(FlowLayout.LEFT));
-                                                          ArrayList<SongPlaylist> list = new ArrayList<>();
-                                                          String songDir;
-                                                          File fad = new File(userName + "favorite");
-                                                          Scanner scannerSong = null;
-                                                          try {
-                                                              scannerSong = new Scanner(fad);
-                                                          } catch (FileNotFoundException e) {
-                                                              e.printStackTrace();
-                                                          }
-                                                          while (scannerSong.hasNextLine()) {
-                                                              songDir = scannerSong.nextLine();
-                                                              try {
-                                                                  list.add(new SongPlaylist(songDir, userName, jFrame));
-                                                              } catch (IOException e) {
-                                                                  e.printStackTrace();
-                                                              } catch (InvalidDataException e) {
-                                                                  e.printStackTrace();
-                                                              } catch (UnsupportedTagException e) {
-                                                                  e.printStackTrace();
+                                                              while (scannerSong.hasNextLine()) {
+                                                                  songDir = scannerSong.nextLine();
+                                                                  try {
+                                                                      list.add(new SongPlaylist(songDir, userName, jFrame));
+                                                                  } catch (IOException e) {
+                                                                      e.printStackTrace();
+                                                                  } catch (InvalidDataException e) {
+                                                                      e.printStackTrace();
+                                                                  } catch (UnsupportedTagException e) {
+                                                                      e.printStackTrace();
+                                                                  }
                                                               }
+                                                              Component c1 = jFrame.getRootPane().getContentPane().getComponent(0);
+                                                              for (int i = 0; i < list.size(); i++) {
+                                                                  list.get(i).setNewSong(((BtmofGUI) c1));
+                                                                  list.get(i).setPlayAddedSong(((BtmofGUI) c1).PS);
+                                                              }
+                                                              for (int i = 0; i < list.size(); i++) {
+                                                                  ((MiddleGUI) c).jPanel.add(list.get(i));
+                                                              }
+                                                              ((MiddleGUI) c).jPanel.setBackground(Color.BLACK);
+                                                              ((MiddleGUI) c).jPanel.setVisible(true);
+                                                              jFrame.validate();
+                                                              jFrame.invalidate();
+                                                              jFrame.repaint();
                                                           }
-                                                          Component c1 = jFrame.getRootPane().getContentPane().getComponent(0);
-                                                          for (int i = 0; i < list.size(); i++) {
-                                                              list.get(i).setNewSong(((BtmofGUI) c1));
-                                                              list.get(i).setPlayAddedSong(((BtmofGUI) c1).PS);
-                                                          }
-                                                          for (int i = 0; i < list.size(); i++) {
-                                                              ((MiddleGUI) c).jPanel.add(list.get(i));
-                                                          }
-                                                          ((MiddleGUI) c).jPanel.setBackground(Color.BLACK);
-                                                          ((MiddleGUI) c).jPanel.setVisible(true);
-                                                          jFrame.validate();
-                                                          jFrame.invalidate();
-                                                          jFrame.repaint();
                                                       }
                                                   }
                                               }
@@ -1018,8 +1116,4 @@ public class PlayStop extends JPanel implements PlayAddedSong, FavoriteOrSong, R
         isRecent = a;
     }
 
-    @Override
-    public void changePlay(boolean a) {
-        isClickedPlay=a;
-    }
 }

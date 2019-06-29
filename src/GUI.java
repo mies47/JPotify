@@ -1,4 +1,5 @@
 import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.UnsupportedTagException;
 import javazoom.jl.decoder.JavaLayerException;
 
@@ -92,14 +93,45 @@ public class GUI extends JFrame {
             while(scanner2.hasNextLine()) {
                 imgDir = scanner2.nextLine();
             }
+            String lastSong="";
             if(imgDir.equals("")){
-                list.add(new OtherUsersSongs(line , "0" , "fuuuck" , "Amir" , ImageIO.read(getClass().getResource("DefaultPhotoPic.jpg"))));
+                File fileLastSong = new File(line+"Recentsongs");
+                Scanner scannerLast = new Scanner(fileLastSong);
+                Mp3File m=null;
+                if(scannerLast.hasNextLine()){
+                    lastSong=scannerLast.nextLine();
+                    m=new Mp3File(new File(lastSong));
+                }
+                //System.out.println(m);
+                if(m!=null && m.hasId3v1Tag()) {
+                    list.add(new OtherUsersSongs(line, "0", m.getId3v1Tag().getTitle(), m.getId3v1Tag().getArtist(), ImageIO.read(getClass().getResource("DefaultPhotoPic.jpg")),lastSong,j));
+                }else if(m!=null && m.hasId3v2Tag())
+                    list.add(new OtherUsersSongs(line , "0" , m.getId3v2Tag().getTitle() , m.getId3v2Tag().getArtist() , ImageIO.read(getClass().getResource("DefaultPhotoPic.jpg")),lastSong,j));
+                else
+                    list.add(new OtherUsersSongs(line , "0" , "                                                 " ,"                                                        " , ImageIO.read(getClass().getResource("DefaultPhotoPic.jpg")),"",j));
             }else{
-                list.add(new OtherUsersSongs(line , "0" , "fuuuck" , "Amir" , ImageIO.read(new File(imgDir))));
+                File fileLastSong = new File(line+"Recentsongs");
+                Scanner scannerLast = new Scanner(fileLastSong);
+                Mp3File m=null;
+                if(scannerLast.hasNextLine()){
+                    lastSong=scannerLast.nextLine();
+                    m=new Mp3File(new File(lastSong));
+                }
+
+                if(m!=null && m.hasId3v1Tag()) {
+                    System.out.println(m.getId3v1Tag().getTitle());
+                    list.add(new OtherUsersSongs(line, "0", m.getId3v1Tag().getTitle(), m.getId3v1Tag().getArtist(), ImageIO.read(new File(imgDir)),lastSong,j));
+                }else if(m!=null && m.hasId3v2Tag())
+                    list.add(new OtherUsersSongs(line , "0" , m.getId3v2Tag().getTitle() , m.getId3v2Tag().getArtist() , ImageIO.read(new File(imgDir)),lastSong,j));
+                else
+                    list.add(new OtherUsersSongs(line , "0" ,"                                                  ","                                                     " , ImageIO.read(new File(imgDir)),"",j));
             }
         }
+        for (int i = 0; i < list.size(); i++) {
+            list.get(i).setNewSong(btmofGUI);
+            list.get(i).setPlayAddedSong(btmofGUI.PS);
+        }
         j.add(new FriendsActivity(list) , BorderLayout.EAST);
-
         j.setMinimumSize(new Dimension(1100, 900));
         j.setLocationRelativeTo(null);
         j.setExtendedState(JFrame.MAXIMIZED_BOTH);

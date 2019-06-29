@@ -19,6 +19,11 @@ public class  ClientObj implements Serializable {
     private HashMap<User , ArrayList<byte[]>> userSongs = new HashMap<>();
     private HashMap<User ,byte[]> userFavorites = new HashMap<>();
     private HashMap<User ,byte[]> userRecents = new HashMap<>();
+
+    public HashMap<User, byte[]> getUserPlayList() {
+        return userPlayList;
+    }
+
     private HashMap<User , byte[]>userPlayList = new HashMap<>();
     private JFrame frame;
     User thisUser;
@@ -39,7 +44,7 @@ public class  ClientObj implements Serializable {
             File f=new File(user);
             Scanner userSc = new Scanner(f);
             String pass = null;
-            File img = new File("DefaultPhotoPic.jpg");
+            File img = new File("C:\\Users\\behesht\\IdeaProjects\\Jpotify\\src\\DefaultPhotoPic.jpg");
             if(userSc.hasNextLine()) {
                 pass = userSc.nextLine();
                 while (userSc.hasNextLine()) {

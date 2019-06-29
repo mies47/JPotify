@@ -28,6 +28,7 @@ public class FriendsActivity extends JPanel {
         UIManager.put("ScrollBar.thumb", new ColorUIResource(Color.BLACK));//edit color of thumb of scroller
         UIManager.put("ScrollBar.track", new ColorUIResource(Color.BLACK));
         scrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI());
+        //this.setMaximumSize(new Dimension());
         this.add(scrollPane , BorderLayout.CENTER);
     }
 }

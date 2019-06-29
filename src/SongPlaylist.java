@@ -588,6 +588,7 @@ public class SongPlaylist extends JPanel {
                     newSong.set(songDir);
                     try {
                         playAddedSong.playAddedSong(true);
+
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     } catch (JavaLayerException e) {
@@ -599,7 +600,6 @@ public class SongPlaylist extends JPanel {
                     } catch (InvalidDataException e) {
                         e.printStackTrace();
                     }
-
                 }
             }
 
