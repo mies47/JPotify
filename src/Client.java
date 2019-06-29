@@ -19,6 +19,8 @@ public class Client implements Runnable {
     ObjectOutputStream objectOutputStream = null;
     volatile ArrayList<ClientObj> objs = null;
     Thread th = null;
+    Thread thread = null;
+    ClientObj clientObj = null;
 
     public Client() {
 
@@ -26,6 +28,7 @@ public class Client implements Runnable {
 
     @Override
     public void run() {
+        File f = new File("member.txt");
         JFrame frame = new JFrame();
         frame.setVisible(true);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -43,23 +46,42 @@ public class Client implements Runnable {
             }
         });
         try {
-            socket = new Socket("localhost", 3543);
+            socket = new Socket("localhost", 5000);
+            if(socket.isConnected()){
+                System.out.println("connected");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
             mainObjectInputStream = new ObjectInputStream(socket.getInputStream());
-
+            objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        try {
-            objectOutputStream.writeObject(new ClientObj(new File("member.txt"), frame));
-            objectOutputStream.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    try {
+                        if(clientObj == null){
+                            clientObj = new ClientObj(f, frame);
+                        }
+                        if(!clientObj.equals(new ClientObj(f, frame))){
+                            System.out.println("kiiiiiiiiiiiiiiiiiiiiiir");
+                            clientObj = new ClientObj(f, frame);
+                        }
+                        objectOutputStream.writeObject(clientObj);
+                        objectOutputStream.flush();
+                        Thread.sleep(1000);
+                    } catch (IOException e) {
+                        Thread.currentThread().interrupt();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
         while (true) {
             try {
                 objs = (ArrayList<ClientObj>) mainObjectInputStream.readObject();
@@ -76,7 +98,10 @@ public class Client implements Runnable {
                         ArrayList<ClientObj> clientObjs;
                         clientObjs = objs;
                         for (ClientObj clientObj : clientObjs) {
-
+                            if(clientObj == null){
+                                continue;
+                            }
+                            System.out.println("KOOOOOOOS");
                             File member = new File("member.txt");
                             try (PrintStream memberWriter = new PrintStream(new FileOutputStream(member, true), true)) {
                                 byte[] memberInByte = clientObj.getMember();

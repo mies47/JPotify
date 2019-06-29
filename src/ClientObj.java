@@ -40,8 +40,10 @@ public class ClientObj implements Serializable {
             ArrayList<String> eachUserSongs = new ArrayList<>();
             while (songSC.hasNextLine()){
                 String path = songSC.nextLine();
-                eachUserSongs.add(new File(path).getName());
-                songs.add(Files.readAllBytes(Paths.get(new File(path).getPath())));
+                File file = new File(path);
+                eachUserSongs.add(file.getName());
+                songs.add(Files.readAllBytes(Paths.get(file.getPath())));
+                file = null;
             }
             userSongs.put(thisUser , songs);
             allSongNames.put(thisUser , eachUserSongs);

@@ -30,8 +30,6 @@ public class ClientHandler implements Runnable {
     @Override
     public void run() {
         ObjectOutputStream arrayListWriter = allSocketsOutput.get(socket);
-
-
         clientObj = allClientObjects.get(socket);
         clientObjs.add(clientObj);
         for (Socket s : allClientObjects.keySet()) {
@@ -44,6 +42,7 @@ public class ClientHandler implements Runnable {
             th = new Thread(new Runnable() {
                 @Override
                 public void run() {
+                    System.out.println("COOOOOOS");
                     if (s != socket) {
                         try {
                             System.out.println(clientObjs);
