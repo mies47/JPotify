@@ -11,6 +11,7 @@ public class Server {
     volatile HashMap<Socket , ClientObj> allClientOBjects = new HashMap<>();
     Socket client;
     Thread thread = null;
+    ClientObj clientObj = null;
     public Server() throws IOException, ClassNotFoundException, InterruptedException {
         ServerSocket serverSocket = new ServerSocket(5000);
         InetAddress local = InetAddress.getLocalHost();
@@ -20,21 +21,23 @@ public class Server {
             client = serverSocket.accept();
             allSocketsOutput.put(client , new ObjectOutputStream(client.getOutputStream()));
             allSocketsInput.put(client  , new ObjectInputStream(client.getInputStream()));
-            final ClientObj[] clientObj = {null};
             thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     while (true) {
                         try {
+                            clientObj = (ClientObj) (allSocketsInput.get(client).readObject());
+                            allClientOBjects.put(client,clientObj );
                             System.out.println("kiir");
-                            clientObj[0] = (ClientObj) allSocketsInput.get(client).readObject();
-                            allClientOBjects.put(client,clientObj[0] );
+                            Thread.sleep(1000);
                             if(allClientOBjects.get(client) == null){
                                 System.out.println("kir");
                             }
-                        } catch (IOException e) {
-                            Thread.currentThread().interrupt();
+                        } catch (IOException ignored) {
+
                         } catch (ClassNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }

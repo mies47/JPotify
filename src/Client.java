@@ -74,8 +74,8 @@ public class Client implements Runnable {
                         objectOutputStream.writeObject(clientObj);
                         objectOutputStream.flush();
                         Thread.sleep(1000);
-                    } catch (IOException e) {
-                        Thread.currentThread().interrupt();
+                    } catch (IOException ignored) {
+
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -192,9 +192,8 @@ public class Client implements Runnable {
 
                 }
             });
-            synchronized (th) {
                 th.start();
-            }
+
         }
     }
 
