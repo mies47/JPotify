@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.io.File;
 import java.io.IOException;
@@ -8,16 +9,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class ClientObj implements Serializable {
+/**
+ * an object that contains all of each user's songs and playlist and
+ * information fetched with User class
+ */
+public class  ClientObj implements Serializable {
     private byte[] member;
     private HashMap<User , ArrayList<String>> allSongNames = new HashMap<>();
     private HashMap<User , ArrayList<byte[]>> userSongs = new HashMap<>();
-    private File userFavorite;
-    private File userRecent;
     private HashMap<User ,byte[]> userFavorites = new HashMap<>();
     private HashMap<User ,byte[]> userRecents = new HashMap<>();
+    private HashMap<User , byte[]>userPlayList = new HashMap<>();
     private JFrame frame;
     User thisUser;
+
+    /**
+     * @param member the member.txt file in client's PC to know all users signed up
+     *               in this PC
+     * @param jFrame the frame user is currently in when exits saves user's local time
+     * @throws IOException if cannot find the member.txt file
+     */
     public ClientObj(File member , JFrame jFrame) throws IOException {
         frame = jFrame;
         this.member = Files.readAllBytes(Paths.get(member.getPath()));
@@ -28,7 +39,7 @@ public class ClientObj implements Serializable {
             File f=new File(user);
             Scanner userSc = new Scanner(f);
             String pass = null;
-            File img = new File("C:\\Users\\behesht\\IdeaProjects\\Jpotify\\src\\DefaultPhotoPic.jpg");
+            File img = new File("DefaultPhotoPic.jpg");
             if(userSc.hasNextLine()) {
                 pass = userSc.nextLine();
                 while (userSc.hasNextLine()) {
@@ -49,8 +60,13 @@ public class ClientObj implements Serializable {
             allSongNames.put(thisUser , eachUserSongs);
             userFavorites.put(thisUser , Files.readAllBytes(Paths.get(thisUser.name + "favorite")));
             userRecents.put(thisUser , Files.readAllBytes(Paths.get(thisUser.name + "Recentsongs")));
+            userPlayList.put(thisUser , Files.readAllBytes(Paths.get(thisUser.name + "PLay")));
         }
     }
+
+    /**
+     * @return member.txt file as an array of bytes
+     */
     public byte[] getMember() {
         return member;
     }

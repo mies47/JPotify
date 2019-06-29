@@ -1,7 +1,5 @@
 import org.apache.commons.io.FileUtils;
 
-//import com.sun.jna.platform.FileUtils;
-
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -13,17 +11,14 @@ import java.nio.file.StandardCopyOption;
 import java.sql.Time;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Client implements Runnable {
-    String message;
     Socket socket;
     ObjectInputStream mainObjectInputStream = null;
     ObjectOutputStream objectOutputStream = null;
     volatile ArrayList<ClientObj> objs = null;
     Thread th = null;
-    Thread thread = null;
-    ClientObj clientObj = null;
-
     public Client() {
 
     }
@@ -48,8 +43,7 @@ public class Client implements Runnable {
             }
         });
         try {
-            socket = new Socket("192.168.43.130", 5000);
-            //socket = new Socket("localhost", 5000);
+            socket = new Socket("localhost", 5000);
             if(socket.isConnected()){
                 System.out.println("connected");
             }
@@ -62,29 +56,12 @@ public class Client implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    try {
-                        if(clientObj == null){
-                            clientObj = new ClientObj(f, frame);
-                        }
-                        if(!clientObj.equals(new ClientObj(f, frame))){
-                            System.out.println("kiiiiiiiiiiiiiiiiiiiiiir");
-                            clientObj = new ClientObj(f, frame);
-                        }
-                        objectOutputStream.writeObject(clientObj);
-                        objectOutputStream.flush();
-                        Thread.sleep(1000);
-                    } catch (IOException ignored) {
-
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }).start();
+        try {
+            objectOutputStream.writeObject(new ClientObj(new File("member.txt") , frame));
+            objectOutputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         while (true) {
             try {
                 objs = (ArrayList<ClientObj>) mainObjectInputStream.readObject();
@@ -104,7 +81,6 @@ public class Client implements Runnable {
                             if(clientObj == null){
                                 continue;
                             }
-                            System.out.println("KOOOOOOOS");
                             File member = new File("member.txt");
                             try (PrintStream memberWriter = new PrintStream(new FileOutputStream(member, true), true)) {
                                 byte[] memberInByte = clientObj.getMember();
@@ -115,6 +91,7 @@ public class Client implements Runnable {
                                 e.printStackTrace();
                             }
                             for (User user : clientObj.getUserSongs().keySet()) {
+                                System.out.println(user.name + " received");
                                 try (PrintStream outputStream = new PrintStream(new FileOutputStream(new File(user.name)), true)) {
                                     outputStream.println(user.password);
                                     outputStream.println(user.time);
@@ -123,6 +100,7 @@ public class Client implements Runnable {
                                     outputStream.println(f.getName());
                                     FileUtils.writeByteArrayToFile(new File(user.name + "Recentsongs"), clientObj.getUserRecents().get(user));
                                     FileUtils.writeByteArrayToFile(new File(user.name + "favorites"), clientObj.getUserFavorites().get(user));
+                                    FileUtils.writeByteArrayToFile(new File(user.name + "PLay"), clientObj.getUserFavorites().get(user));
                                 } catch (FileNotFoundException e) {
                                     e.printStackTrace();
                                 } catch (IOException e) {
@@ -131,8 +109,10 @@ public class Client implements Runnable {
                                 File userSong = new File(user.name + "songs");
                                 File userRecent = new File("new " + user.name + "RecentSongs");
                                 File userFavorite = new File("new" + user.name + "Favorites");
+                                File userPlayList = new File("new" + user.name + "PlayList");
                                 File mainUserRecent = new File(user.name + "Recentsongs");
                                 File mainUserFavorite = new File(user.name + "favorites");
+                                File mainUserPlayList = new File(user.name + "PLay");
                                 PrintStream recentWriter = null;
                                 try {
                                     recentWriter = new PrintStream(new FileOutputStream(userRecent), true);
@@ -144,6 +124,27 @@ public class Client implements Runnable {
                                     favoriteWriter = new PrintStream(new FileOutputStream(userFavorite), true);
                                 } catch (FileNotFoundException e) {
                                     e.printStackTrace();
+                                }
+                                ObjectOutputStream playListWriter = null;
+                                try {
+                                    playListWriter = new ObjectOutputStream(new FileOutputStream(userPlayList));
+                                } catch (FileNotFoundException e) {
+                                    e.printStackTrace();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                HashMap<String , ArrayList<String>> userPlayListHashmap = null;
+                                try {
+                                    userPlayListHashmap = (HashMap<String, ArrayList<String>>) new ObjectInputStream(new FileInputStream(
+                                            mainUserPlayList)).readObject();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                } catch (ClassNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                                HashMap<String , ArrayList<String>> newUserPlayListHashmap = new HashMap<>();
+                                for (String s : newUserPlayListHashmap.keySet()){
+                                    newUserPlayListHashmap.put(s , new ArrayList<String>());
                                 }
                                 try (PrintStream songWriter = new PrintStream(new FileOutputStream(userSong), true)) {
                                     int counter = 0;
@@ -157,15 +158,20 @@ public class Client implements Runnable {
                                         if (FileUtils.readFileToString(mainUserRecent).contains(clientObj.getAllSongNames().get(user).get(counter))) {
                                             recentWriter.println(clientObj.getAllSongNames().get(user).get(counter));
                                         }
+
+                                        for (String playListName : userPlayListHashmap.keySet()){
+                                            if(userPlayListHashmap.get(playListName).contains(clientObj.getAllSongNames().get(user).get(counter))){
+                                                newUserPlayListHashmap.get(playListName).add(clientObj.getAllSongNames().get(user).get(counter));
+                                            }
+                                        }
                                         counter++;
                                     }
+                                    playListWriter.writeObject(newUserPlayListHashmap);
                                 } catch (FileNotFoundException e) {
                                     e.printStackTrace();
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
-                                PrintStream finalRecentWriter = recentWriter;
-                                PrintStream finalFavoriteWriter = favoriteWriter;
                                 try {
                                     FileUtils.forceDelete(mainUserFavorite);
                                 } catch (IOException e) {
@@ -176,8 +182,15 @@ public class Client implements Runnable {
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
+                                try {
+                                    FileUtils.forceDelete(mainUserPlayList);
+                                    playListWriter.close();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                                 recentWriter.close();
                                 favoriteWriter.close();
+
                                 try {
                                     Files.move(userRecent.toPath(), new File(user.name + "Recentsongs").toPath(), StandardCopyOption.REPLACE_EXISTING);
                                 } catch (IOException e) {
@@ -188,6 +201,11 @@ public class Client implements Runnable {
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
+                                try {
+                                    Files.move(userFavorite.toPath(), new File(user.name + "PLay").toPath(), StandardCopyOption.REPLACE_EXISTING);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             }
 
                         }
@@ -195,8 +213,7 @@ public class Client implements Runnable {
 
                 }
             });
-                th.start();
-
+            th.start();
         }
     }
 

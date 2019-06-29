@@ -30,6 +30,7 @@ public class FindLyrics extends JFrame {
         label.setBackground(Color.BLACK);
         label.setForeground(Color.WHITE);
         label.setOpaque(true);
+        label.setFont(new Font("dialog",Font.LAYOUT_NO_LIMIT_CONTEXT,20));
         label.setText("<html>"+lyrics.getLyricsBody().replaceAll("\n","<br/>")+"</html>");
         //System.out.println("Lyrics ID       : "     + lyrics.getLyricsId());
         //System.out.println("Lyrics Language : "     + lyrics.getLyricsLang());
