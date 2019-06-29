@@ -79,6 +79,10 @@ public class LeftOfGUI extends JPanel {
                 recentOrSong.changeRecent(false);
                 favoriteOrSong.changeFav(false);
                 Component c =frame.getRootPane().getContentPane().getComponent(2);
+                Component c1 =frame.getRootPane().getContentPane().getComponent(0);
+                //Component c = frame.getContentPane().getComponent(0);
+                ((BtmofGUI) c1).PS.other=false;
+                ((BtmofGUI) c1).PS.isClickedPlay=false;
                 if(c instanceof MiddleGUI){
                     ((MiddleGUI) c).jPanel.removeAll();
                     JButton songs;
@@ -190,6 +194,7 @@ public class LeftOfGUI extends JPanel {
                             recentOrSong.changeRecent(false);
                             Component c = frame.getRootPane().getContentPane().getComponent(2);
                             Component c1 = frame.getRootPane().getContentPane().getComponent(0);
+
                             if (c instanceof MiddleGUI) {
                                 ((MiddleGUI) c).jPanel.removeAll();
                                 ((MiddleGUI) c).jPanel.setLayout(new WrapLayout(FlowLayout.LEFT));
@@ -364,13 +369,13 @@ public class LeftOfGUI extends JPanel {
 //                    favorites.setBorder(null);
                     try {
                         songs.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("allsong2.jpeg")).getScaledInstance(
-                                600 , 430 , Image.SCALE_SMOOTH)));
+                                560 , 430 , Image.SCALE_SMOOTH)));
                         playList.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("playlist.jpeg")).getScaledInstance(
-                                630 , 430 , Image.SCALE_SMOOTH)));
+                                580 , 430 , Image.SCALE_SMOOTH)));
                         albums.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("album.jpg")).getScaledInstance(
-                                590 , 430 , Image.SCALE_SMOOTH)));
+                                550 , 430 , Image.SCALE_SMOOTH)));
                         favorites.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("download (1).jpeg")).getScaledInstance(
-                                620 , 430 , Image.SCALE_SMOOTH)));
+                                570 , 430 , Image.SCALE_SMOOTH)));
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }

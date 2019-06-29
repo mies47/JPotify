@@ -119,7 +119,7 @@ public class SearchArea extends JPanel {
                                 artistSearch.put(temp,m);
                             }
                         }else{
-                            if((temp.getId3v1Tag().getArtist()).toLowerCase().contains(searchtxt.toLowerCase())){
+                            if((temp.getId3v2Tag().getArtist()).toLowerCase().contains(searchtxt.toLowerCase())){
                                 artistSearch.put(temp,m);
                             }
                         }
@@ -141,7 +141,7 @@ public class SearchArea extends JPanel {
                                 songsSearch.put(temp,m);
                             }
                         }else{
-                            if((temp.getId3v1Tag().getTitle()).toLowerCase().contains(searchtxt.toLowerCase())){
+                            if((temp.getId3v2Tag().getTitle()).toLowerCase().contains(searchtxt.toLowerCase())){
                                 songsSearch.put(temp,m);
                             }
                         }

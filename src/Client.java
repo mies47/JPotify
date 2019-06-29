@@ -62,36 +62,40 @@ public class Client implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    try {
-                        if(clientObj == null){
-                            clientObj = new ClientObj(f, frame);
-                        }
-                        if(!clientObj.equals(new ClientObj(f, frame))){
-                            System.out.println("kiiiiiiiiiiiiiiiiiiiiiir");
-                            clientObj = new ClientObj(f, frame);
-                        }
-                        objectOutputStream.writeObject(clientObj);
-                        objectOutputStream.flush();
-                        Thread.sleep(1000);
-                    } catch (IOException ignored) {
-
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                while (true) {
+//                    try {
+//                        if(clientObj == null){
+//                            clientObj = new ClientObj(f, frame);
+//                        }
+//                        if(!clientObj.equals(new ClientObj(f, frame))){
+//                            System.out.println("kiiiiiiiiiiiiiiiiiiiiiir");
+//                            clientObj = new ClientObj(f, frame);
+//                        }
+//                        Thread.sleep(1000);
+//                    } catch (IOException ignored) {
+//
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//        }).start();
+        try {
+            objectOutputStream.writeObject(new ClientObj(new File("member.txt"),frame));
+            objectOutputStream.flush();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
         while (true) {
             try {
                 objs = (ArrayList<ClientObj>) mainObjectInputStream.readObject();
-            } catch (IOException e) {
+            } catch (IOException e2) {
                 continue;
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+            } catch (ClassNotFoundException e3) {
+                e3.printStackTrace();
             }
             th = new Thread(new Runnable() {
                 @Override
@@ -200,7 +204,7 @@ public class Client implements Runnable {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main (String[] args) {
         Thread th = new Thread(new Client());
         th.start();
     }

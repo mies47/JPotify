@@ -17,7 +17,6 @@ import java.util.HashMap;
 public class PlayListFinal extends JPanel {
     private JLabel pic;
     private JLabel description;
-    Boolean isClickedPlayList;
     public void setRemoveDLM(RemoveDLM removeDLM) {
         this.removeDLM = removeDLM;
     }
@@ -153,9 +152,10 @@ public class PlayListFinal extends JPanel {
             @Override
             public void mouseReleased(MouseEvent mouseEvent) {
                 if (SwingUtilities.isLeftMouseButton(mouseEvent)) {
-                    isClickedPlayList=true;
                     Component c = frame.getRootPane().getContentPane().getComponent(2);
                     Component c1 = frame.getRootPane().getContentPane().getComponent(0);
+                    ((BtmofGUI) c1).PS.isClickedPlay=true;
+                    ((BtmofGUI) c1).PS.name=name;
                     if (c instanceof MiddleGUI) {
                         ((MiddleGUI) c).jPanel.removeAll();
                         ((MiddleGUI) c).jPanel.setLayout(new WrapLayout(FlowLayout.LEFT));
