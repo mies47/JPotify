@@ -284,7 +284,7 @@ public class LibGUI extends JPanel {
                                 Scanner scannerSong = new Scanner(fileSong);
                                 while (scannerSong.hasNextLine()) {
                                     songDir = scannerSong.nextLine();
-                                    if (filepath.equals(songDir))
+                                    if (filepath.contains(songDir))
                                         fileIsExist = true;
                                 }
                             } catch (FileNotFoundException ex) {

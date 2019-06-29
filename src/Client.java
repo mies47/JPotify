@@ -1,5 +1,7 @@
 import org.apache.commons.io.FileUtils;
 
+//import com.sun.jna.platform.FileUtils;
+
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -43,7 +45,7 @@ public class Client implements Runnable {
             }
         });
         try {
-            socket = new Socket("localhost", 3543);
+            socket = new Socket("192.168.43.130", 5000);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -2,6 +2,7 @@ import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.UnsupportedTagException;
 import javazoom.jl.decoder.JavaLayerException;
+import org.jmusixmatch.MusixMatchException;
 //import jdk.nashorn.internal.scripts.JO;
 
 import javax.imageio.ImageIO;
@@ -132,6 +133,32 @@ public class SongPlaylist extends JPanel {
         JPopupMenu menu = new JPopupMenu("More");
         menu.setBackground(Color.BLACK);
         menu.setForeground(Color.white);
+        JMenuItem item5 = new JMenuItem("Show Lyrics");
+        item5.setBackground(Color.BLACK);
+        item5.setForeground(Color.white);
+        item5.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                try {
+                    Mp3File mp3File1=new Mp3File(s);
+                    FindLyrics findLyrics;
+                    if(mp3File1.hasId3v1Tag()) {
+                        findLyrics=new FindLyrics(mp3File1.getId3v1Tag().getTitle(),mp3File1.getId3v1Tag().getArtist());
+                    }else{
+                        findLyrics=new FindLyrics(mp3File1.getId3v2Tag().getTitle(),mp3File1.getId3v2Tag().getArtist());
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedTagException e) {
+                    e.printStackTrace();
+                } catch (InvalidDataException e) {
+                    e.printStackTrace();
+                } catch (MusixMatchException e) {
+                    JOptionPane.showMessageDialog(returnThis(),"Sorry,Can't find lyrics for this song!!!");
+                    e.printStackTrace();
+                }
+            }
+        });
         JMenuItem item4 = new JMenuItem("Share this Song");
         item4.setBackground(Color.BLACK);
         item4.setForeground(Color.white);
@@ -541,7 +568,8 @@ public class SongPlaylist extends JPanel {
         menu.add(item4);
         menu.add(item2);
         menu.add(item3);
-        this.setTransferHandler(new TransferHandler("icon"));
+        menu.add(item5);
+        //this.setTransferHandler(new TransferHandler("icon"));
         this.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {

@@ -17,11 +17,16 @@ import java.util.HashMap;
 public class PlayListFinal extends JPanel {
     private JLabel pic;
     private JLabel description;
-
+    Boolean isClickedPlayList;
     public void setRemoveDLM(RemoveDLM removeDLM) {
         this.removeDLM = removeDLM;
     }
 
+    public void setPlayListChange(PlayListChange playListChange) {
+        this.playListChange = playListChange;
+    }
+
+    PlayListChange playListChange;
     RemoveDLM removeDLM;
 
     public PlayListFinal(ArrayList<String> a, String user, JFrame frame, String name) throws InvalidDataException, IOException, UnsupportedTagException {
@@ -148,7 +153,7 @@ public class PlayListFinal extends JPanel {
             @Override
             public void mouseReleased(MouseEvent mouseEvent) {
                 if (SwingUtilities.isLeftMouseButton(mouseEvent)) {
-
+                    isClickedPlayList=true;
                     Component c = frame.getRootPane().getContentPane().getComponent(2);
                     Component c1 = frame.getRootPane().getContentPane().getComponent(0);
                     if (c instanceof MiddleGUI) {

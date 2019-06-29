@@ -17,7 +17,7 @@ import java.util.*;
  * 3 int param for time
  */
 
-public class PlayStop extends JPanel implements PlayAddedSong, FavoriteOrSong, RecentOrSong {
+public class PlayStop extends JPanel implements PlayAddedSong, FavoriteOrSong, RecentOrSong,PlayListChange {
     public int getKeyPress() {
         return keyPress;
     }
@@ -52,6 +52,7 @@ public class PlayStop extends JPanel implements PlayAddedSong, FavoriteOrSong, R
     volatile File file;
     volatile Boolean isClickedFav = false;
     volatile Boolean isRecent = false;
+    volatile Boolean isClickedPlay = false;
     Boolean fileIsExist = false;
     volatile String userName;
     volatile Mp3File mp3File;
@@ -1015,5 +1016,10 @@ public class PlayStop extends JPanel implements PlayAddedSong, FavoriteOrSong, R
     @Override
     public void changeRecent(Boolean a) {
         isRecent = a;
+    }
+
+    @Override
+    public void changePlay(boolean a) {
+        isClickedPlay=a;
     }
 }

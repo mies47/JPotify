@@ -88,6 +88,7 @@ public class GUI extends JFrame {
             Scanner scanner2 = new Scanner(fileImg);
             String imgDir="";
             int trash=scanner2.nextInt();
+            //int time=scanner2.nextInt();
             while(scanner2.hasNextLine()) {
                 imgDir = scanner2.nextLine();
             }
