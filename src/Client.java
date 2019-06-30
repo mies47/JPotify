@@ -48,7 +48,7 @@ public class Client implements Runnable {
             }
         });
         try {
-            socket = new Socket("192.168.43.130", 5000);
+            socket = new Socket("localhost", 5000);
             //socket = new Socket("localhost", 5000);
             if(socket.isConnected()){
                 System.out.println("connected");
@@ -108,7 +108,6 @@ public class Client implements Runnable {
                             if(clientObj == null){
                                 continue;
                             }
-                            System.out.println("KOOOOOOOS");
                             File member = new File("member.txt");
                             try (PrintStream memberWriter = new PrintStream(new FileOutputStream(member, true), true)) {
                                 byte[] memberInByte = clientObj.getMember();

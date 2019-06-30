@@ -17,7 +17,7 @@ import java.util.*;
  * 3 int param for time
  */
 
-public class PlayStop extends JPanel implements PlayAddedSong, FavoriteOrSong, RecentOrSong, PlayListChange {
+public class PlayStop extends JPanel implements PlayAddedSong, FavoriteOrSong, RecentOrSong {
     public int getKeyPress() {
         return keyPress;
     }
@@ -1116,8 +1116,4 @@ public class PlayStop extends JPanel implements PlayAddedSong, FavoriteOrSong, R
         isRecent = a;
     }
 
-    @Override
-    public void changePlay(boolean a) {
-        isClickedPlay = a;
-    }
 }

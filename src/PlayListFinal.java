@@ -21,11 +21,6 @@ public class PlayListFinal extends JPanel {
         this.removeDLM = removeDLM;
     }
 
-    public void setPlayListChange(PlayListChange playListChange) {
-        this.playListChange = playListChange;
-    }
-
-    PlayListChange playListChange;
     RemoveDLM removeDLM;
 
     public PlayListFinal(ArrayList<String> a, String user, JFrame frame, String name) throws InvalidDataException, IOException, UnsupportedTagException {

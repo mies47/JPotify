@@ -28,7 +28,7 @@ public class ClientObj implements Serializable {
             File f=new File(user);
             Scanner userSc = new Scanner(f);
             String pass = null;
-            File img = new File("C:\\Users\\behesht\\IdeaProjects\\Jpotify\\src\\DefaultPhotoPic.jpg");
+            File img = new File("/home/naha/Jpotify/src/DefaultPhotoPic.jpg");
             if(userSc.hasNextLine()) {
                 pass = userSc.nextLine();
                 while (userSc.hasNextLine()) {
